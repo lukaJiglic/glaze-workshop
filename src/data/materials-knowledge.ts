@@ -1,0 +1,953 @@
+// Inline knowledge from materials.json, substitutions.json, and calculation-guides.json
+// Provides lookups for substitution tooltips, change-impact panels, and material info
+
+export interface MaterialInfo {
+  id: string
+  name: string
+  group: string
+  oxideIds: string[]
+  uses: string[]
+  watchFor: string[]
+  beginner?: string // simplified explanation
+}
+
+export interface SubstitutionOption {
+  materialId: string    // ID matching our known materials
+  label: string         // display name
+  ratio?: string        // e.g. "1:1", "Use 116g per 100g removed"
+  difficulty: 'easy' | 'moderate' | 'advanced'
+  difficultyNote: string  // short human explanation
+  chemicalShift?: string  // what oxide changes
+  visualEffect?: string   // how it looks different
+}
+
+export interface SubstitutionPair {
+  materialId: string
+  alternatives: string[]          // legacy short list (kept for compatibility)
+  notes: string[]
+  specifics?: string[]
+  options?: SubstitutionOption[]  // rich options for switcher UI
+}
+
+export interface ChangeImpact {
+  id: string
+  change: string
+  usuallyDoes: string[]
+  watchFor: string[]
+  visualHint?: string // beginner-friendly description
+}
+
+export interface ColorantHeuristic {
+  materialId: string
+  range: string
+  notes: string
+}
+
+// ─── Material info with beginner descriptions ──────────────────────────────
+
+export const materialInfo = new Map<string, MaterialInfo>([
+  ['silica', {
+    id: 'silica', name: 'Silica / Quartz / Flint', group: 'glass-former',
+    oxideIds: ['sio2'],
+    uses: ['Main glass network former', '200/325 mesh for fine grinding'],
+    watchFor: ['Silica dust is a serious lung hazard — always wear a mask', 'Too much = underfired stiff surface'],
+    beginner: 'The main ingredient that becomes glass in the kiln. More silica = stiffer, more durable glaze that is less likely to run.',
+  }],
+  ['kaolin', {
+    id: 'kaolin', name: 'Kaolin / China Clay', group: 'stabilizer',
+    oxideIds: ['al2o3', 'sio2'],
+    uses: ['Suspends glaze in bucket', 'Adds alumina (stiffener)', 'Binds dry glaze to pot'],
+    watchFor: ['Excess can cause crawling as glaze dries and shrinks', 'Dust is a lung hazard'],
+    beginner: 'A fine white clay that keeps the glaze from running off your pot. Also toughens the melt.',
+  }],
+  ['epk-kaolin', {
+    id: 'epk-kaolin', name: 'EPK Kaolin (Edgar Plastic Kaolin)', group: 'stabilizer',
+    oxideIds: ['al2o3', 'sio2'],
+    uses: ['Standard North American plastic kaolin', 'Good suspension'],
+    watchFor: ['Higher TiO2 (0.37%) than Grolleg — can tint white glazes warm'],
+    beginner: 'The standard North American kaolin. Works in almost all recipes. Slightly warm in fired color.',
+  }],
+  ['grolleg-kaolin', {
+    id: 'grolleg-kaolin', name: 'Grolleg Kaolin', group: 'stabilizer',
+    oxideIds: ['al2o3', 'sio2'],
+    uses: ['Premium English kaolin for white porcelains', 'Very low TiO2 = brilliant white'],
+    watchFor: ['More expensive than EPK', 'Less plastic — may need bentonite'],
+    beginner: 'The premium English kaolin. Used when you want the whitest possible result — porcelain and transparent glazes love it.',
+  }],
+  ['calcined-kaolin', {
+    id: 'calcined-kaolin', name: 'Calcined Kaolin (Glomax LL)', group: 'stabilizer',
+    oxideIds: ['al2o3', 'sio2'],
+    uses: ['Reduces crawling without losing alumina', 'No LOI — less gas in firing'],
+    watchFor: ['Does not suspend glaze on its own — blend with raw kaolin'],
+    beginner: 'Kaolin that has been pre-fired to remove shrinkage. Helps glaze stick to the pot without cracking during drying.',
+  }],
+  ['ball-clay', {
+    id: 'ball-clay', name: 'Ball Clay', group: 'stabilizer',
+    oxideIds: ['al2o3', 'sio2'],
+    uses: ['Strong suspender', 'Higher plasticity than kaolin'],
+    watchFor: ['More iron (Fe2O3) than kaolin — tints glazes warm/buff', 'High TiO2 in some grades'],
+    beginner: 'Like kaolin but stickier and darker. Helps glaze stay mixed and stick to the pot. Has more natural color.',
+  }],
+  ['potash-feldspar', {
+    id: 'potash-feldspar', name: 'Potash Feldspar', group: 'flux',
+    oxideIds: ['k2o', 'al2o3', 'sio2'],
+    uses: ['Major high-fire flux', 'Brings K2O, Al2O3, SiO2 in one material'],
+    watchFor: ['Different brands (Custer vs G-200) have notably different chemistry', 'Higher amounts → crazing risk'],
+    beginner: 'A mineral that helps the glaze melt at high temperatures. The backbone of most stoneware glazes.',
+  }],
+  ['custer-feldspar', {
+    id: 'custer-feldspar', name: 'Custer Feldspar', group: 'flux',
+    oxideIds: ['k2o', 'na2o', 'al2o3', 'sio2'],
+    uses: ['Standard North American potash feldspar', 'Workhorse of stoneware glazes'],
+    watchFor: ['Chemistry changed post-2010 — Na2O went up to ~3%', 'Batches vary — test before large production runs'],
+    beginner: 'The most common feldspar used in North American stoneware recipes. If a recipe says "feldspar" without specifying, it usually means this.',
+  }],
+  ['g200-feldspar', {
+    id: 'g200-feldspar', name: 'G-200 / G200 HP Feldspar', group: 'flux',
+    oxideIds: ['k2o', 'na2o', 'al2o3', 'sio2'],
+    uses: ['Similar role to Custer feldspar'],
+    watchFor: ['G200 HP (current) has significantly more K2O (13.2%) and less Na2O than original G-200', 'Not a clean 1:1 swap for Custer'],
+    beginner: 'Another common potash feldspar. The "HP" version is slightly different chemistry — check if your recipe was written before or after 2005.',
+  }],
+  ['soda-feldspar', {
+    id: 'soda-feldspar', name: 'Soda Feldspar (Minspar / Kona F-4)', group: 'flux',
+    oxideIds: ['na2o', 'al2o3', 'sio2'],
+    uses: ['Flux similar to potash feldspar but with higher sodium'],
+    watchFor: ['Higher thermal expansion than potash — more crazing risk', 'Kona F-4 is discontinued — use Minspar 200'],
+    beginner: 'Like potash feldspar but with sodium instead of potassium. Melts more aggressively and raises crazing risk slightly.',
+  }],
+  ['nepheline-syenite', {
+    id: 'nepheline-syenite', name: 'Nepheline Syenite', group: 'flux',
+    oxideIds: ['na2o', 'k2o', 'al2o3', 'sio2'],
+    uses: ['Melts at lower temps than feldspar', 'Strong flux in cone 4–8 glazes'],
+    watchFor: ['Higher expansion — higher crazing risk than feldspar', 'Less SiO2 than feldspar — may need to add silica'],
+    beginner: 'A stronger-melting version of feldspar. Great for mid-fire glazes and anywhere you need the glaze to melt more easily.',
+  }],
+  ['cornwall-stone', {
+    id: 'cornwall-stone', name: 'Cornwall Stone', group: 'flux',
+    oxideIds: ['k2o', 'na2o', 'cao', 'al2o3', 'sio2'],
+    uses: ['Traditional English glaze material', 'Combined flux + glass former'],
+    watchFor: ['High SiO2 (73.76%) — stiffens melt more than feldspar', 'Supply can be inconsistent outside UK'],
+    beginner: 'A natural rock used in British pottery tradition. It works like feldspar but brings more silica and a slightly stiffer melt.',
+  }],
+  ['whiting', {
+    id: 'whiting', name: 'Whiting (Calcium Carbonate)', group: 'flux',
+    oxideIds: ['cao'],
+    uses: ['Primary calcium source in stoneware glazes', 'Promotes durable glossy surfaces'],
+    watchFor: ['High LOI (43.9%) — releases CO2 which can cause pinholes if fired too fast', 'Does not dissolve well in water'],
+    beginner: 'Crushed limestone. Provides calcium which makes glazes durable and glossy at high temperatures.',
+  }],
+  ['wollastonite', {
+    id: 'wollastonite', name: 'Wollastonite', group: 'flux',
+    oxideIds: ['cao', 'sio2'],
+    uses: ['Calcium + silica with no CO2 release', 'Reduces pinholes vs whiting'],
+    watchFor: ['Not a direct 1:1 weight swap for whiting — chemistry differs', 'Adds extra SiO2 to the recipe'],
+    beginner: 'Provides calcium like whiting but without the gas. Cleaner melts, fewer pinholes. Also adds silica.',
+  }],
+  ['dolomite', {
+    id: 'dolomite', name: 'Dolomite', group: 'flux',
+    oxideIds: ['cao', 'mgo'],
+    uses: ['Calcium + magnesia in one material', 'Common in smooth matte glazes'],
+    watchFor: ['High LOI — releases CO2', 'Can cause pinholes if fired fast'],
+    beginner: 'A double-duty rock: brings both calcium and magnesium. Pushes glazes toward smooth buttery matte finishes.',
+  }],
+  ['talc', {
+    id: 'talc', name: 'Talc', group: 'flux',
+    oxideIds: ['mgo', 'sio2'],
+    uses: ['Magnesia source', 'Promotes satin/matte surfaces at mid-fire', 'Lowers crazing in low-fire bodies'],
+    watchFor: ['Can push glaze to waxy or dry surface if overused', 'Different grades vary in chemistry'],
+    beginner: 'Provides magnesium — pushes the surface toward soft, silky, or matte finishes.',
+  }],
+  ['zinc-oxide', {
+    id: 'zinc-oxide', name: 'Zinc Oxide', group: 'flux',
+    oxideIds: ['zno'],
+    uses: ['Flux and crystal growth promoter', 'Brightens blues/greens'],
+    watchFor: ['Strange effects in reduction atmospheres', 'High amounts can pin or crawl'],
+    beginner: 'Helps the glaze melt and can trigger crystal growth. Best in electric kilns — behaves oddly in gas firing.',
+  }],
+  ['gerstley-borate', {
+    id: 'gerstley-borate', name: 'Gerstley Borate', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'mgo', 'na2o'],
+    uses: ['Natural boron source', 'Melts glazes at lower temperatures'],
+    watchFor: ['Variable chemistry batch to batch', 'Supply uncertain — mine nearly exhausted', 'Very hard to substitute exactly'],
+    beginner: 'A natural mineral that melts glazes at low and mid temperatures. Famous in old recipes but inconsistent — many potters now use frits instead.',
+  }],
+  ['colemanite', {
+    id: 'colemanite', name: 'Colemanite', group: 'flux',
+    oxideIds: ['b2o3', 'cao'],
+    uses: ['Boron + calcium source', 'More consistent than Gerstley Borate'],
+    watchFor: ['Still a natural mineral — some batch variation', 'High LOI from calcium carbonate portion'],
+    beginner: 'A more consistent natural boron mineral than Gerstley Borate. Provides both boron and calcium.',
+  }],
+  ['ferro-frit-3134', {
+    id: 'ferro-frit-3134', name: 'Ferro Frit 3134', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'na2o', 'sio2'],
+    uses: ['Common boron frit for low and mid fire', 'Consistent batch to batch'],
+    watchFor: ['High expansion — can cause crazing', 'More fluid at temperature than expected'],
+    beginner: 'Pre-melted glass powder that provides boron. Consistent and reliable — the go-to replacement for Gerstley Borate in many recipes.',
+  }],
+  ['ferro-frit-3124', {
+    id: 'ferro-frit-3124', name: 'Ferro Frit 3124', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'na2o', 'al2o3', 'sio2'],
+    uses: ['Good all-around borosilicate frit', 'More alumina than 3134 — stiffer melt'],
+    watchFor: ['Less fluid than 3134 — adjust if replacing'],
+    beginner: 'A versatile boron frit with extra alumina. Makes stiffer, more stable melts than Frit 3134.',
+  }],
+  ['ferro-frit-3195', {
+    id: 'ferro-frit-3195', name: 'Ferro Frit 3195', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'mgo', 'na2o', 'al2o3', 'sio2'],
+    uses: ['Low-fire base frit', 'Good general substitute for 3134'],
+    watchFor: ['Higher Al2O3 than 3134 — changes melt character slightly'],
+    beginner: 'A good boron frit for low and mid-fire work. Often used to replace Frit 3134 in clear base glazes.',
+  }],
+  ['ferro-frit-3110', {
+    id: 'ferro-frit-3110', name: 'Ferro Frit 3110', group: 'flux',
+    oxideIds: ['na2o', 'cao', 'b2o3', 'sio2'],
+    uses: ['Strong low-fire melt', 'High sodium content'],
+    watchFor: ['Very high thermal expansion — crazing likely unless clay body matches', 'Very fluid at temperature'],
+    beginner: 'A powerful low-fire melting frit. High in sodium so it works aggressively — crazing is common unless you match it to the right clay.',
+  }],
+  ['ferro-frit-3249', {
+    id: 'ferro-frit-3249', name: 'Ferro Frit 3249', group: 'flux',
+    oxideIds: ['b2o3', 'mgo', 'sio2'],
+    uses: ['Lowest expansion boron frit', 'Good for crawling and crazing problems'],
+    watchFor: ['Very high B2O3 — can be very fluid', 'MgO affects matte surfaces'],
+    beginner: 'A low-expansion boron frit — used to reduce crazing by lowering the overall expansion of the glaze.',
+  }],
+  ['alberta-slip', {
+    id: 'alberta-slip', name: 'Alberta Slip', group: 'flux',
+    oxideIds: ['fe2o3', 'al2o3', 'sio2', 'cao', 'mgo', 'k2o', 'na2o'],
+    uses: ['Natural slip glaze base', 'High-iron fluid matte at cone 10 reduction'],
+    watchFor: ['High iron content — forms dark amber/brown', 'Works best in reduction', 'No longer mined — Alberta Slip 1987 is the reformulation'],
+    beginner: 'A natural clay from Alberta, Canada that melts into a self-glazing rich amber/brown coating. Beautiful in gas kilns.',
+  }],
+  ['red-iron-oxide', {
+    id: 'red-iron-oxide', name: 'Red Iron Oxide', group: 'colorant',
+    oxideIds: ['fe2o3'],
+    uses: ['Amber, brown, rust, temmoku colors', 'Texturing and variegation'],
+    watchFor: ['Dramatic atmosphere sensitivity — completely different in reduction vs oxidation', 'High amounts stiffen the melt'],
+    beginner: 'The main iron colorant. 1–3% = warm amber/honey. 5–8% = rich brown. 10%+ = dark temmoku. Totally different colors in gas kilns.',
+  }],
+  ['yellow-iron-oxide', {
+    id: 'yellow-iron-oxide', name: 'Yellow Iron Oxide', group: 'colorant',
+    oxideIds: ['fe2o3'],
+    uses: ['Similar to red iron but cooler tone', 'Buff and cream colors'],
+    watchFor: ['Similar atmosphere sensitivity to red iron', 'Less common than red iron oxide'],
+    beginner: 'A softer, cooler iron colorant. Gives buff and cream tones rather than the warmer amber of red iron.',
+  }],
+  ['black-iron-oxide', {
+    id: 'black-iron-oxide', name: 'Black Iron Oxide', group: 'colorant',
+    oxideIds: ['fe3o4'],
+    uses: ['Dark brown/black effects', 'Tenmoku and similar glazes'],
+    watchFor: ['Different iron state than red — melts differently', 'Can be more fluid than red at same percentage'],
+    beginner: 'Black iron for dark temmoku-style glazes. Slightly different chemistry to red iron — use slightly less.',
+  }],
+  ['cobalt-carbonate', {
+    id: 'cobalt-carbonate', name: 'Cobalt Carbonate', group: 'colorant',
+    oxideIds: ['coo'],
+    uses: ['Strong blue colorant', 'Combined with iron for teal/navy'],
+    watchFor: ['Tiny amounts have huge effect — measure carefully', 'Cobalt oxide is ~40% stronger than cobalt carbonate'],
+    beginner: 'The strongest blue colorant. Even 0.5% gives visible blue. Use sparingly — this is potent stuff.',
+  }],
+  ['cobalt-oxide', {
+    id: 'cobalt-oxide', name: 'Cobalt Oxide', group: 'colorant',
+    oxideIds: ['coo'],
+    uses: ['Same role as cobalt carbonate — slightly stronger'],
+    watchFor: ['~40% stronger than cobalt carbonate — use less', 'Coarser particle = speckled effect'],
+    beginner: 'Stronger than cobalt carbonate. Use about 60% of the amount you would use carbonate. The coarser form can create beautiful blue speckles.',
+  }],
+  ['copper-carbonate', {
+    id: 'copper-carbonate', name: 'Copper Carbonate', group: 'colorant',
+    oxideIds: ['cuo'],
+    uses: ['Green/turquoise in oxidation', 'Red/metallic in reduction and raku'],
+    watchFor: ['Volatility and crawling at loads above 5%', 'Food safety concerns at high percentages'],
+    beginner: 'Creates greens and turquoise in electric kilns, stunning reds and metallics in gas kilns. A chameleon colorant.',
+  }],
+  ['manganese-dioxide', {
+    id: 'manganese-dioxide', name: 'Manganese Dioxide / Carbonate', group: 'colorant',
+    oxideIds: ['mno'],
+    uses: ['Purple, brown, amber tones', 'Combined with cobalt for purple-blues'],
+    watchFor: ['Health hazard — avoid inhalation (fumes and dust)', 'Promotes crazing in some systems'],
+    beginner: 'Creates warm purple and brown tones. Combined with cobalt = purple-blue. Handle with care — fumes during firing need good ventilation.',
+  }],
+  ['chrome-oxide', {
+    id: 'chrome-oxide', name: 'Chrome Oxide', group: 'colorant',
+    oxideIds: ['cr2o3'],
+    uses: ['Opaque greens', 'Gray-green in matte glazes'],
+    watchFor: ['Turns pink in tin-containing glazes', 'Turns brown with zinc oxide', 'Very opaque even at 1%'],
+    beginner: 'Makes opaque greens. Warning: it turns pink when mixed with tin glaze — a famous accident called "chrome-tin pink".',
+  }],
+  ['nickel-oxide', {
+    id: 'nickel-oxide', name: 'Nickel Oxide / Carbonate', group: 'colorant',
+    oxideIds: ['nio'],
+    uses: ['Gray, tan, soft blue-gray tones', 'Modifier and variegation agent'],
+    watchFor: ['Unpredictable — results vary widely with base glaze chemistry', 'Muted, subtle colorant'],
+    beginner: 'A subtle modifier that adds gray, tan, or soft blue-gray tones. Less predictable than most colorants — a good "what if?" ingredient.',
+  }],
+  ['rutile', {
+    id: 'rutile', name: 'Rutile (Titanium with iron)', group: 'colorant',
+    oxideIds: ['tio2', 'fe2o3'],
+    uses: ['Warm variegation, oatmeal, and streak effects', 'Breaks color over texture'],
+    watchFor: ['Natural impurities cause batch variation', 'Can go muddy if overdone'],
+    beginner: 'A natural mineral that adds warm, textured, streaky effects. The secret ingredient in many beautiful variegated glazes — unpredictable in the best way.',
+  }],
+  ['titanium-dioxide', {
+    id: 'titanium-dioxide', name: 'Titanium Dioxide', group: 'opacifier',
+    oxideIds: ['tio2'],
+    uses: ['Opacifier and matting agent', 'Crystallization promoter'],
+    watchFor: ['Different from rutile — purer and whiter', 'Can promote crawling at high loads'],
+    beginner: 'Purer titanium without the iron of rutile. Adds whiteness and can trigger crystal growth.',
+  }],
+  ['tin-oxide', {
+    id: 'tin-oxide', name: 'Tin Oxide', group: 'opacifier',
+    oxideIds: ['sno2'],
+    uses: ['Premium white opacifier', 'Softens colors for pastels', 'Traditional majolica base'],
+    watchFor: ['Changes chrome glaze to pink (chrome-tin reaction)', 'Expensive — zirconium is cheaper alternative'],
+    beginner: 'Makes glazes opaque white. Used in majolica and any recipe where you want to hide the clay underneath. Expensive but beautiful.',
+  }],
+  ['zirconium-silicate', {
+    id: 'zirconium-silicate', name: 'Zircopax / Zirconium Silicate', group: 'opacifier',
+    oxideIds: ['zro2', 'sio2'],
+    uses: ['Strong, affordable opacifier', 'White and off-white surfaces'],
+    watchFor: ['Cooler/flatter surface than tin oxide', 'Less warm feel — can look commercial'],
+    beginner: 'Cheaper tin substitute for white opacity. Works well but the white is slightly cooler and flatter than tin.',
+  }],
+  ['barnard-clay', {
+    id: 'barnard-clay', name: 'Barnard Clay (Blackbird Clay)', group: 'colorant',
+    oxideIds: ['fe2o3', 'al2o3', 'sio2', 'mno'],
+    uses: ['Dark brown/black slip glaze bases', 'Natural iron-rich clay'],
+    watchFor: ['Supply issues — mined out, alternatives needed', 'High iron and manganese — very dark fired results'],
+    beginner: 'A dark natural clay high in iron and manganese. Used for deep brown and black effects. Supply is limited — may need to reformulate.',
+  }],
+  ['spodumene', {
+    id: 'spodumene', name: 'Spodumene', group: 'flux',
+    oxideIds: ['li2o', 'al2o3', 'sio2'],
+    uses: ['Lithium flux source', 'Promotes bright colors and special effects'],
+    watchFor: ['Supply can be limited', 'High Al2O3 content stiffens melt'],
+    beginner: 'A lithium-containing mineral. Lithium is a powerful flux that brightens colors (especially blues and greens) and lowers melting temperature.',
+  }],
+  ['lithium-carbonate', {
+    id: 'lithium-carbonate', name: 'Lithium Carbonate', group: 'flux',
+    oxideIds: ['li2o'],
+    uses: ['Pure lithium flux', 'Brightens blues', 'Lowers crazing in earthenware'],
+    watchFor: ['Slightly water soluble — can migrate in slop', 'High LOI', 'Very small amounts have significant effect'],
+    beginner: 'Pure lithium — a special flux that brightens colors and can help prevent crazing. A little goes a long way.',
+  }],
+  ['bentonite', {
+    id: 'bentonite', name: 'Bentonite', group: 'suspension-aid',
+    oxideIds: ['al2o3', 'sio2', 'mgo'],
+    uses: ['Suspends glaze in bucket', 'Prevents hard settling'],
+    watchFor: ['Keep under 2–3% or risk crawling', 'Hard to mix dry — add last or blend with a liquid'],
+    beginner: 'A very sticky clay used in tiny amounts (1–3%) to keep the glaze mixed and prevent it settling in the bucket.',
+  }],
+  ['epsom-salt', {
+    id: 'epsom-salt', name: 'Epsom Salt (Magnesium Sulphate)', group: 'suspension-aid',
+    oxideIds: ['mgo'],
+    uses: ['Flocculates glaze to prevent hard pan', 'Alternative to bentonite for suspension'],
+    watchFor: ['Does not add to dry glaze chemistry', 'Use only 0.1–0.5% dissolved in water'],
+    beginner: 'Regular Epsom salt dissolved in water helps keep the glaze fluffy and prevents it from sinking into a hard lump.',
+  }],
+  ['strontium-carbonate', {
+    id: 'strontium-carbonate', name: 'Strontium Carbonate', group: 'flux',
+    oxideIds: ['sro'],
+    uses: ['Low expansion alternative to barium carbonate', 'High-fire flux similar to calcium'],
+    watchFor: ['High LOI', 'Less common than other fluxes — not in all supply lists'],
+    beginner: 'A flux similar to calcium. Useful for lowering thermal expansion without the health risks of barium carbonate.',
+  }],
+  ['barium-carbonate', {
+    id: 'barium-carbonate', name: 'Barium Carbonate', group: 'flux',
+    oxideIds: ['bao'],
+    uses: ['Crawl-resistant matte surfaces', 'Unique satin effects'],
+    watchFor: ['TOXIC — requires PPE, careful handling', 'Not suitable for functional ware', 'Strontium carbonate is a safer alternative'],
+    beginner: 'Creates distinctive matte and crawled surfaces but is toxic. Many potters now use strontium carbonate as a safer option.',
+  }],
+  ['wood-ash', {
+    id: 'wood-ash', name: 'Wood Ash', group: 'flux',
+    oxideIds: ['cao', 'k2o', 'mgo', 'sio2', 'p2o5'],
+    uses: ['Natural ash glaze base', 'Traditional Japanese and Korean glaze tradition', 'Variegation and surface movement'],
+    watchFor: ['Highly variable chemistry between different wood species', 'Soluble fluxes in unwashed ash cause crawling and inconsistency', 'Wash 5–7 times to stabilise chemistry', 'Handle dry ash carefully — alkaline dust hazard'],
+    beginner: 'Ash from wood fires, used directly as a glaze ingredient. Creates beautiful organic, flowing surfaces. Wash it thoroughly first to remove the soluble salts that cause crawling.',
+  }],
+  ['soda-ash', {
+    id: 'soda-ash', name: 'Soda Ash (Sodium Carbonate)', group: 'flux',
+    oxideIds: ['na2o'],
+    uses: ['High-sodium source for Shino-style glazes', 'Carbon-trapping in reduction', 'Deflocculant in glaze batches'],
+    watchFor: ['Very soluble in water — migrates to glaze surface as it dries', 'Causes crawling and pinholes if applied unevenly', 'Use fresh — absorbs moisture from air over time'],
+    beginner: 'Washing soda in ceramic form. The secret to authentic American Shino glazes — it creates the blistered, carbon-trapped orange surface. It dissolves in water, which is part of how it works but also why it can be tricky.',
+  }],
+  ['ravenscrag-slip', {
+    id: 'ravenscrag-slip', name: 'Ravenscrag Slip', group: 'flux',
+    oxideIds: ['sio2', 'al2o3', 'cao', 'k2o', 'mgo', 'fe2o3'],
+    uses: ['Natural slip glaze base (cone 6–10)', 'Direct substitute for Alberta Slip in Tony Hansen\'s Digitalfire recipes', 'Fluid transparent to translucent surfaces with warm blush'],
+    watchFor: ['From Saskatchewan, Canada — available only in North America', 'Lower iron than Alberta Slip — lighter, more transparent results', 'Best used at 50–80% of recipe; needs fluxes added for lower temperatures'],
+    beginner: 'A natural clay from Saskatchewan, Canada that melts into a self-glazing surface at cone 6–10. Similar to Alberta Slip but lighter in color and more transparent. The base of many Digitalfire GR-series recipes.',
+  }],
+  ['bone-ash', {
+    id: 'bone-ash', name: 'Bone Ash (Calcium Phosphate)', group: 'flux',
+    oxideIds: ['cao', 'p2o5'],
+    uses: ['Opalescence and special effects in high-fire glazes', 'Slight mattening and surface break', 'English bone china body ingredient'],
+    watchFor: ['Very small amounts create noticeable opalescence', 'More than 5% can over-matt or dry the surface', 'Animal-derived — synthetic alternatives available'],
+    beginner: 'Burned and ground animal bones. In tiny amounts (1–3%) it makes glazes slightly milky or opalescent — the same effect you see in bone china. More than that and it starts to dry out the surface.',
+  }],
+  ['copper-oxide', {
+    id: 'copper-oxide', name: 'Copper Oxide (Black)', group: 'colorant',
+    oxideIds: ['cuo'],
+    uses: ['Green/turquoise in oxidation', 'Red/metallic in reduction and raku', 'Same character as copper carbonate — slightly stronger per gram'],
+    watchFor: ['About 25% stronger than copper carbonate — adjust amounts', 'Volatility, crawling, and food safety concerns at high percentages (>5%)', 'Migrates to other glazes in a crowded kiln'],
+    beginner: 'The oxide form of copper — slightly stronger than the carbonate. Same dramatic color shifts: green in electric kilns, reds and metallics in gas/raku. Use a little less than you would carbonate.',
+  }],
+  ['manganese-carbonate', {
+    id: 'manganese-carbonate', name: 'Manganese Carbonate', group: 'colorant',
+    oxideIds: ['mno'],
+    uses: ['Softer alternative to manganese dioxide for purples and brown tones', 'Combines with cobalt for violet-purple', 'Slightly cooler firing than dioxide form'],
+    watchFor: ['Health hazard — fumes during firing require ventilation', 'Similar to manganese dioxide but slightly milder per gram', 'Both forms accumulate in the kiln atmosphere with regular use'],
+    beginner: 'A gentler form of manganese than the dioxide. Creates warm purple and brown tones. With cobalt: rich violet-purple. Treat with the same caution as manganese dioxide — fumes need ventilation.',
+  }],
+  ['ilmenite', {
+    id: 'ilmenite', name: 'Ilmenite (FeTiO₃)', group: 'colorant',
+    oxideIds: ['fe2o3', 'tio2'],
+    uses: ['Speckle and dark brown flecks in glaze', 'Granular form creates distinct visible speckling', 'Combines iron and titanium in one material'],
+    watchFor: ['Coarse granular form essential for visible speckling — fine powder won\'t speckle', 'Usually used at 2–5% for decorative speckle', 'Natural batch variation in iron/titanium ratio'],
+    beginner: 'A natural iron-titanium mineral that adds dark speckles to glazes. The coarser the grind, the bigger and more visible the specks. A little goes a long way — 2–4% for a beautiful speckled surface.',
+  }],
+  ['ferro-frit-4110', {
+    id: 'ferro-frit-4110', name: 'Ferro Frit 4110', group: 'flux',
+    oxideIds: ['cao', 'b2o3', 'al2o3', 'sio2'],
+    uses: ['High-calcium low-fire frit', 'Earthenware liner glaze base', 'Low-expansion borosilicate for food-safe earthenware'],
+    watchFor: ['Primarily a low-fire frit — less effective above cone 4', 'Check current availability — Ferro periodically reformulates frits'],
+    beginner: 'A high-calcium low-fire frit often used as the main ingredient in food-safe earthenware base glazes. Provides a stable, durable surface at low temperatures.',
+  }],
+  ['ferro-frit-3107', {
+    id: 'ferro-frit-3107', name: 'Ferro Frit 3107', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'na2o', 'sio2'],
+    uses: ['Standard low-fire clear base', 'High boron content for gloss at cone 04–06', 'Traditional majolica and earthenware frit'],
+    watchFor: ['Lead-free version of historic lead frits — check if recipe is old', 'High sodium — moderate crazing risk on non-matching bodies'],
+    beginner: 'A classic low-fire gloss frit used in earthenware glazes. High in boron so it melts well at low temperatures. Often the base of bright earthenware colors.',
+  }],
+])
+
+// ─── Substitution data with rich options for the switcher UI ──────────────
+
+export const substitutions = new Map<string, SubstitutionPair>([
+  ['gerstley-borate', {
+    materialId: 'gerstley-borate',
+    alternatives: ['Colemanite (rough 1:1)', 'Ferro Frit 3134 (partial — chemistry drifts)', 'Ferro Frit 3195 (better all-round)'],
+    notes: ['No universal 1:1 replacement exists', '100 parts GB needs ~118 parts Frit 3134 for B2O3, but MgO and Na2O still drift'],
+    specifics: ['Best approach: remove GB entirely and rebuild the boron, CaO, MgO, and Na2O from separate materials using glaze chemistry software.'],
+    options: [
+      {
+        materialId: 'colemanite',
+        label: 'Colemanite',
+        ratio: '1:1 rough approximation',
+        difficulty: 'easy',
+        difficultyNote: 'Closest chemistry match among natural minerals. Still has some batch variation.',
+        chemicalShift: 'Slightly higher B2O3 per unit, lower MgO and Na2O',
+        visualEffect: 'Very similar melt character. Slightly more consistent than Gerstley Borate.',
+      },
+      {
+        materialId: 'ferro-frit-3134',
+        label: 'Ferro Frit 3134',
+        ratio: 'Use 118g per 100g of GB removed',
+        difficulty: 'moderate',
+        difficultyNote: 'Frit 3134 is consistent but doesn\'t match GB chemistry — you\'re adding extra SiO2 and losing MgO.',
+        chemicalShift: 'Higher SiO2 and Na2O, lower MgO vs Gerstley Borate',
+        visualEffect: 'May be slightly glossier. More consistent batch to batch.',
+      },
+      {
+        materialId: 'ferro-frit-3195',
+        label: 'Ferro Frit 3195',
+        ratio: 'Use same weight as 3134 approach',
+        difficulty: 'moderate',
+        difficultyNote: 'Slightly better Al2O3 match to GB than 3134. Good all-round low-fire substitute.',
+        chemicalShift: 'Higher Al2O3 than 3134 — stiffer melt',
+        visualEffect: 'More stable than 3134. Slightly less fluid.',
+      },
+    ],
+  }],
+  ['whiting', {
+    materialId: 'whiting',
+    alternatives: ['Wollastonite (adds SiO2, no CO2 release)', 'Calcium carbonate (same as whiting — different brand)'],
+    notes: ['Wollastonite: multiply whiting amount × 1.16, then reduce recipe SiO2 to compensate', 'Wollastonite reduces pinholing from CO2 gas release'],
+    options: [
+      {
+        materialId: 'wollastonite',
+        label: 'Wollastonite',
+        ratio: 'Use 116g per 100g of whiting removed (and reduce recipe silica)',
+        difficulty: 'moderate',
+        difficultyNote: 'Wollastonite provides the same CaO but also adds SiO2, so you need to reduce other silica sources.',
+        chemicalShift: 'Adds SiO2 along with CaO — no CO2 released',
+        visualEffect: 'Fewer pinholes from gas release. Slightly cleaner surface.',
+      },
+    ],
+  }],
+  ['kaolin', {
+    materialId: 'kaolin',
+    alternatives: ['Calcined kaolin (lower shrinkage, same chemistry)', 'Grolleg kaolin (whiter, less plastic)', 'Ball clay (more suspension, more iron)'],
+    notes: ['Best approach: use 50% raw kaolin + 50% calcined kaolin to balance suspension with low shrinkage', 'Ball clay tints light glazes slightly warm'],
+    options: [
+      {
+        materialId: 'calcined-kaolin',
+        label: 'Calcined Kaolin (Glomax LL)',
+        ratio: '1:1 weight (same fired chemistry, less LOI)',
+        difficulty: 'easy',
+        difficultyNote: 'Same chemistry after firing. Reduces glaze crawling and drying shrinkage. Slightly less suspension.',
+        chemicalShift: 'Same Al2O3 and SiO2. Lower LOI — less gas in firing.',
+        visualEffect: 'Glaze dries more evenly. Less tendency to crack off the pot before firing.',
+      },
+      {
+        materialId: 'grolleg-kaolin',
+        label: 'Grolleg Kaolin',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Whiter and cleaner than EPK. Lower TiO2 = cooler, purer white in fired result.',
+        chemicalShift: 'Very similar Al2O3 and SiO2. Much lower TiO2 (0.03% vs 0.37%).',
+        visualEffect: 'Whiter, cooler tone. Noticeably cleaner in transparent glazes.',
+      },
+      {
+        materialId: 'ball-clay',
+        label: 'Ball Clay',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Suspends better but adds iron and titanium. Not suitable for white/transparent glazes.',
+        chemicalShift: 'Higher Fe2O3 and TiO2 — adds warmth and possible tint',
+        visualEffect: 'Better suspension, but off-white or buff tones may appear.',
+      },
+    ],
+  }],
+  ['epk-kaolin', {
+    materialId: 'epk-kaolin',
+    alternatives: ['Grolleg Kaolin (whiter)', 'Calcined Kaolin (less crawling)'],
+    notes: ['EPK and Grolleg are interchangeable by weight as a starting point', 'Choose Grolleg for white/transparent glazes'],
+    options: [
+      {
+        materialId: 'grolleg-kaolin',
+        label: 'Grolleg Kaolin',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Virtually the same chemistry but with much lower TiO2. Produces whiter, cleaner results.',
+        chemicalShift: 'Lower TiO2 (0.03% vs 0.37%) — significant for white glazes',
+        visualEffect: 'Cooler, whiter fired color. Better for porcelain and transparent glazes.',
+      },
+      {
+        materialId: 'calcined-kaolin',
+        label: 'Calcined Kaolin',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Less crawling, less dry shrinkage — same fired chemistry.',
+        chemicalShift: 'No LOI — same fired oxides',
+        visualEffect: 'Glaze stays on better during drying and firing. No visible difference in finished glaze.',
+      },
+    ],
+  }],
+  ['potash-feldspar', {
+    materialId: 'potash-feldspar',
+    alternatives: ['Custer Feldspar (1:1 starting point)', 'G-200 HP (adjust for higher K2O)', 'Soda Feldspar / Minspar (higher Na2O)', 'Nepheline Syenite (more powerful flux)'],
+    notes: ['Different feldspar brands have different chemistry — test before production', 'Nepheline syenite melts at lower temperatures — may need to reduce total flux'],
+    options: [
+      {
+        materialId: 'custer-feldspar',
+        label: 'Custer Feldspar',
+        ratio: '1:1 weight (approximate)',
+        difficulty: 'easy',
+        difficultyNote: 'The two most common North American potash feldspars. Close but not identical — slight chemistry differences.',
+        chemicalShift: 'Small differences in K2O, Na2O, and Al2O3 ratios',
+        visualEffect: 'Very similar. Some glazes may be slightly glossier or more matte.',
+      },
+      {
+        materialId: 'soda-feldspar',
+        label: 'Soda Feldspar (Minspar 200)',
+        ratio: '1:1 weight as starting point',
+        difficulty: 'moderate',
+        difficultyNote: 'Higher sodium content raises thermal expansion — more crazing risk.',
+        chemicalShift: 'Higher Na2O, lower K2O — raises thermal expansion',
+        visualEffect: 'More fluid melt. Higher crazing risk.',
+      },
+      {
+        materialId: 'nepheline-syenite',
+        label: 'Nepheline Syenite',
+        ratio: 'Use 80% of feldspar amount, add 5% silica',
+        difficulty: 'moderate',
+        difficultyNote: 'More powerful flux with less SiO2. Melts at lower temperatures.',
+        chemicalShift: 'Lower SiO2, higher Na2O — more aggressive flux',
+        visualEffect: 'More melt activity. Good for lowering firing temperature.',
+      },
+    ],
+  }],
+  ['custer-feldspar', {
+    materialId: 'custer-feldspar',
+    alternatives: ['G-200 HP Feldspar', 'Potash Feldspar generic', 'Minspar (soda feldspar)'],
+    notes: ['Within the potash feldspar group, most are interchangeable with testing', 'Custer post-2010 has more Na2O than original'],
+    options: [
+      {
+        materialId: 'g200-feldspar',
+        label: 'G-200 HP Feldspar',
+        ratio: '1:1 starting point (test result)',
+        difficulty: 'easy',
+        difficultyNote: 'G200 HP has more K2O and less Na2O than Custer. Small but noticeable chemistry shift.',
+        chemicalShift: 'G200 HP: K2O 13.2% vs Custer K2O ~10% — higher potassium',
+        visualEffect: 'May be slightly stiffer. Worth a test tile before committing.',
+      },
+      {
+        materialId: 'nepheline-syenite',
+        label: 'Nepheline Syenite',
+        ratio: 'Use 80% of Custer amount + extra silica',
+        difficulty: 'moderate',
+        difficultyNote: 'Stronger flux, lower SiO2. Good if recipe needs to melt better.',
+        chemicalShift: 'Lower SiO2, more flux power',
+        visualEffect: 'More fluid. Lower effective maturing temperature.',
+      },
+    ],
+  }],
+  ['soda-feldspar', {
+    materialId: 'soda-feldspar',
+    alternatives: ['Minspar 200 (current soda feldspar)', 'Potash feldspar (lower expansion)'],
+    notes: ['Kona F-4 is discontinued — Minspar 200 is the direct replacement', 'Swapping to potash feldspar reduces crazing risk'],
+    options: [
+      {
+        materialId: 'potash-feldspar',
+        label: 'Potash Feldspar',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Lower expansion than soda feldspar. Reduces crazing risk.',
+        chemicalShift: 'Higher K2O, lower Na2O — lower thermal expansion',
+        visualEffect: 'Less fluid. Lower crazing risk.',
+      },
+      {
+        materialId: 'nepheline-syenite',
+        label: 'Nepheline Syenite',
+        ratio: '1:1 rough start, may need less',
+        difficulty: 'moderate',
+        difficultyNote: 'More powerful flux — may over-melt if used 1:1.',
+        chemicalShift: 'Higher flux power, lower SiO2',
+        visualEffect: 'More melt. Test first.',
+      },
+    ],
+  }],
+  ['nepheline-syenite', {
+    materialId: 'nepheline-syenite',
+    alternatives: ['Potash feldspar (lower flux, add more)', 'Cornish Stone (UK equivalent)'],
+    notes: ['Nepheline syenite melts more aggressively than feldspar', 'To replace with potash feldspar: increase amount and add more silica to compensate for lower SiO2 in nepheline'],
+    options: [
+      {
+        materialId: 'potash-feldspar',
+        label: 'Potash Feldspar',
+        ratio: 'Use 120–125g per 100g nepheline removed, add 5g silica',
+        difficulty: 'moderate',
+        difficultyNote: 'Feldspar melts at higher temp — recipe may need adjustment to ensure full melt.',
+        chemicalShift: 'Higher SiO2, lower fluxing power',
+        visualEffect: 'Stiffer melt. May need longer or hotter firing.',
+      },
+    ],
+  }],
+  ['ball-clay', {
+    materialId: 'ball-clay',
+    alternatives: ['Kaolin (purer, less iron)', 'EPK Kaolin + 2% bentonite blend'],
+    notes: ['Kaolin suspends less — add 1–2% bentonite to compensate', 'Kaolin gives whiter results'],
+    options: [
+      {
+        materialId: 'kaolin',
+        label: 'Kaolin / China Clay',
+        ratio: '1:1 weight + add 2% bentonite',
+        difficulty: 'easy',
+        difficultyNote: 'Kaolin is purer and whiter. Add a small amount of bentonite to restore suspension.',
+        chemicalShift: 'Lower Fe2O3 and TiO2 — cooler, whiter result',
+        visualEffect: 'Cooler, purer white. Add bentonite or epsom salt for suspension.',
+      },
+    ],
+  }],
+  ['talc', {
+    materialId: 'talc',
+    alternatives: ['Dolomite (adds CaO too)', 'Light magnesium carbonate (pure MgO source)'],
+    notes: ['Talc also brings SiO2 (63%), dolomite brings CaO — not a direct swap', 'Magnesium carbonate is pure MgO but can cause crawling'],
+    options: [
+      {
+        materialId: 'dolomite',
+        label: 'Dolomite',
+        ratio: 'Use 55g dolomite per 100g talc removed (and reduce whiting if present)',
+        difficulty: 'advanced',
+        difficultyNote: 'Dolomite brings CaO as well as MgO — you get a different flux profile. Use glaze chemistry software to recalculate.',
+        chemicalShift: 'Adds both CaO and MgO vs talc\'s MgO + SiO2',
+        visualEffect: 'Similar matte result. May need to adjust silica.',
+      },
+    ],
+  }],
+  ['dolomite', {
+    materialId: 'dolomite',
+    alternatives: ['Talc + Whiting (split the MgO and CaO separately)'],
+    notes: ['High LOI — consider wollastonite + talc for cleaner firing'],
+    options: [
+      {
+        materialId: 'talc',
+        label: 'Talc (for MgO) + Whiting (for CaO)',
+        ratio: 'Requires chemistry calculation to split CaO and MgO contributions',
+        difficulty: 'advanced',
+        difficultyNote: 'Split dolomite\'s CaO and MgO: roughly 60% becomes whiting, 40% becomes talc equivalent. Use chemistry software.',
+        chemicalShift: 'Same oxides (CaO + MgO) but from two separate materials with different SiO2 contributions',
+        visualEffect: 'Fewer pinholes than dolomite alone. Very similar matte surface.',
+      },
+    ],
+  }],
+  ['ferro-frit-3134', {
+    materialId: 'ferro-frit-3134',
+    alternatives: ['Ferro Frit 3195 (more alumina)', 'Ferro Frit 3124 (stiffer melt)', 'Colemanite (natural, less consistent)', 'Gerstley Borate (natural, variable)'],
+    notes: ['Different frits shift expansion, melt character, and clarity', 'Frit 3124 has more alumina — stiffer, more stable melt'],
+    options: [
+      {
+        materialId: 'ferro-frit-3195',
+        label: 'Ferro Frit 3195',
+        ratio: '1:1 weight as starting point',
+        difficulty: 'easy',
+        difficultyNote: 'Higher Al2O3 than 3134. Good all-round substitute in low and mid-fire work.',
+        chemicalShift: 'More Al2O3, similar B2O3 — slightly stiffer melt',
+        visualEffect: 'More stable glaze surface. Slightly less fluid.',
+      },
+      {
+        materialId: 'ferro-frit-3124',
+        label: 'Ferro Frit 3124',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Good general borosilicate frit. More alumina makes it stiffer — less risk of running.',
+        chemicalShift: 'Lower B2O3, much higher Al2O3 than 3134',
+        visualEffect: 'Stiffer, more controlled melt. Less flow.',
+      },
+      {
+        materialId: 'gerstley-borate',
+        label: 'Gerstley Borate (if available)',
+        ratio: 'Use ~85g GB per 100g Frit 3134',
+        difficulty: 'moderate',
+        difficultyNote: 'GB is a natural material — variable and hard to source. Only use if frit is unavailable.',
+        chemicalShift: 'Adds MgO that frit lacks. Different Na2O level.',
+        visualEffect: 'More variable results. Beautiful in the best cases.',
+      },
+    ],
+  }],
+  ['ferro-frit-3110', {
+    materialId: 'ferro-frit-3110',
+    alternatives: ['Ferro Frit 3134 (lower expansion)', 'Ferro Frit 3195'],
+    notes: ['Frit 3110 has very high expansion — substituting 3134 will reduce crazing risk', '3134 is less aggressive — recipe may need adjustment'],
+    options: [
+      {
+        materialId: 'ferro-frit-3134',
+        label: 'Ferro Frit 3134',
+        ratio: '1:1 weight as first test',
+        difficulty: 'easy',
+        difficultyNote: 'Lower expansion than 3110. Reduces crazing. May melt slightly differently.',
+        chemicalShift: 'Lower Na2O — lower thermal expansion',
+        visualEffect: 'Less crazing. Slightly different melt character.',
+      },
+    ],
+  }],
+  ['tin-oxide', {
+    materialId: 'tin-oxide',
+    alternatives: ['Zirconium silicate / Zircopax (affordable substitute)', 'Titanium dioxide (different whiteness character)'],
+    notes: ['Zircopax needs 2× the amount of tin oxide for similar opacity', 'Zircopax gives cooler, flatter white vs tin\'s warmer tone'],
+    options: [
+      {
+        materialId: 'zirconium-silicate',
+        label: 'Zircopax (Zirconium Silicate)',
+        ratio: 'Use 15–20g Zircopax per 8–10g tin oxide',
+        difficulty: 'easy',
+        difficultyNote: 'Needs more material for same opacity. Cheaper, but result is cooler and flatter.',
+        chemicalShift: 'Adds ZrO2 + SiO2 vs pure SnO2 — different opacity mechanism',
+        visualEffect: 'Cooler, more industrial white. Less warm and depth vs tin.',
+      },
+    ],
+  }],
+  ['zirconium-silicate', {
+    materialId: 'zirconium-silicate',
+    alternatives: ['Tin oxide (warmer, more depth)', 'Titanium dioxide (different opacity character)'],
+    notes: ['Tin oxide gives warmer opacity with more depth — use ~50% less', 'Titanium dioxide at 5–8% gives soft, more uneven opacity'],
+    options: [
+      {
+        materialId: 'tin-oxide',
+        label: 'Tin Oxide',
+        ratio: 'Use 5–8g tin per 12–15g Zircopax removed',
+        difficulty: 'easy',
+        difficultyNote: 'Much stronger opacifier per gram. Warmer, more luminous white.',
+        chemicalShift: 'Pure SnO2 vs ZrO2+SiO2 — different refractive index',
+        visualEffect: 'Warmer white with more depth. Superior visual quality.',
+      },
+    ],
+  }],
+  ['cobalt-carbonate', {
+    materialId: 'cobalt-carbonate',
+    alternatives: ['Cobalt oxide (stronger — use 60% of the amount)'],
+    notes: ['Cobalt oxide is approximately 40% stronger than cobalt carbonate', 'Coarser cobalt oxide particles create attractive blue speckles'],
+    options: [
+      {
+        materialId: 'cobalt-oxide',
+        label: 'Cobalt Oxide',
+        ratio: 'Use 60% of cobalt carbonate amount',
+        difficulty: 'easy',
+        difficultyNote: 'Same colorant, stronger concentration. Coarser particle can create speckle effect.',
+        chemicalShift: 'Same CoO oxide — different particle size and concentration',
+        visualEffect: 'Same blue, possibly with attractive darker speckles if particle size is coarse.',
+      },
+    ],
+  }],
+  ['cobalt-oxide', {
+    materialId: 'cobalt-oxide',
+    alternatives: ['Cobalt carbonate (use ~166% of cobalt oxide amount)'],
+    notes: ['Cobalt carbonate is milder and easier to measure accurately for small amounts'],
+    options: [
+      {
+        materialId: 'cobalt-carbonate',
+        label: 'Cobalt Carbonate',
+        ratio: 'Use 166% of cobalt oxide amount (e.g. 0.5g oxide → 0.83g carbonate)',
+        difficulty: 'easy',
+        difficultyNote: 'Carbonate form — slightly weaker, easier to measure in small quantities.',
+        chemicalShift: 'Same CoO oxide contribution at correct amounts',
+        visualEffect: 'Same blue, but finer particle — more even wash, less speckle.',
+      },
+    ],
+  }],
+  ['copper-carbonate', {
+    materialId: 'copper-carbonate',
+    alternatives: ['Copper oxide (stronger — use about 75%)'],
+    notes: ['Copper oxide is slightly stronger than copper carbonate', 'Results in oxidation and reduction are the same chameleon-like behavior'],
+    options: [
+      {
+        materialId: 'copper-oxide',
+        label: 'Copper Oxide (Black)',
+        ratio: 'Use 75% of copper carbonate amount',
+        difficulty: 'easy',
+        difficultyNote: 'Slightly stronger per gram. Same dramatic oxidation/reduction behavior.',
+        chemicalShift: 'Same CuO contribution at adjusted amounts',
+        visualEffect: 'Virtually identical. May be slightly coarser — slight texture difference.',
+      },
+    ],
+  }],
+  ['red-iron-oxide', {
+    materialId: 'red-iron-oxide',
+    alternatives: ['Yellow iron oxide (cooler tone)', 'Black iron oxide (use slightly less)', 'Barnard clay (+ other oxides)'],
+    notes: ['Different iron forms give slightly different color temperatures', 'Black iron oxide is in a different oxidation state — use ~90% of the amount'],
+    options: [
+      {
+        materialId: 'yellow-iron-oxide',
+        label: 'Yellow Iron Oxide',
+        ratio: '1:1 weight as starting point',
+        difficulty: 'easy',
+        difficultyNote: 'Same iron content but different crystal form. Slightly cooler, more buff tones.',
+        chemicalShift: 'Same Fe2O3 contribution — different pigment particle form',
+        visualEffect: 'Slightly cooler amber-buff tones vs the warm orange-amber of red iron.',
+      },
+      {
+        materialId: 'black-iron-oxide',
+        label: 'Black Iron Oxide',
+        ratio: 'Use 90% of red iron amount',
+        difficulty: 'easy',
+        difficultyNote: 'Fe3O4 oxidation state — melts differently. Use a touch less.',
+        chemicalShift: 'Fe3O4 vs Fe2O3 — different melting behavior',
+        visualEffect: 'Darker and richer at same percentage. Can be more fluid.',
+      },
+    ],
+  }],
+  ['whiting', {
+    materialId: 'whiting',
+    alternatives: ['Wollastonite (adds SiO2, no CO2)', 'Calcium carbonate (same thing — different brand)'],
+    notes: ['Wollastonite: use 116g per 100g whiting, but reduce SiO2 to compensate', 'Wollastonite = fewer pinholes from gas'],
+    options: [
+      {
+        materialId: 'wollastonite',
+        label: 'Wollastonite',
+        ratio: 'Use 116g per 100g whiting; reduce other silica by ~60g per 100g wollastonite added',
+        difficulty: 'moderate',
+        difficultyNote: 'Wollastonite adds SiO2 as well as CaO. You need to reduce silica sources to compensate.',
+        chemicalShift: 'No CO2 release. Adds SiO2 alongside CaO.',
+        visualEffect: 'Fewer pinholes. Slightly cleaner surface. May change matte/gloss character slightly.',
+      },
+    ],
+  }],
+  ['lithium-carbonate', {
+    materialId: 'lithium-carbonate',
+    alternatives: ['Spodumene (Li2O + Al2O3 + SiO2)', 'Petalite (lower Li2O, lower expansion)'],
+    notes: ['Spodumene is a mineral with Li2O — less pure but brings Al2O3 and SiO2 along', 'Both reduce expansion better than sodium or potassium fluxes'],
+    options: [
+      {
+        materialId: 'spodumene',
+        label: 'Spodumene',
+        ratio: 'Use ~5× the lithium carbonate amount to match Li2O',
+        difficulty: 'advanced',
+        difficultyNote: 'Spodumene has ~8% Li2O vs 40% in lithium carbonate. Also adds Al2O3 and SiO2 to the recipe.',
+        chemicalShift: 'Adds Al2O3 and SiO2 alongside Li2O',
+        visualEffect: 'More stable melt. May be slightly stiffer.',
+      },
+    ],
+  }],
+])
+
+// ─── Change impacts — what happens when you adjust an ingredient ──────────
+
+export const changeImpacts = new Map<string, ChangeImpact>([
+  ['silica', { id: 'increase-silica', change: 'Increase silica', usuallyDoes: ['Raises glass-network strength', 'Often lowers thermal expansion', 'Reduces melt fluidity'], watchFor: ['Dryness if underfired', 'Loss of brilliance'], visualHint: 'Surface becomes stiffer and more matte. Less likely to run.' }],
+  ['kaolin', { id: 'increase-alumina', change: 'Increase kaolin/alumina', usuallyDoes: ['Stiffens the melt', 'Reduces running', 'Improves hardness and suspension'], watchFor: ['Cloudiness', 'More crawling risk'], visualHint: 'Glaze becomes more stable and opaque. Better suspension but may crawl.' }],
+  ['epk-kaolin', { id: 'increase-alumina', change: 'Increase EPK kaolin', usuallyDoes: ['Stiffens the melt', 'Better suspension'], watchFor: ['Slight warm tint from TiO2', 'Crawling'], visualHint: 'Similar to generic kaolin. Good suspension, slight warm tint possible.' }],
+  ['grolleg-kaolin', { id: 'increase-alumina', change: 'Increase Grolleg', usuallyDoes: ['Stiffens the melt', 'Whiter result than EPK'], watchFor: ['Less plastic — less suspension', 'Crawling at high amounts'], visualHint: 'Whiter, cooler result. Best for transparent and porcelain glazes.' }],
+  ['calcined-kaolin', { id: 'increase-alumina', change: 'Increase calcined kaolin', usuallyDoes: ['Stiffens melt', 'Reduces dry shrinkage'], watchFor: ['Less suspension power than raw kaolin', 'Crawling'], visualHint: 'Less crawling during drying. Same effect on fired glaze as raw kaolin.' }],
+  ['ball-clay', { id: 'increase-alumina', change: 'Increase ball clay', usuallyDoes: ['Stiffens the melt', 'Better suspension than kaolin'], watchFor: ['Iron tinting in light glazes', 'Crawling'], visualHint: 'Similar to kaolin but adds iron tint. Good for suspension.' }],
+  ['potash-feldspar', { id: 'increase-potassium-sodium', change: 'Increase feldspar flux', usuallyDoes: ['Increases melt activity', 'Pushes gloss when balanced', 'Raises expansion slightly'], watchFor: ['Crazing risk', 'Excessive running in low-alumina bases'], visualHint: 'More melt and flow. Surface gets glossier but may craze.' }],
+  ['custer-feldspar', { id: 'increase-potassium-sodium', change: 'Increase Custer Feldspar', usuallyDoes: ['Standard stoneware flux activity', 'Glossy surface when balanced with alumina'], watchFor: ['Crazing if thermal expansion climbs', 'Underfired = dry crawled surface'], visualHint: 'More gloss at stoneware temperatures. The workhorse feldspar — reliable but watch crazing.' }],
+  ['g200-feldspar', { id: 'increase-potassium-sodium', change: 'Increase G-200 HP', usuallyDoes: ['Similar to Custer but higher K2O', 'Slightly stiffer melt than Custer'], watchFor: ['Slightly different from old G-200 formulation', 'Same crazing risk as Custer'], visualHint: 'Very similar to Custer feldspar. Slightly stiffer melt due to higher K2O.' }],
+  ['soda-feldspar', { id: 'increase-potassium-sodium', change: 'Increase soda feldspar', usuallyDoes: ['Strong melt activator', 'Pushes gloss'], watchFor: ['Higher crazing risk than potash feldspar'], visualHint: 'Aggressive melter. More gloss but higher crazing risk.' }],
+  ['nepheline-syenite', { id: 'increase-potassium-sodium', change: 'Increase nepheline syenite', usuallyDoes: ['Melts at lower temperatures', 'Strong flux'], watchFor: ['High expansion', 'Excessive fluidity'], visualHint: 'Turbocharged melting. Great for lower temps but watch for running.' }],
+  ['whiting', { id: 'increase-calcium', change: 'Increase whiting (CaO)', usuallyDoes: ['Supports durable gloss', 'Can promote crystals or satin'], watchFor: ['Pinholes from CO2 gas release', 'Stiffness with too much alumina'], visualHint: 'More durability and gloss at stoneware temps. May pinhole if fired too fast.' }],
+  ['wollastonite', { id: 'increase-calcium', change: 'Increase wollastonite', usuallyDoes: ['CaO + SiO2 with lower LOI', 'Cleaner melt than whiting'], watchFor: ['Not a direct whiting substitute by weight — adds SiO2'], visualHint: 'Cleaner calcium source — fewer pinholes than whiting.' }],
+  ['talc', { id: 'increase-magnesium', change: 'Increase talc (MgO)', usuallyDoes: ['Pushes satin or matte surfaces', 'Often lowers expansion'], watchFor: ['Waxy or dry surfaces', 'Loss of transparency'], visualHint: 'Surface softens toward silky matte. Colors may become muted.' }],
+  ['dolomite', { id: 'increase-magnesium', change: 'Increase dolomite', usuallyDoes: ['Pushes matte and satin surfaces', 'Adds both CaO and MgO'], watchFor: ['High LOI CO2 release', 'Can cause pinholes'], visualHint: 'Smooth buttery matte surface. Watch for pinholes from gas.' }],
+  ['zinc-oxide', { id: 'increase-zinc', change: 'Increase zinc oxide', usuallyDoes: ['Boosts melt', 'Supports crystal growth', 'Brightens blues and greens'], watchFor: ['Odd behavior in reduction', 'High fluidity in crystalline glazes'], visualHint: 'More melt and potential crystal formation. Best in electric kilns.' }],
+  ['red-iron-oxide', { id: 'increase-iron', change: 'Increase iron oxide', usuallyDoes: ['Amber → brown → rust → temmoku depending on amount', 'Atmosphere dramatically shifts color'], watchFor: ['Over-darkening', 'Stiff or saturated surfaces'], visualHint: '1–3%: warm amber. 5–8%: rich brown. 10%+: dark temmoku. Reduction shifts everything.' }],
+  ['yellow-iron-oxide', { id: 'increase-iron', change: 'Increase yellow iron oxide', usuallyDoes: ['Buff and cream tones', 'Cooler than red iron'], watchFor: ['Same atmosphere sensitivity as red iron'], visualHint: 'Warmer buff/cream result vs red iron\'s orange-amber tone.' }],
+  ['black-iron-oxide', { id: 'increase-iron', change: 'Increase black iron oxide', usuallyDoes: ['Dark brown and black effects', 'Can be more fluid than red iron'], watchFor: ['Different melting behavior than red iron', 'Use slightly less'], visualHint: 'Darker and richer at same percentage. Temmoku and dark chun effects.' }],
+  ['cobalt-carbonate', { id: 'increase-cobalt', change: 'Increase cobalt', usuallyDoes: ['Quickly moves to strong blue', 'Very powerful colorant'], watchFor: ['Tiny increments matter — 0.25% visible', 'Excess flattens subtle variation'], visualHint: 'Small additions = visible blue. Very potent — measure carefully.' }],
+  ['cobalt-oxide', { id: 'increase-cobalt', change: 'Increase cobalt oxide', usuallyDoes: ['Even stronger than carbonate per gram', 'Speckle from coarser particles'], watchFor: ['Use less — ~40% stronger than carbonate'], visualHint: 'Same blue as carbonate but coarser — can create beautiful speckled blue effects.' }],
+  ['copper-carbonate', { id: 'increase-copper', change: 'Increase copper', usuallyDoes: ['Deepens turquoise/green in oxidation', 'Red/metallic in reduction and raku'], watchFor: ['Volatility and crawling at high loads', 'Food safety concerns'], visualHint: 'Electric kiln: greens and turquoise. Gas kiln: reds and metallics.' }],
+  ['manganese-dioxide', { id: 'increase-manganese', change: 'Increase manganese', usuallyDoes: ['Purple, brown, and amber tones', 'Combined with cobalt = purple-blue'], watchFor: ['Health hazard — ventilate well during firing', 'Promotes crazing'], visualHint: 'Warm purple-brown tones. With cobalt: royal purple-blue.' }],
+  ['chrome-oxide', { id: 'increase-chrome', change: 'Increase chrome oxide', usuallyDoes: ['Opaque greens', 'Gray-green in matte bases'], watchFor: ['Pink reaction with tin oxide — chrome-tin pink', 'Brown with zinc oxide'], visualHint: 'Strong opaque green at low amounts. Warning: turns pink near tin glazes.' }],
+  ['rutile', { id: 'increase-titanium-rutile', change: 'Increase rutile', usuallyDoes: ['Adds variegation and mottling', 'Breaks color over texture', 'Warms cream and oatmeal surfaces'], watchFor: ['Muddy transparency', 'Batch variation'], visualHint: 'Adds warm streaks, crystals, and organic texture. Unpredictable in the best way.' }],
+  ['titanium-dioxide', { id: 'increase-titanium-rutile', change: 'Increase titanium dioxide', usuallyDoes: ['White opacity', 'Can promote crystal nucleation'], watchFor: ['Crawling at high loads', 'Uneven results'], visualHint: 'Whitens and opacifies. Purer than rutile — less warm and streaky.' }],
+  ['tin-oxide', { id: 'increase-tin-zircon', change: 'Increase tin oxide', usuallyDoes: ['Raises opacity', 'Pushes white or pastel surfaces'], watchFor: ['Cooler color response', 'Loss of transparency'], visualHint: 'Glaze becomes whiter and more opaque. Softens other colors.' }],
+  ['zirconium-silicate', { id: 'increase-tin-zircon', change: 'Increase zirconium silicate', usuallyDoes: ['Strong opacifier', 'White surfaces'], watchFor: ['Cooler and flatter than tin', 'Loss of depth'], visualHint: 'Strong whitener. Cheaper than tin but less warmth.' }],
+  ['bentonite', { id: 'increase-bentonite', change: 'Increase bentonite', usuallyDoes: ['Improves suspension', 'Slows settling'], watchFor: ['Too much dry shrinkage', 'Greater crawling risk'], visualHint: 'Helps keep glaze mixed. Keep under 3% or risk crawling.' }],
+  ['gerstley-borate', { id: 'increase-boron', change: 'Increase Gerstley Borate', usuallyDoes: ['Lowers melting temp', 'Increases gloss at low/mid fire'], watchFor: ['Variable chemistry', 'Higher expansion'], visualHint: 'More melt at lower temps. Inconsistent batch to batch.' }],
+  ['colemanite', { id: 'increase-boron', change: 'Increase colemanite', usuallyDoes: ['More boron and calcium', 'Lower melting temp'], watchFor: ['Batch variation', 'High LOI'], visualHint: 'Similar to Gerstley Borate but more consistent. Good boron source.' }],
+  ['ferro-frit-3134', { id: 'increase-boron', change: 'Increase Frit 3134', usuallyDoes: ['Lowers melting temp', 'Increases gloss', 'Helps clear low-fire systems'], watchFor: ['Higher expansion', 'More fluidity than expected'], visualHint: 'More melting power. Good for low-fire clarity but can cause crazing.' }],
+  ['ferro-frit-3124', { id: 'increase-boron', change: 'Increase Frit 3124', usuallyDoes: ['Boron flux with stable alumina', 'Stiffer melt than 3134'], watchFor: ['Less fluid than 3134'], visualHint: 'More controlled melt. Good for glazes that tend to run.' }],
+  ['ferro-frit-3195', { id: 'increase-boron', change: 'Increase Frit 3195', usuallyDoes: ['Good general borosilicate flux', 'Stable at low and mid fire'], watchFor: ['Similar to 3134 — test first'], visualHint: 'Reliable all-round frit. Similar to 3134 with slightly stiffer melt.' }],
+  ['ferro-frit-3110', { id: 'increase-boron', change: 'Increase Frit 3110', usuallyDoes: ['Strong low-fire melt'], watchFor: ['Very high expansion — crazing likely'], visualHint: 'Aggressive low-fire melter. High crazing risk.' }],
+  ['ferro-frit-3249', { id: 'increase-boron', change: 'Increase Frit 3249', usuallyDoes: ['High boron, low expansion', 'Reduces crazing risk'], watchFor: ['High B2O3 — can be very fluid'], visualHint: 'Corrects crazing by lowering expansion. Very fluid — watch for running.' }],
+  ['spodumene', { id: 'increase-lithium', change: 'Increase spodumene', usuallyDoes: ['Adds lithium flux', 'Lowers expansion', 'Brightens colors'], watchFor: ['Also adds Al2O3 — can stiffen melt'], visualHint: 'Lithium brightens blues and lowers crazing. Spodumene adds alumina too.' }],
+  ['lithium-carbonate', { id: 'increase-lithium', change: 'Increase lithium carbonate', usuallyDoes: ['Powerful flux', 'Lowers expansion', 'Brightens colors dramatically'], watchFor: ['Slightly soluble — can migrate', 'Small amounts have big effect'], visualHint: 'Brightens colors and lowers crazing. A little goes a long way.' }],
+  ['strontium-carbonate', { id: 'increase-strontium', change: 'Increase strontium carbonate', usuallyDoes: ['Lowers expansion (like calcium but slightly less)', 'Stable high-fire flux'], watchFor: ['High LOI', 'Less dramatic effect than barium'], visualHint: 'Subtle expansion reducer. Safer alternative to barium carbonate.' }],
+  ['barium-carbonate', { id: 'increase-barium', change: 'Increase barium carbonate', usuallyDoes: ['Unique crawled/dry matte surfaces', 'Lowers expansion'], watchFor: ['TOXIC — serious health hazard', 'Not suitable for functional ware'], visualHint: 'Distinctive dry, crawled surface effects. Not for anything that touches food.' }],
+  ['alberta-slip', { id: 'increase-iron-slip', change: 'Increase Alberta Slip', usuallyDoes: ['More fluid amber/brown melt', 'Classic slip glaze character'], watchFor: ['High iron — very dark at high amounts', 'Best in reduction firing'], visualHint: 'Rich amber-to-brown at lower amounts. Dark and flowing at high amounts in reduction.' }],
+  ['wood-ash', { id: 'increase-wood-ash', change: 'Increase wood ash', usuallyDoes: ['More natural flux character', 'Surface movement and pooling', 'Soft satin or glossy surface depending on base'], watchFor: ['Unwashed ash adds soluble fluxes — crawling risk', 'Inconsistency between batches of different ash'], visualHint: 'More organic, flowing surface. Ash glazes pool in grooves and run slightly on vertical surfaces.' }],
+  ['soda-ash', { id: 'increase-soda-ash', change: 'Increase soda ash', usuallyDoes: ['More sodium flux', 'Encourages carbon trapping in shino-style glazes', 'Higher gloss potential'], watchFor: ['Very soluble — migrates to surface during drying', 'Higher amounts = more crawling risk'], visualHint: 'More surface movement and carbon blushing in reduction. Can cause pinholes if too thick.' }],
+  ['bone-ash', { id: 'increase-bone-ash', change: 'Increase bone ash', usuallyDoes: ['Adds opalescence and milkiness', 'Slight mattening effect', 'Phosphorus-calcium chemistry shift'], watchFor: ['Over 5% can dry out the surface considerably', 'Changes color response of iron and other colorants'], visualHint: 'Glaze becomes milky and slightly opalescent. Beautiful in thick transparent glazes.' }],
+  ['ravenscrag-slip', { id: 'increase-ravenscrag', change: 'Increase Ravenscrag Slip', usuallyDoes: ['More natural slip character', 'Fluid amber-clear surface at high percentages', 'Good transparency with slight warm tint'], watchFor: ['Low iron compared to Alberta Slip — lighter results', 'Needs additional fluxes at cone 6'], visualHint: 'Warm transparent surface. Higher amounts = more slip-glaze character with natural movement.' }],
+  ['copper-oxide', { id: 'increase-copper', change: 'Increase copper oxide', usuallyDoes: ['Deepens turquoise/green in oxidation', 'Red/metallic in reduction and raku'], watchFor: ['~25% stronger than copper carbonate — use less', 'Crawling and volatility at high loads'], visualHint: 'Same color shifts as copper carbonate — electric: greens. Gas/raku: reds and metallics.' }],
+  ['manganese-carbonate', { id: 'increase-manganese', change: 'Increase manganese carbonate', usuallyDoes: ['Purple, brown, and amber tones', 'Combined with cobalt = violet-purple'], watchFor: ['Health hazard — ventilate well during firing', 'Slightly milder than dioxide per gram'], visualHint: 'Warm purple-brown tones. With cobalt: rich violet-purple.' }],
+  ['ilmenite', { id: 'increase-ilmenite', change: 'Increase ilmenite', usuallyDoes: ['Dark brown to black speckle in glaze', 'More and larger specks as amount increases'], watchFor: ['Use coarse granular form for visible speckling', 'Fine powder form blends invisibly'], visualHint: 'Dark speckles appear in the glaze surface. More ilmenite = more prominent speckling.' }],
+  ['ferro-frit-4110', { id: 'increase-boron', change: 'Increase Frit 4110', usuallyDoes: ['More stable low-fire melt', 'Higher calcium in the base', 'Good durability for earthenware'], watchFor: ['Primarily a low-fire material — less active at higher temps'], visualHint: 'More melt at low temperatures. Durable, food-safe base for earthenware.' }],
+  ['ferro-frit-3107', { id: 'increase-boron', change: 'Increase Frit 3107', usuallyDoes: ['More gloss at low fire', 'Boron + calcium + sodium flux combination'], watchFor: ['High sodium can cause crazing on non-matching clay bodies'], visualHint: 'More glossy low-fire melt. Good for bright opaque earthenware colors.' }],
+])
+
+// ─── Colorant dosing heuristics ────────────────────────────────────────────
+
+export const colorantHeuristics = new Map<string, ColorantHeuristic>([
+  ['cobalt-carbonate', { materialId: 'cobalt-carbonate', range: '0.25–2% light blues, 2–5% strong blue', notes: 'Tiny changes are visible. Measure with a gram scale.' }],
+  ['cobalt-oxide', { materialId: 'cobalt-oxide', range: '0.15–1.5% light blues, 1.5–3% strong blue', notes: '~40% stronger than carbonate. Coarser particle = blue speckle.' }],
+  ['copper-carbonate', { materialId: 'copper-carbonate', range: '1–3% oxidation greens, 3–6% turquoise, 8–11% special effects', notes: 'Higher loads increase volatility. Caution above 5% for food surfaces.' }],
+  ['red-iron-oxide', { materialId: 'red-iron-oxide', range: '1–3% amber/celadon, 4–8% rust/brown, 10–15% temmoku', notes: 'Atmosphere changes everything — test in your specific kiln.' }],
+  ['yellow-iron-oxide', { materialId: 'yellow-iron-oxide', range: '1–5% buff/cream tones, 5–10% light brown', notes: 'Cooler, more subtle than red iron.' }],
+  ['black-iron-oxide', { materialId: 'black-iron-oxide', range: '1–4% dark amber, 5–12% brown/black', notes: 'Slightly more fluid than red iron at same %. Use about 10% less.' }],
+  ['rutile', { materialId: 'rutile', range: '2–5% subtle variegation, 5–10% strong break and mottling', notes: 'Natural batch variation is part of the charm.' }],
+  ['titanium-dioxide', { materialId: 'titanium-dioxide', range: '3–6% soft opacity, 6–12% strong opacity/crystalline', notes: 'Higher amounts encourage crystal nucleation.' }],
+  ['tin-oxide', { materialId: 'tin-oxide', range: '4–8% semi-opaque, 8–12% fully opaque white', notes: 'Changes chrome and copper response dramatically.' }],
+  ['zirconium-silicate', { materialId: 'zirconium-silicate', range: '6–10% semi-opaque, 10–15% fully opaque', notes: 'Needs more than tin for same opacity. Cooler and flatter.' }],
+  ['manganese-dioxide', { materialId: 'manganese-dioxide', range: '1–4% warm purple/brown, 3–6% with cobalt for true purple', notes: 'Ensure good kiln ventilation during firing.' }],
+  ['chrome-oxide', { materialId: 'chrome-oxide', range: '0.5–2% mid green, 2–4% opaque green', notes: 'Very powerful — keep away from tin-containing glazes or neighbors.' }],
+  ['nickel-oxide', { materialId: 'nickel-oxide', range: '0.5–2% gray modifier, combined with cobalt for cool blue-gray', notes: 'Unpredictable. Test extensively before committing.' }],
+  ['copper-oxide', { materialId: 'copper-oxide', range: '0.75–2.25% oxidation greens, 2.25–4.5% turquoise, 6–8% special effects', notes: '~25% stronger than copper carbonate. Same atmosphere-sensitivity. Adjust down from carbonate amounts.' }],
+  ['manganese-carbonate', { materialId: 'manganese-carbonate', range: '1–4% warm purple/brown, 3–6% with cobalt for true purple', notes: 'Very similar to manganese dioxide — slightly milder. Good ventilation required during firing.' }],
+  ['ilmenite', { materialId: 'ilmenite', range: '2–4% light speckle, 4–8% heavy speckle', notes: 'Use coarse granular form for visible spots. Fine powder blends in. Natural variation in batch chemistry.' }],
+])

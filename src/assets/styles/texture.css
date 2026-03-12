@@ -1,0 +1,47 @@
+/* Paper grain overlay using SVG feTurbulence */
+.texture-overlay {
+  position: relative;
+}
+
+.texture-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-toast);
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+/* Diagonal separator */
+.diagonal-sep {
+  position: relative;
+  overflow: hidden;
+}
+
+.diagonal-sep::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--cream);
+  clip-path: polygon(0 60px, 100% 0, 100% 60px);
+}
+
+.diagonal-sep--parchment::after {
+  background: var(--parchment);
+}
+
+/* Warm card glow */
+.warm-glow {
+  box-shadow: var(--shadow-md), var(--shadow-clay);
+}
+
+/* Craft border */
+.craft-border {
+  border: 1px solid var(--ink-10);
+  border-bottom-color: var(--ink-20);
+}

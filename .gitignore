@@ -1,0 +1,32 @@
+# Claude Code
+CLAUDE.md
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Scratch / working data (app data lives in public/knowledge/)
+knowledge/
+ceramic_glaze_materials.json
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vite cache
+.vite/
