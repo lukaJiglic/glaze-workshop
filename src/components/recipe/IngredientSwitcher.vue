@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { substitutions, materialInfo } from '@/data/materials-knowledge'
 import type { SubstitutionOption } from '@/data/materials-knowledge'
+import { computeUMF } from '@/composables/useGlazeChemistry'
 
 interface Ingredient {
   materialId: string
@@ -12,6 +13,8 @@ interface Ingredient {
 const props = defineProps<{
   ingredient: Ingredient
   visible: boolean
+  allIngredients?: Ingredient[]
+  firingRangeId?: string
 }>()
 
 const emit = defineEmits<{
@@ -32,6 +35,39 @@ function difficultyLabel(d: string) {
   if (d === 'easy') return 'Easy swap'
   if (d === 'moderate') return 'Moderate'
   return 'Recalculate'
+}
+
+// Live UMF delta for each substitute option
+function getUMFDelta(opt: SubstitutionOption): string | null {
+  if (!props.allIngredients || props.allIngredients.length === 0) return null
+
+  const currentUMF = computeUMF(props.allIngredients, props.firingRangeId)
+  if (!currentUMF.isValid) return null
+
+  // Create modified ingredient list with the swap applied
+  const modified = props.allIngredients.map(ing =>
+    ing.materialId === props.ingredient.materialId
+      ? { ...ing, materialId: opt.materialId, sourceLabel: opt.label }
+      : ing
+  )
+  const newUMF = computeUMF(modified, props.firingRangeId)
+  if (!newUMF.isValid) return null
+
+  const parts: string[] = []
+  if (currentUMF.siToAl === null || newUMF.siToAl === null) return null
+  const siDelta = newUMF.siToAl - currentUMF.siToAl
+  if (Math.abs(siDelta) >= 0.05) {
+    parts.push(`Si:Al ${siDelta > 0 ? '+' : ''}${siDelta.toFixed(2)}`)
+  }
+  const knaDelta = newUMF.knaO - currentUMF.knaO
+  if (Math.abs(knaDelta) >= 0.01) {
+    parts.push(`KNaO ${knaDelta > 0 ? '+' : ''}${knaDelta.toFixed(2)}`)
+  }
+  const expDelta = newUMF.expansionIndex - currentUMF.expansionIndex
+  if (Math.abs(expDelta) >= 0.5) {
+    parts.push(`Exp ${expDelta > 0 ? '+' : ''}${expDelta.toFixed(1)}`)
+  }
+  return parts.length > 0 ? parts.join(' · ') : 'No significant change'
 }
 
 function handleSwap(opt: SubstitutionOption) {
@@ -87,6 +123,10 @@ function handleSwap(opt: SubstitutionOption) {
             <div v-if="opt.visualEffect" class="option-row">
               <span class="opt-label">Visual result</span>
               <span class="opt-value opt-visual">{{ opt.visualEffect }}</span>
+            </div>
+            <div v-if="allIngredients && getUMFDelta(opt)" class="option-row">
+              <span class="opt-label">UMF delta</span>
+              <span class="opt-value opt-delta">{{ getUMFDelta(opt) }}</span>
             </div>
           </div>
         </div>
@@ -257,6 +297,14 @@ function handleSwap(opt: SubstitutionOption) {
 
 .opt-visual {
   color: var(--ink);
+}
+
+.opt-delta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--clay);
+  font-weight: 600;
+  font-style: normal;
 }
 
 .switcher-advanced {

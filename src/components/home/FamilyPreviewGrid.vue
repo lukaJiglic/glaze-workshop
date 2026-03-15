@@ -70,6 +70,7 @@ onMounted(() => {
               {{ sig }}
             </span>
           </div>
+          <span class="browse-hint">Browse recipes →</span>
         </div>
       </RouterLink>
     </div>
@@ -183,6 +184,22 @@ onMounted(() => {
 
 .signal-tag::before {
   content: '— ';
+  color: var(--clay);
+}
+
+.browse-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.family-card:hover .browse-hint {
+  opacity: 1;
+  transform: translateX(0);
   color: var(--clay);
 }
 

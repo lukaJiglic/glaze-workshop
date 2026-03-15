@@ -66,4 +66,28 @@ export const cautions = new Map<string, CautionEntry>([
     description: 'Strontium carbonate is a mild hazard. Treat as a potential irritant and use standard dust precautions.',
     severity: 'info',
   }],
+  ['lead-caution', {
+    id: 'lead-caution',
+    label: 'Contains lead compound',
+    description: 'This recipe uses a lead-bearing material. Lead is highly toxic and tightly regulated. Not suitable for food surfaces. Handle with full PPE and fire only in dedicated, well-ventilated kilns.',
+    severity: 'danger',
+  }],
+  ['raku-porosity', {
+    id: 'raku-porosity',
+    label: 'Raku — porous body',
+    description: 'Raku-fired ware remains porous and absorbs water. Not food-safe or watertight. Intended for decorative use only.',
+    severity: 'warning',
+  }],
+  ['soluble-barium', {
+    id: 'soluble-barium',
+    label: 'Soluble barium risk',
+    description: 'This glaze contains barium in a soluble form (e.g. barium carbonate without full fusion into the glass). Soluble barium can leach under acidic conditions. Do not use on food or drink surfaces.',
+    severity: 'danger',
+  }],
+  ['metal-oxide-handling', {
+    id: 'metal-oxide-handling',
+    label: 'Metal oxide — handle with care',
+    description: 'Contains metal oxide colorants (cobalt, copper, manganese, chrome, nickel, etc.). Wear gloves and a fitted respirator when mixing dry materials. Avoid skin contact and inhalation.',
+    severity: 'warning',
+  }],
 ])

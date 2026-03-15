@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
+import { useWorkshopStore } from '@/stores/workshop'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -59,6 +60,15 @@ const router = createRouter({
     if (savedPosition) return savedPosition
     return { top: 0, behavior: 'smooth' }
   },
+})
+
+// Guard: redirect to /my-recipes if recipe doesn't exist
+router.beforeEach((to) => {
+  if (to.name === 'recipe-editor' && to.params.id) {
+    const ws = useWorkshopStore()
+    const exists = ws.customRecipes.some(r => r.id === to.params.id)
+    if (!exists) return { name: 'my-recipes' }
+  }
 })
 
 router.afterEach((to) => {

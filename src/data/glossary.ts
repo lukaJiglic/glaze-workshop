@@ -277,4 +277,48 @@ export const glossary = new Map<string, GlossaryEntry>([
     analogy: 'Exactly like a cooking recipe, but for coating pottery.',
     whyItMatters: 'Recipes are how glazes are shared and reproduced. Learning to read them is your first step.'
   }],
+  ['ash', {
+    term: 'Ash',
+    plain: 'Wood or plant ash used as a glaze ingredient. It contains a natural mix of fluxes (calcium, potassium, sodium) and silica that varies depending on the plant species and burn conditions.',
+    analogy: 'Like using homemade stock instead of store-bought — every batch is a little different.',
+    whyItMatters: 'Ash glazes are prized for their unique, unrepeatable surfaces, but the variability makes exact results hard to predict.'
+  }],
+  ['opacifier', {
+    term: 'Opacifier',
+    plain: 'A material added to a glaze to make it opaque instead of transparent. Tin oxide and zirconium silicate are the two most common opacifiers.',
+    analogy: 'Like adding milk to tea — it clouds the liquid so you can\'t see through it.',
+    whyItMatters: 'Opacifiers let you hide dark clay bodies under a clean white or colored glaze.'
+  }],
+  ['slip', {
+    term: 'Slip',
+    plain: 'A liquid mixture of clay and water, used as a coating, a decorating medium, or as a glaze ingredient. Some slips (like Albany slip or Alberta slip) are used as major glaze components.',
+    analogy: 'Like a thin clay paint.',
+    whyItMatters: 'Slip glazes are some of the oldest and simplest glazes — a single material that melts into a glaze at the right temperature.'
+  }],
+  ['carbon trapping', {
+    term: 'Carbon Trapping',
+    plain: 'A technique where carbon from combustion is deliberately sealed into a glaze during firing, leaving dark marks, flashing, or smoky effects in the surface.',
+    analogy: 'Like pressing a leaf into wet concrete — the imprint stays after the leaf is gone.',
+    whyItMatters: 'Carbon trapping creates dramatic, one-of-a-kind surfaces. It\'s central to shino, raku, and soda-fired work.'
+  }],
+  ['cone 4', {
+    term: 'Cone 4',
+    plain: 'A heat-work level of roughly 1160 °C (2120 °F). Sits at the low end of mid-fire.',
+    whyItMatters: 'Some studio potters fire to cone 4 for brighter colors while still achieving reasonable durability.'
+  }],
+  ['cone 5', {
+    term: 'Cone 5',
+    plain: 'A heat-work level of roughly 1180 °C (2160 °F). Often paired with cone 6 — many glazes work across the cone 5–6 range.',
+    whyItMatters: 'Cone 5 gives you access to most cone 6 glazes with slightly lower energy cost.'
+  }],
+  ['cone 8', {
+    term: 'Cone 8',
+    plain: 'A heat-work level of roughly 1260 °C (2300 °F). The lower boundary of high-fire.',
+    whyItMatters: 'Cone 8 is where stoneware really vitrifies. Many gas kilns target cone 8–10 for their firings.'
+  }],
+  ['cone 9', {
+    term: 'Cone 9',
+    plain: 'A heat-work level of roughly 1280 °C (2340 °F). Common in university and professional gas kiln programs.',
+    whyItMatters: 'Cone 9 reduction is a classic combination — the temperature and atmosphere produce deep, rich surfaces.'
+  }],
 ])

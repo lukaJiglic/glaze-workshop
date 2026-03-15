@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Recipe, ColorProfile, RecipeMapping, VisualMetadata, GlazeFamily, Taxonomy } from '@/types'
+import { materialAnalyses } from '@/data/material-analyses'
+import { sources } from '@/data/sources'
+import { cautions } from '@/data/cautions'
 
 const BASE = '/knowledge/glaze'
 
@@ -110,6 +113,33 @@ export const useGlazeStore = defineStore('glaze', () => {
       families.value = glazeFamilies.families
 
       isLoaded.value = true
+
+      // Dev-mode data integrity warnings
+      if ((import.meta as any).env?.DEV) {
+        const validFiringRanges = new Set(
+          tax.taxonomies.firingRanges?.map((fr) => fr.id) ?? []
+        )
+        for (const recipe of recipes.value) {
+          for (const ing of recipe.ingredients ?? []) {
+            if (!materialAnalyses.has(ing.materialId)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown materialId "${ing.materialId}"`)
+            }
+          }
+          for (const sid of recipe.sourceIds ?? []) {
+            if (!sources.has(sid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown sourceId "${sid}"`)
+            }
+          }
+          for (const cid of recipe.cautionIds ?? []) {
+            if (!cautions.has(cid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown cautionId "${cid}"`)
+            }
+          }
+          if (recipe.firingRangeId && !validFiringRanges.has(recipe.firingRangeId)) {
+            console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown firingRangeId "${recipe.firingRangeId}"`)
+          }
+        }
+      }
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Unknown error loading data'
       console.error('[GlazeStore] Load error:', e)

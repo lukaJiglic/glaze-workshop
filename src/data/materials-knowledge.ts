@@ -424,6 +424,55 @@ export const materialInfo = new Map<string, MaterialInfo>([
     watchFor: ['Lead-free version of historic lead frits — check if recipe is old', 'High sodium — moderate crazing risk on non-matching bodies'],
     beginner: 'A classic low-fire gloss frit used in earthenware glazes. High in boron so it melts well at low temperatures. Often the base of bright earthenware colors.',
   }],
+  ['fusion-frit-f524', {
+    id: 'fusion-frit-f524', name: 'Fusion Frit F-524', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'na2o', 'al2o3', 'sio2'],
+    uses: ['Balanced borosilicate frit for low- to mid-fire', 'Similar role to Ferro 3195', 'Used in Digitalfire clear and liner recipes'],
+    watchFor: ['Regional availability — Fusion Ceramics (Canada)', 'Not a 1:1 swap for Ferro frits — check chemistry'],
+    beginner: 'A Canadian-made frit used in many Digitalfire recipes. Similar to Ferro 3195 — provides boron flux for low- and mid-fire glazes. Good balance of melt and stability.',
+  }],
+  ['fusion-frit-f69', {
+    id: 'fusion-frit-f69', name: 'Fusion Frit F-69', group: 'flux',
+    oxideIds: ['b2o3', 'cao', 'na2o', 'k2o', 'al2o3', 'sio2'],
+    uses: ['High-alumina borosilicate for stiff clear glazes', 'Reduces running in low-fire systems', 'Combined with F-524 in some Digitalfire clears'],
+    watchFor: ['Regional availability — Fusion Ceramics (Canada)', 'Higher alumina than most frits — stiffer melt'],
+    beginner: 'A high-alumina frit that makes stiff, stable glazes at low temperatures. The extra alumina stops the glaze from running off the pot.',
+  }],
+  ['black-copper-oxide', {
+    id: 'black-copper-oxide', name: 'Black Copper Oxide (Cu₂O)', group: 'colorant',
+    oxideIds: ['cuo'],
+    uses: ['Same greens/reds as copper oxide and carbonate', 'Sometimes preferred in raku for specific colour effects', 'Coarser particle than carbonate'],
+    watchFor: ['Essentially interchangeable with copper oxide for UMF purposes', 'Slightly different particle behaviour during firing', 'Same food-safety and volatility concerns'],
+    beginner: 'Another form of copper colorant — same greens in oxidation, reds in reduction. For chemistry purposes, treat it like regular copper oxide.',
+  }],
+  ['calcined-alumina', {
+    id: 'calcined-alumina', name: 'Calcined Alumina (Al₂O₃)', group: 'stabilizer',
+    oxideIds: ['al2o3'],
+    uses: ['Kiln wash ingredient — prevents ware from sticking to shelves', 'Glaze stiffener at 1–5%', 'Reduces running in overly fluid glazes'],
+    watchFor: ['Essentially pure alumina — very refractory, doesn\'t melt', 'More than 5% can make glaze too stiff to mature', 'Not a substitute for kaolin — kaolin also brings SiO₂'],
+    beginner: 'Pure alumina powder. It doesn\'t melt at any normal kiln temperature, so adding even small amounts stiffens a glaze and stops it from running. Also used as kiln shelf wash.',
+  }],
+  ['mason-stain-generic', {
+    id: 'mason-stain-generic', name: 'Mason Stain (Generic)', group: 'colorant',
+    oxideIds: ['sio2', 'al2o3', 'zro2'],
+    uses: ['Encapsulated commercial colorant', 'Predictable color at 5–10% addition', 'Wide range of available colours'],
+    watchFor: ['Chemistry varies enormously by stain number', 'Some stain colours are unstable in certain base glazes — check Mason\'s guide', 'Zirconium and tin in the stain can affect melt'],
+    beginner: 'Factory-made ceramic colorants that give very predictable, consistent colors. Each stain number produces a specific colour. Think of them like food colouring for clay — easy to use but less interesting than raw oxides.',
+  }],
+  ['red-lead', {
+    id: 'red-lead', name: 'Red Lead (Pb₃O₄)', group: 'flux',
+    oxideIds: ['pbo'],
+    uses: ['Historical earthenware flux — brilliant, deep gloss', 'Traditional lead glaze foundation', 'Low melting point — effective below cone 06'],
+    watchFor: ['HIGHLY TOXIC — lead poisoning risk from dust, fumes, and fired surface', 'Not suitable for functional ware under modern safety standards', 'Historical recipes only — do not use without proper safety protocols'],
+    beginner: 'A very old-fashioned ceramic ingredient that creates beautiful glossy low-fire glazes. EXTREMELY toxic — lead poisoning is a serious health risk. Modern potters use lead-free frits instead. Included here for historical recipe accuracy only.',
+  }],
+  ['alberta-slip-roasted', {
+    id: 'alberta-slip-roasted', name: 'Alberta Slip (Roasted/Calcined)', group: 'clay',
+    oxideIds: ['sio2', 'al2o3', 'fe2o3', 'mgo', 'cao', 'k2o', 'na2o', 'tio2'],
+    uses: ['Calcined version of Alberta Slip — same chemistry, zero LOI', 'Reduces crawling from drying shrinkage', 'Often mixed 50/50 with raw Alberta Slip for best results'],
+    watchFor: ['Must calcine yourself or buy pre-calcined', 'Slightly higher oxide percentages than raw (LOI removed)', 'Less plastic than raw — doesn\'t suspend as well alone'],
+    beginner: 'Alberta Slip that has been pre-fired (calcined) to remove all the water and gas. Same final chemistry but much less shrinkage during drying, which means fewer crawling problems. Often blended with raw Alberta Slip.',
+  }],
 ])
 
 // ─── Substitution data with rich options for the switcher UI ──────────────
@@ -858,6 +907,79 @@ export const substitutions = new Map<string, SubstitutionPair>([
       },
     ],
   }],
+  ['silica', {
+    materialId: 'silica',
+    alternatives: ['Quartz — same material different name', 'Flint — historical term for the same thing'],
+    notes: ['Silica is silica — there is no true substitute', 'Reducing silica changes the glass network fundamentally'],
+    options: [
+      {
+        materialId: 'silica',
+        label: 'Quartz / Flint (same material)',
+        ratio: '1:1 weight',
+        difficulty: 'easy',
+        difficultyNote: 'Silica, quartz, and flint are all SiO₂. Only mesh size differs.',
+        chemicalShift: 'None — identical chemistry',
+        visualEffect: 'Finer mesh dissolves faster. 200 mesh is standard glaze grade.',
+      },
+    ],
+  }],
+  ['zinc-oxide', {
+    materialId: 'zinc-oxide',
+    alternatives: ['Strontium carbonate (different but sometimes replaces ZnO role)', 'Barium carbonate (similar crystal effects, TOXIC)'],
+    notes: ['No true chemical substitute — ZnO is unique', 'Can sometimes reduce zinc and add other fluxes to compensate'],
+    options: [
+      {
+        materialId: 'strontium-carbonate',
+        label: 'Strontium Carbonate',
+        ratio: 'Not a direct sub — test with chemistry software',
+        difficulty: 'advanced',
+        difficultyNote: 'SrO and ZnO have different effects. Strontium is a lower-expansion flux but won\'t produce zinc-style crystals.',
+        chemicalShift: 'SrO vs ZnO — different flux behavior entirely',
+        visualEffect: 'No crystal formation. Different melt character. Only works if zinc was just a flux, not a crystal promoter.',
+      },
+    ],
+  }],
+  ['strontium-carbonate', {
+    materialId: 'strontium-carbonate',
+    alternatives: ['Barium carbonate (similar role, TOXIC)', 'Whiting (higher expansion)'],
+    notes: ['SrO is between CaO and BaO in the periodic table — intermediate properties', 'Good non-toxic replacement for barium in many recipes'],
+    options: [
+      {
+        materialId: 'barium-carbonate',
+        label: 'Barium Carbonate (TOXIC)',
+        ratio: '1.47g BaCO₃ per 1g SrCO₃ (molecular weight ratio)',
+        difficulty: 'moderate',
+        difficultyNote: 'Similar flux behavior but barium is highly toxic. Only for non-functional ware.',
+        chemicalShift: 'BaO vs SrO — similar expansion reduction, barium gives more dramatic matte effects',
+        visualEffect: 'More dramatic dry/crawled matte surfaces. But serious toxicity concerns.',
+      },
+      {
+        materialId: 'whiting',
+        label: 'Whiting (Calcium Carbonate)',
+        ratio: 'Use ~54g whiting per 100g strontium carbonate',
+        difficulty: 'moderate',
+        difficultyNote: 'CaO is a reasonable flux substitute but with higher expansion. Recipe may craze.',
+        chemicalShift: 'CaO vs SrO — higher expansion, more active flux',
+        visualEffect: 'Slightly glossier, higher crazing risk. Good enough in many recipes.',
+      },
+    ],
+  }],
+  ['bone-ash', {
+    materialId: 'bone-ash',
+    alternatives: ['Synthetic calcium phosphate (same chemistry)', 'Wollastonite (CaO only, no phosphorus)'],
+    notes: ['The phosphorus is what creates opalescence — no substitute gives the same effect', 'Synthetic tri-calcium phosphate is chemically identical'],
+    options: [
+      {
+        materialId: 'wollastonite',
+        label: 'Wollastonite (CaO + SiO₂)',
+        ratio: 'Not a true substitute — provides CaO but no P₂O₅',
+        difficulty: 'advanced',
+        difficultyNote: 'Only replaces the calcium contribution. You lose the phosphorus opalescence entirely.',
+        chemicalShift: 'Adds SiO₂ alongside CaO. No P₂O₅ at all.',
+        visualEffect: 'Lose the milky opalescence that makes bone ash special. Cleaner but less interesting.',
+      },
+    ],
+  }],
   ['lithium-carbonate', {
     materialId: 'lithium-carbonate',
     alternatives: ['Spodumene (Li2O + Al2O3 + SiO2)', 'Petalite (lower Li2O, lower expansion)'],
@@ -929,6 +1051,7 @@ export const changeImpacts = new Map<string, ChangeImpact>([
   ['ilmenite', { id: 'increase-ilmenite', change: 'Increase ilmenite', usuallyDoes: ['Dark brown to black speckle in glaze', 'More and larger specks as amount increases'], watchFor: ['Use coarse granular form for visible speckling', 'Fine powder form blends invisibly'], visualHint: 'Dark speckles appear in the glaze surface. More ilmenite = more prominent speckling.' }],
   ['ferro-frit-4110', { id: 'increase-boron', change: 'Increase Frit 4110', usuallyDoes: ['More stable low-fire melt', 'Higher calcium in the base', 'Good durability for earthenware'], watchFor: ['Primarily a low-fire material — less active at higher temps'], visualHint: 'More melt at low temperatures. Durable, food-safe base for earthenware.' }],
   ['ferro-frit-3107', { id: 'increase-boron', change: 'Increase Frit 3107', usuallyDoes: ['More gloss at low fire', 'Boron + calcium + sodium flux combination'], watchFor: ['High sodium can cause crazing on non-matching clay bodies'], visualHint: 'More glossy low-fire melt. Good for bright opaque earthenware colors.' }],
+  ['nickel-oxide', { id: 'increase-nickel', change: 'Increase nickel oxide', usuallyDoes: ['Gray, brown, and blue-gray modifying tones', 'Mutes and cools other colorants', 'Promotes crystal growth in zinc-bearing glazes'], watchFor: ['Highly unpredictable — results vary with base chemistry', 'Can turn brown, gray, green, or even blue depending on flux balance', 'Best used as a modifier alongside other colorants rather than solo'], visualHint: 'Unpredictable gray-brown modifier. With cobalt: cool blue-gray. With zinc: can crystallize.' }],
 ])
 
 // ─── Colorant dosing heuristics ────────────────────────────────────────────

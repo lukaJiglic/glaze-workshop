@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useGlazeStore } from '@/stores/glaze'
+import { useWorkshopStore } from '@/stores/workshop'
 import AppNav from '@/components/layout/AppNav.vue'
 import PageTransition from '@/components/layout/PageTransition.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import RecipeDetail from '@/components/recipe/RecipeDetail.vue'
 
 const store = useGlazeStore()
+const workshopStore = useWorkshopStore()
 
 onMounted(() => {
   store.loadAll()
 })
+
+// Restore calculator recipe from localStorage once data loads
+watch(() => store.isLoaded, (loaded) => {
+  if (loaded) workshopStore.restoreCalculatorRecipe(store.recipeById)
+}, { immediate: true })
 </script>
 
 <template>

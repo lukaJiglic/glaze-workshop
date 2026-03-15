@@ -16,12 +16,17 @@ const scores = computed(() => {
   return fd?.scores ?? null
 })
 
-const linkedRecipes = computed(() =>
-  glazeStore.recipeMappings
-    .filter(m => m.defaultProfileId === props.profile.id)
-    .map(m => glazeStore.recipeById.get(m.recipeId))
+const linkedRecipes = computed(() => {
+  const recipeIds = new Set<string>()
+  for (const m of glazeStore.recipeMappings) {
+    if (m.defaultProfileId === props.profile.id || m.secondaryProfileIds?.includes(props.profile.id)) {
+      recipeIds.add(m.recipeId)
+    }
+  }
+  return Array.from(recipeIds)
+    .map(id => glazeStore.recipeById.get(id))
     .filter(Boolean)
-)
+})
 
 const isGlossy = computed(() => (scores.value?.glossLevel ?? 0) >= 3)
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useWorkshopStore } from '@/stores/workshop'
 import { useGlazeStore } from '@/stores/glaze'
 import { useRouter } from 'vue-router'
@@ -28,6 +28,11 @@ const scores = computed(() => {
   return glazeStore.getScores(recipe.value.id, recipe.value.firingRangeId)
 })
 
+const recipeOverride = computed(() => {
+  if (!recipe.value || !glazeStore.visualMetadata) return null
+  return glazeStore.visualMetadata.recipeOverrides.find(r => r.recipeId === recipe.value!.id) ?? null
+})
+
 const percentageSum = computed(() => {
   return recipe.value?.ingredients.reduce((s, i) => s + i.amount, 0) ?? 0
 })
@@ -36,6 +41,38 @@ const percentageSum = computed(() => {
 const expandedInfo = ref<Set<string>>(new Set())
 const switcherOpen = ref<string | null>(null)
 const swapConfirm = ref<{ fromLabel: string; toLabel: string; note: string } | null>(null)
+const newNote = ref('')
+
+// ─── Collapsible sections (mobile) ─────────────────────────────────────────
+const isMobile = ref(typeof window !== 'undefined' && window.innerWidth <= 768)
+let resizeHandler: (() => void) | null = null
+onMounted(() => {
+  resizeHandler = () => { isMobile.value = window.innerWidth <= 768 }
+  window.addEventListener('resize', resizeHandler)
+})
+onUnmounted(() => {
+  if (resizeHandler) window.removeEventListener('resize', resizeHandler)
+})
+
+const collapsedSections = ref<Set<string>>(new Set(['chemistry', 'similar', 'crossRange', 'notes', 'cautions', 'twins']))
+function toggleSection(key: string) {
+  if (collapsedSections.value.has(key)) {
+    collapsedSections.value.delete(key)
+  } else {
+    collapsedSections.value.add(key)
+  }
+  collapsedSections.value = new Set(collapsedSections.value)
+}
+function isSectionOpen(key: string) {
+  if (!isMobile.value) return true
+  return !collapsedSections.value.has(key)
+}
+
+function submitNote() {
+  if (!newNote.value.trim() || !recipe.value) return
+  workshopStore.addUserNote(recipe.value.id, newNote.value.trim())
+  newNote.value = ''
+}
 
 function toggleInfo(materialId: string) {
   if (expandedInfo.value.has(materialId)) {
@@ -127,6 +164,156 @@ const similarRecipes = computed(() => {
   scored.sort((a, b) => b.score - a.score)
   return scored.slice(0, 4).map(s => s.recipe)
 })
+
+// Similar across other firing ranges (sharing 3+ ingredients at different cones)
+const crossRangeSimilar = computed(() => {
+  if (!recipe.value) return []
+  const current = recipe.value
+  const currentIds = new Set(current.ingredients.map(i => i.materialId))
+
+  const pool = glazeStore.recipes.filter(r =>
+    r.id !== current.id && r.firingRangeId !== current.firingRangeId
+  )
+
+  const scored = pool.map(r => {
+    const matches = r.ingredients.filter(i => currentIds.has(i.materialId)).length
+    return { recipe: r, matches }
+  }).filter(s => s.matches >= 3)
+
+  scored.sort((a, b) => b.matches - a.matches)
+  return scored.slice(0, 3).map(s => s.recipe)
+})
+
+// ─── Visual twins — same color/surface, different materials ──────────────────
+const visualTwins = computed(() => {
+  if (!recipe.value) return []
+  const current = recipe.value
+  const currentProfile = profileId.value
+  const currentSurfaces = new Set(current.surfaceIds)
+  const currentIds = new Set(current.ingredients.map(i => i.materialId))
+
+  if (!currentProfile && currentSurfaces.size === 0) return []
+
+  const pool = glazeStore.recipes.filter(r => r.id !== current.id)
+
+  return pool.filter(r => {
+    // Must share color family or surface
+    const rProfile = glazeStore.profileForRecipe.get(r.id)
+    const colorMatch = currentProfile && rProfile && (() => {
+      const cp = glazeStore.colorProfileById.get(currentProfile)
+      const rp = glazeStore.colorProfileById.get(rProfile)
+      return cp && rp && cp.familyId === rp.familyId
+    })()
+    const surfaceMatch = r.surfaceIds.some(s => currentSurfaces.has(s))
+    if (!colorMatch && !surfaceMatch) return false
+
+    // Must have mostly different materials (overlap < 30%)
+    const rIds = new Set(r.ingredients.map(i => i.materialId))
+    const overlap = [...currentIds].filter(id => rIds.has(id)).length
+    const maxLen = Math.max(currentIds.size, rIds.size)
+    return overlap / maxLen < 0.3
+  }).slice(0, 3)
+})
+
+// ─── Export as PDF (print) ──────────────────────────────────────────────────
+function exportAsPDF() {
+  if (!recipe.value) return
+  const r = recipe.value
+  const chem = chemistry.value
+  const cauts = recipeCautions.value
+  const srcs = recipeSources.value
+
+  const printWindow = window.open('', '_blank')
+  if (!printWindow) return
+
+  const ingredientRows = r.ingredients
+    .map(i => `<tr><td class="ing-name">${i.sourceLabel}</td><td class="ing-pct">${i.amount}%</td></tr>`)
+    .join('')
+
+  const chemSection = chem.isValid ? `
+    <div class="chem-grid">
+      <div class="chem-item"><span class="chem-label">Si : Al</span><span class="chem-val">${chem.siToAl !== null ? chem.siToAl.toFixed(1) : '—'}</span></div>
+      <div class="chem-item"><span class="chem-label">KNaO</span><span class="chem-val">${chem.knaO.toFixed(2)}</span></div>
+      <div class="chem-item"><span class="chem-label">SiO₂</span><span class="chem-val">${chem.totalSi.toFixed(2)}</span></div>
+      <div class="chem-item"><span class="chem-label">Al₂O₃</span><span class="chem-val">${chem.totalAl.toFixed(2)}</span></div>
+      <div class="chem-item"><span class="chem-label">LOI</span><span class="chem-val">${chem.totalLOI.toFixed(1)}%</span></div>
+      <div class="chem-item"><span class="chem-label">Expansion</span><span class="chem-val">${chem.expansionIndex.toFixed(1)}</span></div>
+    </div>` : ''
+
+  const cautionSection = cauts.length ? `
+    <div class="cautions">
+      <h3>Cautions</h3>
+      ${cauts.map(c => `<p class="caution-line caution-${c!.severity}">⚠ <strong>${c!.label}</strong> — ${c!.description}</p>`).join('')}
+    </div>` : ''
+
+  const notesSection = r.notes.length ? `
+    <div class="notes">
+      <h3>Notes</h3>
+      ${r.notes.map(n => `<p>${n}</p>`).join('')}
+    </div>` : ''
+
+  const sourceSection = srcs.length ? `
+    <div class="sources">
+      <p class="source-line">Source: ${srcs.map(s => s!.name).join(', ')}</p>
+    </div>` : ''
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${r.name} — Glaze Workshop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Lora', Georgia, serif; color: #2c2416; padding: 24px; max-width: 600px; margin: 0 auto; }
+  .card { border: 1px solid #d4cfc7; border-radius: 12px; overflow: hidden; }
+  .swatch { height: 60px; background: ${swatchHex.value}; position: relative; }
+  .swatch::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%); }
+  .card-body { padding: 20px 24px 24px; }
+  h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #2c2416; }
+  .meta { font-family: 'Space Mono', monospace; font-size: 11px; color: #8a7e6e; letter-spacing: 0.04em; margin-bottom: 16px; }
+  h3 { font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8a7e6e; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; }
+  tr { border-bottom: 1px solid #f0ebe3; }
+  td { padding: 5px 0; font-size: 13px; }
+  .ing-name { font-family: 'Lora', serif; }
+  .ing-pct { font-family: 'Space Mono', monospace; text-align: right; font-size: 12px; color: #8a7e6e; }
+  .chem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .chem-item { display: flex; flex-direction: column; gap: 2px; }
+  .chem-label { font-family: 'Space Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: #8a7e6e; }
+  .chem-val { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: #2c2416; }
+  .notes p { font-size: 13px; line-height: 1.6; color: #5a5245; font-style: italic; margin-bottom: 4px; }
+  .caution-line { font-size: 12px; line-height: 1.5; margin-bottom: 4px; }
+  .caution-danger { color: #b82020; }
+  .caution-warning { color: #c4532a; }
+  .caution-info { color: #5a5245; }
+  .source-line { font-family: 'Space Mono', monospace; font-size: 10px; color: #8a7e6e; margin-top: 16px; padding-top: 12px; border-top: 1px solid #f0ebe3; }
+  .footer { font-family: 'Space Mono', monospace; font-size: 9px; color: #b0a89a; text-align: center; margin-top: 20px; letter-spacing: 0.04em; }
+  @media print { body { padding: 0; } .card { border: none; } }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="swatch"></div>
+  <div class="card-body">
+    <h1>${r.name}</h1>
+    <div class="meta">Cone ${r.cone} · ${r.atmosphereIds.join(', ')} · ${r.firingRangeId.replace(/-/g, ' ')}</div>
+    <h3>Ingredients</h3>
+    <table>${ingredientRows}</table>
+    ${chemSection ? '<h3>Chemistry (UMF)</h3>' + chemSection : ''}
+    ${cautionSection}
+    ${notesSection}
+    ${sourceSection}
+  </div>
+</div>
+<p class="footer">Glaze Workshop · Printed recipe card</p>
+<script>window.onload = function() { window.print(); }<\/script>
+</body>
+</html>`
+
+  printWindow.document.write(html)
+  printWindow.document.close()
+}
 
 // ─── Copy to clipboard ────────────────────────────────────────────────────────
 const copyLabel = ref('Copy Recipe')
@@ -226,25 +413,37 @@ function formatScore(val: number): string {
             </div>
             <h2 class="drawer-title">{{ recipe.name }}</h2>
             <p v-if="profile?.appearance" class="drawer-appearance">{{ profile.appearance }}</p>
+            <button
+              v-if="recipeCautions.length"
+              class="caution-badge"
+              :class="{ expanded: isSectionOpen('cautions') }"
+              @click="toggleSection('cautions')"
+            >
+              <span class="caution-badge-icon">{{ recipeCautions.some(c => c!.severity === 'danger') ? '⚠' : '!' }}</span>
+              {{ recipeCautions.length }} caution{{ recipeCautions.length > 1 ? 's' : '' }}
+              <span class="caution-badge-arrow">{{ isSectionOpen('cautions') ? '▾' : '▸' }}</span>
+            </button>
           </div>
 
-          <!-- Cautions -->
-          <div v-if="recipeCautions.length" class="cautions-block">
-            <div
-              v-for="caution in recipeCautions"
-              :key="caution!.id"
-              class="caution-item"
-              :class="caution!.severity"
-            >
-              <span class="caution-icon">
-                {{ caution!.severity === 'danger' ? '⚠' : caution!.severity === 'warning' ? '!' : 'ℹ' }}
-              </span>
-              <div class="caution-text">
-                <strong>{{ caution!.label }}</strong>
-                <span>{{ caution!.description }}</span>
+          <!-- Cautions (collapsible) -->
+          <Transition name="expand-info">
+            <div v-if="recipeCautions.length && isSectionOpen('cautions')" class="cautions-block">
+              <div
+                v-for="caution in recipeCautions"
+                :key="caution!.id"
+                class="caution-item"
+                :class="caution!.severity"
+              >
+                <span class="caution-icon">
+                  {{ caution!.severity === 'danger' ? '⚠' : caution!.severity === 'warning' ? '!' : 'ℹ' }}
+                </span>
+                <div class="caution-text">
+                  <strong>{{ caution!.label }}</strong>
+                  <span>{{ caution!.description }}</span>
+                </div>
               </div>
             </div>
-          </div>
+          </Transition>
 
           <!-- Ingredients -->
           <section class="drawer-section">
@@ -322,6 +521,8 @@ function formatScore(val: number): string {
                 <IngredientSwitcher
                   :ingredient="ing"
                   :visible="switcherOpen === ing.materialId"
+                  :all-ingredients="recipe.ingredients"
+                  :firing-range-id="recipe.firingRangeId"
                   @close="closeSwitcher"
                   @swap="handleSwap"
                 />
@@ -335,9 +536,15 @@ function formatScore(val: number): string {
             </div>
           </section>
 
-          <!-- UMF Chemistry -->
-          <section v-if="chemistry.isValid" class="drawer-section">
-            <ChemistryPanel :chemistry="chemistry" :compact="true" />
+          <!-- UMF Chemistry (collapsible on mobile) -->
+          <section v-if="chemistry.isValid" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('chemistry')">
+              Chemistry
+              <span class="toggle-arrow">{{ isSectionOpen('chemistry') ? '▾' : '▸' }}</span>
+            </h3>
+            <div v-if="isSectionOpen('chemistry')" class="collapsible-body">
+              <ChemistryPanel :chemistry="chemistry" :compact="true" />
+            </div>
           </section>
 
           <!-- Swap confirmation toast -->
@@ -388,12 +595,21 @@ function formatScore(val: number): string {
                 <span class="score-dots">{{ formatScore(scores.textureLevel) }}</span>
               </div>
             </div>
+            <p v-if="recipeOverride?.edgeBreak" class="visual-hint">
+              <span class="hint-label">Edge break</span> {{ recipeOverride.edgeBreak }}
+            </p>
+            <p v-if="recipeOverride?.poolingColorHint" class="visual-hint">
+              <span class="hint-label">Pooling</span> {{ recipeOverride.poolingColorHint }}
+            </p>
           </section>
 
-          <!-- Notes -->
-          <section v-if="recipe.notes.length" class="drawer-section">
-            <h3 class="section-label">Notes</h3>
-            <ul class="notes-list">
+          <!-- Notes (collapsible on mobile) -->
+          <section v-if="recipe.notes.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('notes')">
+              Notes
+              <span class="toggle-arrow">{{ isSectionOpen('notes') ? '▾' : '▸' }}</span>
+            </h3>
+            <ul v-if="isSectionOpen('notes')" class="notes-list">
               <li v-for="(note, i) in recipe.notes" :key="i">{{ note }}</li>
             </ul>
           </section>
@@ -414,10 +630,13 @@ function formatScore(val: number): string {
             <span>{{ recipe.tablewareStatus.replace(/-/g, ' ') }}</span>
           </div>
 
-          <!-- Similar recipes -->
-          <section v-if="similarRecipes.length" class="drawer-section">
-            <h3 class="section-label">Similar Recipes</h3>
-            <div class="similar-list">
+          <!-- Similar recipes (collapsible on mobile) -->
+          <section v-if="similarRecipes.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('similar')">
+              Similar Recipes
+              <span class="toggle-arrow">{{ isSectionOpen('similar') ? '▾' : '▸' }}</span>
+            </h3>
+            <div v-if="isSectionOpen('similar')" class="similar-list">
               <button
                 v-for="sim in similarRecipes"
                 :key="sim.id"
@@ -433,6 +652,77 @@ function formatScore(val: number): string {
                   <span class="similar-cone">C{{ sim.cone }}</span>
                 </div>
               </button>
+            </div>
+          </section>
+
+          <!-- Cross-range similar (collapsible on mobile) -->
+          <section v-if="crossRangeSimilar.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('crossRange')">
+              Similar at Other Temps
+              <span class="toggle-arrow">{{ isSectionOpen('crossRange') ? '▾' : '▸' }}</span>
+            </h3>
+            <div v-if="isSectionOpen('crossRange')" class="similar-list">
+              <button
+                v-for="sim in crossRangeSimilar"
+                :key="sim.id"
+                class="similar-card"
+                @click="workshopStore.openRecipe(sim)"
+              >
+                <div
+                  class="similar-swatch"
+                  :style="{ background: glazeStore.colorProfileById.get(glazeStore.profileForRecipe.get(sim.id) ?? '')?.swatchHex ?? '#ede6d6' }"
+                />
+                <div class="similar-info">
+                  <span class="similar-name">{{ sim.name }}</span>
+                  <span class="similar-cone">C{{ sim.cone }} · {{ sim.firingRangeId.replace(/-/g, ' ') }}</span>
+                </div>
+              </button>
+            </div>
+          </section>
+
+          <!-- Visual twins -->
+          <section v-if="visualTwins.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('twins')">
+              Visual Twins
+              <span class="section-hint">same look, different path</span>
+              <span class="toggle-arrow">{{ isSectionOpen('twins') ? '▾' : '▸' }}</span>
+            </h3>
+            <div v-if="isSectionOpen('twins')" class="similar-list">
+              <button
+                v-for="twin in visualTwins"
+                :key="twin.id"
+                class="similar-card"
+                @click="workshopStore.openRecipe(twin)"
+              >
+                <div
+                  class="similar-swatch"
+                  :style="{ background: glazeStore.colorProfileById.get(glazeStore.profileForRecipe.get(twin.id) ?? '')?.swatchHex ?? '#ede6d6' }"
+                />
+                <div class="similar-info">
+                  <span class="similar-name">{{ twin.name }}</span>
+                  <span class="similar-cone">C{{ twin.cone }} · {{ twin.ingredients.length }} materials</span>
+                </div>
+              </button>
+            </div>
+          </section>
+
+          <!-- User notes -->
+          <section class="drawer-section user-notes-section">
+            <h3 class="section-label">My Notes</h3>
+            <ul v-if="workshopStore.getUserNotes(recipe.id).length" class="user-notes-list">
+              <li v-for="(note, i) in workshopStore.getUserNotes(recipe.id)" :key="i" class="user-note-item">
+                <span class="user-note-text">{{ note }}</span>
+                <button class="user-note-remove" @click="workshopStore.removeUserNote(recipe.id, i)" title="Remove note">×</button>
+              </li>
+            </ul>
+            <div class="user-note-input-row">
+              <input
+                v-model="newNote"
+                class="user-note-input"
+                placeholder="Add a note..."
+                @keydown.enter="submitNote"
+              />
+              <button class="user-note-add" :disabled="!newNote.trim()" @click="submitNote">+</button>
             </div>
           </section>
 
@@ -462,6 +752,9 @@ function formatScore(val: number): string {
             </button>
             <button class="btn btn-ghost" @click="copyRecipe">
               {{ copyLabel }}
+            </button>
+            <button class="btn btn-ghost" @click="exportAsPDF">
+              Export PDF
             </button>
           </div>
         </div>
@@ -923,6 +1216,25 @@ function formatScore(val: number): string {
 
 .score-dots.high-risk { color: #c0392b; }
 
+.visual-hint {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--stone);
+  line-height: 1.5;
+  margin-top: var(--space-2);
+  font-style: italic;
+}
+
+.hint-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-right: var(--space-1);
+}
+
 .notes-list {
   list-style: none;
   display: flex;
@@ -1050,6 +1362,172 @@ function formatScore(val: number): string {
 }
 
 .source-link:hover { color: var(--clay-dark); }
+
+/* User notes */
+.user-notes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.user-note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--parchment);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--clay-20);
+}
+
+.user-note-text {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.user-note-remove {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.user-note-remove:hover {
+  background: var(--clay-10);
+  color: var(--clay);
+}
+
+.user-note-input-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.user-note-input {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-sm);
+  background: var(--chalk);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+.user-note-input::placeholder {
+  color: var(--stone);
+  font-style: italic;
+}
+
+.user-note-input:focus {
+  outline: none;
+  border-color: var(--clay);
+}
+
+.user-note-add {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-sm);
+  background: var(--chalk);
+  color: var(--clay);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.user-note-add:hover:not(:disabled) {
+  background: var(--clay);
+  color: white;
+  border-color: var(--clay);
+}
+
+.user-note-add:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Caution badge in header */
+.caution-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgba(196, 83, 42, 0.1);
+  border: 1px solid rgba(196, 83, 42, 0.2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--clay-dark);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  align-self: flex-start;
+}
+
+.caution-badge:hover {
+  background: rgba(196, 83, 42, 0.15);
+  border-color: var(--clay);
+}
+
+.caution-badge-icon {
+  font-size: 12px;
+}
+
+.caution-badge-arrow {
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+/* Collapsible sections */
+.section-toggle {
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.section-toggle:hover {
+  color: var(--clay);
+}
+
+.toggle-arrow {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-left: auto;
+  font-weight: 400;
+}
+
+/* On desktop, hide toggle arrows */
+@media (min-width: 769px) {
+  .toggle-arrow {
+    display: none;
+  }
+}
+
+/* On mobile, give toggles more tap target */
+@media (max-width: 768px) {
+  .collapsible-section .section-toggle {
+    padding: var(--space-1) 0;
+  }
+}
 
 .source-name { color: var(--stone); }
 

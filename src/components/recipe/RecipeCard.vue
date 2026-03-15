@@ -12,9 +12,16 @@ const workshopStore = useWorkshopStore()
 
 const profileId = computed(() => glazeStore.profileForRecipe.get(props.recipe.id))
 const profile = computed(() => profileId.value ? glazeStore.colorProfileById.get(profileId.value) : null)
-const swatchHex = computed(() => profile.value?.swatchHex ?? '#ede6d6')
+const customSwatch = computed(() => {
+  if (!props.recipe.id.startsWith('custom-')) return null
+  const custom = workshopStore.customRecipes.find(r => r.id === props.recipe.id)
+  return custom?.swatchColor ?? null
+})
+const swatchHex = computed(() => customSwatch.value ?? profile.value?.swatchHex ?? '#ede6d6')
 
 const isFav = computed(() => workshopStore.isFavorite(props.recipe.id))
+const isInCompare = computed(() => workshopStore.compareIds.includes(props.recipe.id))
+const canCompare = computed(() => workshopStore.compareIds.length < 3 || isInCompare.value)
 
 const primaryAtmosphere = computed(() => props.recipe.atmosphereIds[0] ?? '')
 const primarySurface = computed(() => props.recipe.surfaceIds[0] ?? '')
@@ -29,6 +36,19 @@ function open() {
     <!-- Color swatch strip -->
     <div class="card-swatch" :style="{ background: swatchHex }">
       <div class="swatch-sheen" />
+      <span
+        v-if="workshopStore.hasUserNotes(recipe.id)"
+        class="note-indicator"
+        title="Has personal notes"
+      >✎</span>
+      <button
+        v-if="canCompare || isInCompare"
+        class="compare-btn"
+        :class="{ active: isInCompare }"
+        @click.stop="workshopStore.toggleCompare(recipe.id)"
+        :aria-label="isInCompare ? 'Remove from comparison' : 'Add to comparison'"
+        :title="isInCompare ? 'Remove from comparison' : 'Compare'"
+      >⇔</button>
       <button
         class="fav-btn"
         :class="{ active: isFav }"
@@ -51,7 +71,15 @@ function open() {
       <p v-if="profile?.appearance" class="card-appearance">{{ profile.appearance }}</p>
 
       <div class="card-footer">
-        <TagBadge v-if="primarySurface" :label="primarySurface" variant="surface" />
+        <div class="card-footer-left">
+          <TagBadge v-if="primarySurface" :label="primarySurface" variant="surface" />
+          <span
+            v-if="recipe.tablewareStatus"
+            class="tableware-icon"
+            :class="recipe.tablewareStatus"
+            :title="recipe.tablewareStatus.replace(/-/g, ' ')"
+          >{{ recipe.tablewareStatus === 'functional' ? '✓' : recipe.tablewareStatus === 'test-only' ? '⚠' : '◦' }}</span>
+        </div>
         <span class="card-ingredient-count">{{ recipe.ingredients.length }} materials</span>
       </div>
     </div>
@@ -85,6 +113,54 @@ function open() {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+}
+
+.note-indicator {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 240, 232, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--clay);
+  backdrop-filter: blur(4px);
+}
+
+.compare-btn {
+  position: absolute;
+  top: var(--space-2);
+  right: 38px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 240, 232, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--stone);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+}
+
+.recipe-card:hover .compare-btn,
+.compare-btn.active {
+  opacity: 1;
+}
+
+.compare-btn:hover,
+.compare-btn.active {
+  background: rgba(255,255,255,0.95);
+  color: var(--clay);
+  transform: scale(1.1);
 }
 
 .fav-btn {
@@ -150,6 +226,35 @@ function open() {
   justify-content: space-between;
   padding-top: var(--space-2);
   border-top: 1px solid var(--ink-05);
+}
+
+.card-footer-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tableware-icon {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.tableware-icon.functional {
+  color: var(--sage);
+}
+
+.tableware-icon.test-only {
+  color: var(--clay);
+}
+
+.tableware-icon.decorative {
+  color: var(--stone);
 }
 
 .card-ingredient-count {

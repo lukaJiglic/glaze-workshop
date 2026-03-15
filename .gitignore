@@ -8,7 +8,7 @@ node_modules/
 dist/
 
 # Scratch / working data (app data lives in public/knowledge/)
-knowledge/
+/knowledge/
 ceramic_glaze_materials.json
 
 # Local env files

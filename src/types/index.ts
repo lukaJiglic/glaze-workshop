@@ -106,6 +106,9 @@ export interface FilterState {
   selectedFamilies: string[]
   selectedStyles: string[]
   selectedTablewareStatuses: string[]
+  selectedKilns: string[]
+  selectedTechniques: string[]
+  selectedClays: string[]
 }
 
 export interface ScaledIngredient extends Ingredient {
@@ -156,6 +159,9 @@ export interface CustomRecipe {
   colourIds: string[]
   ingredients: Ingredient[]
   notes: string[]
+  cautionIds?: string[]
+  styleIds?: string[]
+  swatchColor?: string
   createdAt: string
   updatedAt: string
 }

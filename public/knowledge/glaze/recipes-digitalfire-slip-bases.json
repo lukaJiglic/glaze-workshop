@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "title": "Digitalfire natural slip-base and fluid-melt recipes",
+    "createdAt": "2026-03-10",
+    "note": "This pack focuses on Alberta Slip, Ravenscrag Slip, and cone-6 fluid-melt reference formulas. These recipes are valuable because they show what happens when a studio builds many surfaces from one natural base material plus targeted additives."
+  },
+  "recipes": [
+    {
+      "id": "ga6-a",
+      "name": "GA6-A Alberta Slip Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["amber"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "alberta-slip", "sourceLabel": "Alberta Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 20.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red Iron Oxide", "amount": 4.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Simple Alberta Slip cone-6 base showing how a natural iron-bearing material plus frit can produce a warm honey amber.",
+        "Useful as a baseline before branching into rutile, stain, or lithium variants."
+      ],
+      "sourceIds": ["digitalfire-ga6a"]
+    },
+    {
+      "id": "ga6-b",
+      "name": "GA6-B / L3500 Alberta Slip Honey Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["amber", "brown", "variegated"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "alberta-slip", "sourceLabel": "Alberta Slip", "amount": 78.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 10.0 },
+        { "materialId": "lithium-carbonate", "sourceLabel": "Lithium Carbonate", "amount": 2.0 },
+        { "materialId": "calcined-alumina", "sourceLabel": "Calcined Alumina", "amount": 5.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 5.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Fluid amber honey base from the Alberta Slip family with lithium, calcined alumina, and rutile for richer amber and crystal-like variation.",
+        "More effect-oriented than GA6-A and should be treated as a reactive test glaze."
+      ],
+      "sourceIds": ["digitalfire-ga6b"]
+    },
+    {
+      "id": "ga6-c",
+      "name": "GA6-C Alberta Slip Rutile Blue",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue", "amber", "variegated"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "alberta-slip", "sourceLabel": "Alberta Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Rutile-blue branch of the Alberta Slip cone-6 family.",
+        "Useful for showing how one additive can shift a natural amber base into a more variegated blue-break surface."
+      ],
+      "sourceIds": ["digitalfire-ga6c"]
+    },
+    {
+      "id": "ga6-g",
+      "name": "GA6-G Alberta Slip Rutile Brown",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["brown", "amber", "variegated"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "alberta-slip-roasted", "sourceLabel": "Roasted Alberta Slip", "amount": 85.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 10.0 },
+        { "materialId": "lithium-carbonate", "sourceLabel": "Lithium Carbonate", "amount": 2.0 },
+        { "materialId": "calcined-alumina", "sourceLabel": "Calcined Alumina", "amount": 3.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red Iron Oxide", "amount": 2.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Roasted-Alberta variant that trades some raw-shrinkage issues for better slurry behavior while keeping a rutile-brown effect path.",
+        "Useful for studying how roasting a natural base changes workflow without completely changing the fired family."
+      ],
+      "sourceIds": ["digitalfire-ga6g", "digitalfire-alberta-slip-roasted"]
+    },
+    {
+      "id": "ga6-h",
+      "name": "GA6-H Alberta Slip Black Stain Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["black"],
+      "surfaceIds": ["glossy", "opaque"],
+      "ingredients": [
+        { "materialId": "alberta-slip", "sourceLabel": "Alberta Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 20.0 },
+        { "materialId": "mason-stain-generic", "sourceLabel": "Mason 6666 Black Stain", "amount": 6.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 10.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Black stain branch of the Alberta Slip base.",
+        "Shows how one natural base can become a stable dark glaze by adding stain and zircon opacifier."
+      ],
+      "sourceIds": ["digitalfire-ga6h", "mason-reference-guide"]
+    },
+    {
+      "id": "gr6-a",
+      "name": "GR6-A Ravenscrag Slip Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear", "amber"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Minimal Ravenscrag cone-6 base glaze with only one added frit.",
+        "A useful natural-base contrast against clearer, more engineered cone-6 transparents."
+      ],
+      "sourceIds": ["digitalfire-gr6a"]
+    },
+    {
+      "id": "gr6-m",
+      "name": "GR6-M Ravenscrag Floating Blue",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue", "cream", "variegated"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Ferro Frit 3134", "amount": 20.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt Oxide", "amount": 1.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin Oxide", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Floating blue branch of the Ravenscrag cone-6 base.",
+        "Very useful for comparing natural-base floating blue against the more engineered G2826R family."
+      ],
+      "sourceIds": ["digitalfire-gr6m"]
+    },
+    {
+      "id": "gr6-n",
+      "name": "GR6-N Ravenscrag Brilliant Celadon",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["celadon"],
+      "colourIds": ["celadon-green", "green"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin Oxide", "amount": 4.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red Iron Oxide", "amount": 1.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Celadon branch of the Ravenscrag cone-6 family.",
+        "A good example of how a tiny iron addition on a natural base can move the fired result into a celadon-like green."
+      ],
+      "sourceIds": ["digitalfire-gr6n"]
+    },
+    {
+      "id": "gr10-a",
+      "name": "GR10-A Ravenscrag High Fire Base",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear", "amber"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 85.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 10.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 5.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire Ravenscrag base glaze.",
+        "Provides a natural-material high-fire reference to compare against feldspathic cone-10 clears."
+      ],
+      "sourceIds": ["digitalfire-gr10a"]
+    },
+    {
+      "id": "gr10-b",
+      "name": "GR10-B Ravenscrag Liner",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear", "cream"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 15.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 5.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire Ravenscrag liner branch with more calcium than GR10-A.",
+        "Useful as a natural-base functional high-fire comparison glaze."
+      ],
+      "sourceIds": ["digitalfire-gr10b"]
+    },
+    {
+      "id": "gr10-c",
+      "name": "GR10-C Raventalc",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["matte", "satin-matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["matte", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 65.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 15.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 20.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire matte branch built from the Ravenscrag family.",
+        "Useful for comparing a natural-base talc-dolomite matte against dolomite and spodumene matte references."
+      ],
+      "sourceIds": ["digitalfire-gr10c"]
+    },
+    {
+      "id": "g2934y",
+      "name": "G2934Y Cone 6 Silky Matte Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline Syenite", "amount": 22.57 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.42 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 19.67 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.19 },
+        { "materialId": "ball-clay", "sourceLabel": "Ball Clay", "amount": 10.89 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 8.26 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Cone-6 matte base developed as a silkier, harder, less mark-prone alternative to rougher matte directions.",
+        "Useful for functional matte testing and as a calmer alternative to highly reactive cone-6 bases."
+      ],
+      "sourceIds": ["digitalfire-g2934y"]
+    },
+    {
+      "id": "g3806c",
+      "name": "G3806C Cone 6 Super-Gloss Fluid-Melt Copper Blue",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["turquoise", "green", "blue", "variegated"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline Syenite", "amount": 29.5 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Ferro Frit 3110", "amount": 31.5 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 21.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 17.5 },
+        { "materialId": "black-copper-oxide", "sourceLabel": "Copper Oxide", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Cone-6 super-gloss fluid-melt reference showing the highly mobile, pooling side of oxidation glaze behavior.",
+        "Useful for comparing a deliberately fluid effect glaze against stable liner-style clear bases."
+      ],
+      "sourceIds": ["digitalfire-g3806c", "digitalfire-fluid-melt-glazes", "digitalfire-melt-fluidity"]
+    }
+  ]
+}

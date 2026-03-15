@@ -9,6 +9,7 @@ import { useGlazeFilter } from '@/composables/useGlazeFilter'
 import FilterSidebar from '@/components/recipe/FilterSidebar.vue'
 import FilterChip from '@/components/recipe/FilterChip.vue'
 import RecipeCard from '@/components/recipe/RecipeCard.vue'
+import ComparePanel from '@/components/recipe/ComparePanel.vue'
 import type { FilterState } from '@/types'
 
 const store = useGlazeStore()
@@ -25,11 +26,18 @@ const {
   selectedFamilies,
   selectedStyles,
   selectedTablewareStatuses,
+  selectedKilns,
+  selectedTechniques,
+  selectedClays,
   filteredRecipes,
   activeFilterCount,
   toggleFilter,
   clearAll,
   removeFilter,
+  savedFilterSets,
+  saveCurrentFilters,
+  loadFilterSet,
+  deleteFilterSet,
 } = useGlazeFilter(() => searchResults.value)
 
 // Read URL query param to pre-fill search (e.g. from ingredient filter link)
@@ -47,6 +55,9 @@ const filters = computed<FilterState>(() => ({
   selectedFamilies: selectedFamilies.value,
   selectedStyles: selectedStyles.value,
   selectedTablewareStatuses: selectedTablewareStatuses.value,
+  selectedKilns: selectedKilns.value,
+  selectedTechniques: selectedTechniques.value,
+  selectedClays: selectedClays.value,
 }))
 
 // Active chips for display
@@ -58,7 +69,21 @@ const activeChips = computed(() => [
   ...selectedFamilies.value.map(v => ({ type: 'families' as const, value: v, label: v })),
   ...selectedStyles.value.map(v => ({ type: 'styles' as const, value: v, label: v })),
   ...selectedTablewareStatuses.value.map(v => ({ type: 'tableware' as const, value: v, label: v })),
+  ...selectedKilns.value.map(v => ({ type: 'kilns' as const, value: v, label: v.replace(/-/g, ' ') })),
+  ...selectedTechniques.value.map(v => ({ type: 'techniques' as const, value: v, label: v.replace(/-/g, ' ') })),
+  ...selectedClays.value.map(v => ({ type: 'clays' as const, value: v, label: v.replace(/-/g, ' ') })),
 ])
+
+// ─── Save filter set ─────────────────────────────────────────────────────────
+const showSaveFilter = ref(false)
+const saveFilterName = ref('')
+
+function handleSaveFilter() {
+  if (!saveFilterName.value.trim()) return
+  saveCurrentFilters(saveFilterName.value.trim())
+  saveFilterName.value = ''
+  showSaveFilter.value = false
+}
 
 // ─── Sort ────────────────────────────────────────────────────────────────────
 type SortKey = 'default' | 'name-asc' | 'name-desc' | 'cone-asc' | 'favorites'
@@ -124,6 +149,22 @@ watch(sortedRecipes, async () => {
 }, { immediate: false })
 
 const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
+
+// ─── Compare bar ──────────────────────────────────────────────────────────────
+const compareCount = computed(() => workshopStore.compareIds.length)
+
+const compareRecipeNames = computed(() =>
+  workshopStore.compareIds.map(id => {
+    const recipe = store.recipeById.get(id)
+    return recipe?.name ?? id
+  })
+)
+
+function openCompare() {
+  if (compareCount.value >= 2) {
+    workshopStore.isCompareOpen = true
+  }
+}
 </script>
 
 <template>
@@ -169,6 +210,34 @@ const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
               autocomplete="off"
             />
             <button v-if="query" class="search-clear" @click="clearSearch">×</button>
+          </div>
+        </div>
+
+        <!-- Saved filter sets -->
+        <div v-if="savedFilterSets.length || activeChips.length" class="saved-filters-bar">
+          <button
+            v-for="set in savedFilterSets"
+            :key="set.name"
+            class="saved-filter-chip"
+            @click="loadFilterSet(set)"
+          >
+            {{ set.name }}
+            <span class="saved-filter-remove" @click.stop="deleteFilterSet(set.name)">×</span>
+          </button>
+          <button
+            v-if="activeFilterCount > 0 && !showSaveFilter"
+            class="save-filter-btn"
+            @click="showSaveFilter = true"
+          >+ Save filter</button>
+          <div v-if="showSaveFilter" class="save-filter-input-row">
+            <input
+              v-model="saveFilterName"
+              class="save-filter-input"
+              placeholder="Filter name..."
+              @keydown.enter="handleSaveFilter"
+              @keydown.escape="showSaveFilter = false"
+            />
+            <button class="save-filter-confirm" :disabled="!saveFilterName.trim()" @click="handleSaveFilter">Save</button>
           </div>
         </div>
 
@@ -230,6 +299,29 @@ const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
         </div>
       </div>
     </div>
+
+    <!-- Compare bar (floating) -->
+    <Transition name="compare-bar">
+      <div v-if="compareCount > 0" class="compare-bar">
+        <div class="compare-bar-inner">
+          <div class="compare-bar-info">
+            <span class="compare-bar-count">{{ compareCount }} / 3 selected</span>
+            <span class="compare-bar-names">{{ compareRecipeNames.join(' · ') }}</span>
+          </div>
+          <div class="compare-bar-actions">
+            <button
+              class="compare-bar-go"
+              :disabled="compareCount < 2"
+              @click="openCompare"
+            >Compare →</button>
+            <button class="compare-bar-clear" @click="workshopStore.clearCompare()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Compare panel overlay -->
+    <ComparePanel />
   </div>
 </template>
 
@@ -357,6 +449,103 @@ const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
 
 .search-clear:hover { color: var(--clay); }
 
+/* Saved filter sets */
+.saved-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.saved-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.saved-filter-chip:hover {
+  border-color: var(--clay);
+  background: var(--clay-10);
+}
+
+.saved-filter-remove {
+  font-size: 13px;
+  color: var(--stone);
+  margin-left: 2px;
+}
+
+.saved-filter-remove:hover {
+  color: var(--clay);
+}
+
+.save-filter-btn {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--ink-10);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.save-filter-btn:hover {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.save-filter-input-row {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.save-filter-input {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--chalk);
+  width: 120px;
+}
+
+.save-filter-input:focus {
+  outline: none;
+  border-color: var(--clay);
+}
+
+.save-filter-confirm {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--carbon);
+  color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.save-filter-confirm:hover:not(:disabled) {
+  background: var(--clay);
+}
+
+.save-filter-confirm:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .active-chips {
   display: flex;
   flex-wrap: wrap;
@@ -482,10 +671,116 @@ const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
   color: var(--stone);
 }
 
+/* Compare bar */
+.compare-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-above, 100);
+  background: var(--carbon);
+  border-top: 2px solid var(--clay);
+  padding: var(--space-3) var(--space-6);
+}
+
+.compare-bar-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.compare-bar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.compare-bar-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.compare-bar-names {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--stone-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px;
+}
+
+.compare-bar-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.compare-bar-go {
+  background: var(--clay);
+  color: var(--cream);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.compare-bar-go:hover:not(:disabled) {
+  background: var(--clay-dark);
+  transform: translateX(2px);
+}
+
+.compare-bar-go:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.compare-bar-clear {
+  background: none;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--stone-light);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.compare-bar-clear:hover {
+  border-color: var(--cream);
+  color: var(--cream);
+}
+
+/* Compare bar transition */
+.compare-bar-enter-active,
+.compare-bar-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.compare-bar-enter-from,
+.compare-bar-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
 @media (max-width: 768px) {
   .desktop-sidebar { display: none; }
   .sidebar-toggle { display: flex; }
   .workshop-main { padding: var(--space-4); }
   .results-row { flex-direction: column; align-items: flex-start; }
+  .compare-bar { padding: var(--space-3); }
+  .compare-bar-names { max-width: 200px; }
 }
 </style>

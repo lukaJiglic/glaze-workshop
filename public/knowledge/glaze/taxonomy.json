@@ -1,0 +1,585 @@
+{
+  "meta": {
+    "title": "Glaze taxonomy and reference notes",
+    "createdAt": "2026-03-10"
+  },
+  "taxonomies": {
+    "firingRanges": [
+      {
+        "id": "raku",
+        "name": "Raku",
+        "coneRange": "010-06",
+        "approxCelsius": "900-1000",
+        "summary": "Fast, low-temperature firing with hot removal and post-fire reduction or cooling effects.",
+        "sourceIds": [
+          "orton-pyrometric-guide",
+          "ct-raku"
+        ]
+      },
+      {
+        "id": "low-fire",
+        "name": "Low fire",
+        "coneRange": "06-02",
+        "approxCelsius": "999-1120",
+        "summary": "Common for earthenware, bright color, and frit-heavy clear or opaque glazes.",
+        "sourceIds": [
+          "orton-pyrometric-guide",
+          "digitalfire-earthenware",
+          "ct-earthenware"
+        ]
+      },
+      {
+        "id": "mid-fire",
+        "name": "Mid fire",
+        "coneRange": "5-7",
+        "approxCelsius": "1186-1239",
+        "summary": "Common studio range for electric kilns and balanced functional ware glazes.",
+        "sourceIds": [
+          "orton-pyrometric-guide",
+          "ct-midfire"
+        ]
+      },
+      {
+        "id": "high-fire",
+        "name": "High fire",
+        "coneRange": "8-10",
+        "approxCelsius": "1240-1305",
+        "summary": "Traditional stoneware and porcelain range associated with celadon, shino, ash, temmoku, and durable feldspathic glazes.",
+        "sourceIds": [
+          "orton-pyrometric-guide",
+          "digitalfire-stoneware",
+          "digitalfire-porcelain",
+          "ct-stoneware"
+        ]
+      }
+    ],
+    "atmospheres": [
+      {
+        "id": "oxidation",
+        "name": "Oxidation",
+        "summary": "Plenty of oxygen in the kiln. Electric firing is usually oxidation.",
+        "sourceIds": [
+          "ct-earthenware",
+          "ct-midfire"
+        ]
+      },
+      {
+        "id": "reduction",
+        "name": "Reduction",
+        "summary": "Oxygen-starved firing that shifts iron and copper color responses and supports many traditional high-fire surfaces.",
+        "sourceIds": [
+          "ct-stoneware"
+        ]
+      },
+      {
+        "id": "neutral",
+        "name": "Neutral",
+        "summary": "Balanced atmosphere with little oxidation or reduction push.",
+        "sourceIds": [
+          "orton-pyrometric-guide"
+        ]
+      },
+      {
+        "id": "raku-reduction",
+        "name": "Post-fire raku reduction",
+        "summary": "Hot ware is moved to combustible reduction chambers to produce metallic luster, carbon blackening, or copper shifts.",
+        "sourceIds": [
+          "ct-raku"
+        ]
+      },
+      {
+        "id": "wood-ash-atmosphere",
+        "name": "Wood / ash atmosphere",
+        "summary": "Ash deposition and long firing can add natural glaze effects, flashing, and directional texture.",
+        "sourceIds": [
+          "ct-stoneware"
+        ]
+      },
+      {
+        "id": "salt",
+        "name": "Salt atmosphere",
+        "summary": "Salt introduced into the hot kiln creates sodium vapor and orange-peel flashing on clay surfaces.",
+        "sourceIds": [
+          "orton-pyrometric-guide"
+        ]
+      },
+      {
+        "id": "soda",
+        "name": "Soda atmosphere",
+        "summary": "Soda firing produces sodium vapor effects similar to salt, often with softer deposition control.",
+        "sourceIds": [
+          "orton-pyrometric-guide"
+        ]
+      },
+      {
+        "id": "pit-saggar",
+        "name": "Pit / saggar atmosphere",
+        "summary": "Smoke, salts, and combustible materials mark the clay surface instead of forming a classic melted glaze layer.",
+        "sourceIds": [
+          "orton-pyrometric-guide"
+        ]
+      }
+    ],
+    "kilns": [
+      {
+        "id": "electric-kiln",
+        "name": "Electric kiln",
+        "summary": "Stable oxidation firing, common for low-fire and mid-fire glazes."
+      },
+      {
+        "id": "gas-kiln",
+        "name": "Gas kiln",
+        "summary": "Allows oxidation, neutral, or reduction control and is common for high-fire glaze traditions."
+      },
+      {
+        "id": "wood-kiln",
+        "name": "Wood kiln",
+        "summary": "Long firings with ash deposition, flashing, and directional flame effects."
+      },
+      {
+        "id": "raku-kiln",
+        "name": "Raku kiln",
+        "summary": "Fast-access kiln built for hot removal at low temperature."
+      },
+      {
+        "id": "soda-kiln",
+        "name": "Soda kiln",
+        "summary": "Specialized kiln for soda vapor firing."
+      },
+      {
+        "id": "salt-kiln",
+        "name": "Salt kiln",
+        "summary": "Specialized kiln for salt vapor firing."
+      },
+      {
+        "id": "pit-or-saggar",
+        "name": "Pit or saggar furnace",
+        "summary": "Low-tech firing container or pit for smoke-marked surfaces."
+      }
+    ],
+    "clays": [
+      {
+        "id": "red-earthenware",
+        "name": "Red earthenware",
+        "summary": "Porous low-fire body with iron-rich warmth and strong color response under clear glazes.",
+        "sourceIds": [
+          "digitalfire-earthenware"
+        ]
+      },
+      {
+        "id": "white-earthenware",
+        "name": "White earthenware",
+        "summary": "Low-fire body suited to bright majolica and clean underglaze color.",
+        "sourceIds": [
+          "digitalfire-earthenware"
+        ]
+      },
+      {
+        "id": "stoneware",
+        "name": "Stoneware",
+        "summary": "Dense mid-to-high-fire body that usually vitrifies more fully than earthenware.",
+        "sourceIds": [
+          "digitalfire-stoneware"
+        ]
+      },
+      {
+        "id": "white-stoneware",
+        "name": "White stoneware",
+        "summary": "Cleaner background than iron-rich stoneware while keeping more tooth than porcelain.",
+        "sourceIds": [
+          "digitalfire-stoneware"
+        ]
+      },
+      {
+        "id": "porcelain",
+        "name": "Porcelain",
+        "summary": "White, vitreous, high-silica body prized for translucency and celadon clarity.",
+        "sourceIds": [
+          "digitalfire-porcelain"
+        ]
+      },
+      {
+        "id": "grogged-sculpture",
+        "name": "Grogged sculpture body",
+        "summary": "Open, shock-resistant body suited to large forms and some specialty firings.",
+        "sourceIds": [
+          "digitalfire-stoneware"
+        ]
+      },
+      {
+        "id": "raku-clay",
+        "name": "Raku clay",
+        "summary": "Open, thermal-shock-tolerant body with grog for rapid heating and cooling.",
+        "sourceIds": [
+          "ct-raku"
+        ]
+      },
+      {
+        "id": "paperclay",
+        "name": "Paperclay",
+        "summary": "Fiber-reinforced body used for lightweight joins and repairs; glaze fit still needs testing.",
+        "sourceIds": [
+          "digitalfire-stoneware"
+        ]
+      }
+    ],
+    "applicationMethods": [
+      {
+        "id": "dipping",
+        "name": "Dipping"
+      },
+      {
+        "id": "pouring",
+        "name": "Pouring"
+      },
+      {
+        "id": "brushing",
+        "name": "Brushing"
+      },
+      {
+        "id": "spraying",
+        "name": "Spraying"
+      },
+      {
+        "id": "trailing",
+        "name": "Trailing"
+      },
+      {
+        "id": "wash",
+        "name": "Oxide wash"
+      },
+      {
+        "id": "wax-resist",
+        "name": "Wax resist"
+      },
+      {
+        "id": "layering",
+        "name": "Layering"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "majolica",
+        "name": "Majolica"
+      },
+      {
+        "id": "ash-glazing",
+        "name": "Ash glazing"
+      },
+      {
+        "id": "celadon",
+        "name": "Celadon reduction"
+      },
+      {
+        "id": "shino",
+        "name": "Shino"
+      },
+      {
+        "id": "crystalline-glaze",
+        "name": "Crystalline glaze"
+      },
+      {
+        "id": "raku-reduction-technique",
+        "name": "Raku reduction"
+      },
+      {
+        "id": "line-blend",
+        "name": "Line blend testing"
+      },
+      {
+        "id": "triaxial-blend",
+        "name": "Triaxial blend testing"
+      },
+      {
+        "id": "single-fire",
+        "name": "Single firing"
+      },
+      {
+        "id": "overglaze-luster",
+        "name": "Overglaze luster"
+      },
+      {
+        "id": "soda-salt-flashing",
+        "name": "Soda or salt flashing"
+      }
+    ],
+    "styles": [
+      {
+        "id": "clear-gloss",
+        "name": "Clear gloss"
+      },
+      {
+        "id": "satin-matte",
+        "name": "Satin matte"
+      },
+      {
+        "id": "matte",
+        "name": "Matte"
+      },
+      {
+        "id": "crackle",
+        "name": "Crackle"
+      },
+      {
+        "id": "ash",
+        "name": "Ash glaze"
+      },
+      {
+        "id": "celadon",
+        "name": "Celadon"
+      },
+      {
+        "id": "shino",
+        "name": "Shino"
+      },
+      {
+        "id": "temmoku",
+        "name": "Temmoku"
+      },
+      {
+        "id": "crystalline",
+        "name": "Crystalline"
+      },
+      {
+        "id": "majolica",
+        "name": "Majolica"
+      },
+      {
+        "id": "metallic-raku",
+        "name": "Metallic raku"
+      },
+      {
+        "id": "copper-red",
+        "name": "Copper red"
+      },
+      {
+        "id": "variegated",
+        "name": "Variegated"
+      }
+    ],
+    "colours": [
+      {
+        "id": "clear",
+        "name": "Clear"
+      },
+      {
+        "id": "white",
+        "name": "White"
+      },
+      {
+        "id": "cream",
+        "name": "Cream"
+      },
+      {
+        "id": "blue",
+        "name": "Blue"
+      },
+      {
+        "id": "turquoise",
+        "name": "Turquoise"
+      },
+      {
+        "id": "green",
+        "name": "Green"
+      },
+      {
+        "id": "celadon-green",
+        "name": "Celadon green"
+      },
+      {
+        "id": "amber",
+        "name": "Amber"
+      },
+      {
+        "id": "brown",
+        "name": "Brown"
+      },
+      {
+        "id": "black",
+        "name": "Black"
+      },
+      {
+        "id": "red",
+        "name": "Red"
+      },
+      {
+        "id": "copper-red",
+        "name": "Copper red"
+      },
+      {
+        "id": "yellow",
+        "name": "Yellow"
+      },
+      {
+        "id": "metallic",
+        "name": "Metallic"
+      },
+      {
+        "id": "variegated",
+        "name": "Variegated"
+      }
+    ],
+    "surfaces": [
+      {
+        "id": "glossy",
+        "name": "Glossy"
+      },
+      {
+        "id": "satin",
+        "name": "Satin"
+      },
+      {
+        "id": "matte",
+        "name": "Matte"
+      },
+      {
+        "id": "dry",
+        "name": "Dry"
+      },
+      {
+        "id": "crackle",
+        "name": "Crackle"
+      },
+      {
+        "id": "variegated",
+        "name": "Variegated"
+      },
+      {
+        "id": "crystalline",
+        "name": "Crystalline"
+      },
+      {
+        "id": "opaque",
+        "name": "Opaque"
+      },
+      {
+        "id": "transparent",
+        "name": "Transparent"
+      },
+      {
+        "id": "semi-transparent",
+        "name": "Semi-transparent"
+      },
+      {
+        "id": "runny",
+        "name": "Runny"
+      }
+    ]
+  },
+  "referenceNotes": [
+    {
+      "id": "glaze-triad",
+      "title": "A glaze system is usually glass former plus stabilizer plus flux",
+      "summary": "Most glaze understanding starts by separating silica, alumina-bearing clay, and melting oxides or frits.",
+      "bullets": [
+        "Silica builds the glass network.",
+        "Alumina stiffens and stabilizes the melt.",
+        "Fluxes lower the melting point so the glaze can mature at the chosen cone."
+      ],
+      "sourceIds": [
+        "insight-glazes",
+        "digitalfire-oxides",
+        "glazy-oxides"
+      ]
+    },
+    {
+      "id": "cone-heatwork",
+      "title": "Cone numbers describe heatwork, not temperature alone",
+      "summary": "Firing rate and soak matter, so the same cone can bend at different peak temperatures.",
+      "bullets": [
+        "Use witness cones to verify what the kiln really did.",
+        "Do not treat cone tables as a single absolute temperature."
+      ],
+      "sourceIds": [
+        "orton-pyrometric-guide"
+      ]
+    },
+    {
+      "id": "clay-fit",
+      "title": "Glaze fit changes with the clay body",
+      "summary": "A recipe that works on one body can craze, shiver, or color-shift on another.",
+      "bullets": [
+        "Red earthenware darkens clear glazes and can magnify craze visibility.",
+        "Porcelain shows transparent celadons clearly but exposes fit problems fast."
+      ],
+      "sourceIds": [
+        "digitalfire-earthenware",
+        "digitalfire-stoneware",
+        "digitalfire-porcelain",
+        "digitalfire-crazing",
+        "digitalfire-shivering"
+      ]
+    },
+    {
+      "id": "atmosphere-matters",
+      "title": "Atmosphere changes color pathways",
+      "summary": "Iron, copper, and ash glazes often look radically different in oxidation, reduction, wood, or raku conditions.",
+      "bullets": [
+        "Copper can move from turquoise in oxidation to red or metallic in reduction.",
+        "Iron can move from honey and brown to celadon green or temmoku black depending on chemistry and atmosphere."
+      ],
+      "sourceIds": [
+        "ct-stoneware",
+        "ct-raku",
+        "digitalfire-oxides"
+      ]
+    },
+    {
+      "id": "frits-vs-raw",
+      "title": "Frit-heavy low-fire recipes behave differently from raw stoneware glazes",
+      "summary": "Low-fire earthenware glazes often rely on frits and boron, while high-fire stoneware glazes lean on feldspar, calcium, ash, and clay.",
+      "bullets": [
+        "Frits help predictable low-temperature melting.",
+        "Raw stoneware recipes often need more careful cooling, fit testing, and body matching."
+      ],
+      "sourceIds": [
+        "ct-earthenware",
+        "ct-stoneware",
+        "glazy-materials"
+      ]
+    },
+    {
+      "id": "testing-workflow",
+      "title": "Systematic testing matters more than isolated recipes",
+      "summary": "A usable glaze library needs test tiles, line blends, triaxial blends, witness cones, and notes.",
+      "bullets": [
+        "Test on the intended body and thickness.",
+        "Record the actual kiln, atmosphere, and cooling schedule."
+      ],
+      "sourceIds": [
+        "insight-glazes",
+        "orton-pyrometric-guide"
+      ]
+    },
+    {
+      "id": "surface-control",
+      "title": "Surface is chemistry plus thickness plus cooling",
+      "summary": "Gloss, satin, matte, crystals, crackle, and variegation do not come from one variable alone.",
+      "bullets": [
+        "Magnesium and calcium often push satin or matte surfaces.",
+        "Titanium, rutile, zinc, and cooling profile can promote variegation or crystals."
+      ],
+      "sourceIds": [
+        "digitalfire-oxides",
+        "glazy-oxides",
+        "ct-midfire",
+        "ct-stoneware"
+      ]
+    },
+    {
+      "id": "archive-recipes",
+      "title": "Older recipe collections are valuable but need modern scrutiny",
+      "summary": "Historic recipe pages contain useful formulas, but some use toxic materials, obsolete frit assumptions, or incomplete firing metadata.",
+      "bullets": [
+        "Treat old recipes as research starting points.",
+        "Normalize them into chemistry, fit, and safety testing before relying on them."
+      ],
+      "sourceIds": [
+        "ct-earthenware",
+        "ct-midfire",
+        "ct-stoneware",
+        "ct-raku"
+      ]
+    }
+  ]
+}

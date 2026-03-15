@@ -11,7 +11,7 @@ import {
 
 // ─── Core UMF calculation ──────────────────────────────────────────────────────
 
-function computeUMF(ingredients: Ingredient[], firingRangeId?: string): UMFResult {
+export function computeUMF(ingredients: Ingredient[], firingRangeId?: string): UMFResult {
   const empty: UMFResult = {
     isValid: false, missingMaterials: [], fluxSum: 0,
     r2o: [], ro: [], r2o3: [], ro2: [], colorants: [], other: [],

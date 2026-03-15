@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { gsap } from 'gsap'
 import { useGlazeStore } from '@/stores/glaze'
 import { useWorkshopStore } from '@/stores/workshop'
@@ -116,6 +116,19 @@ function duplicateAsCustom() {
   router.push(`/my-recipes/${custom.id}`)
 }
 
+const saveScaledLabel = ref('Save Batch as Recipe')
+
+function saveScaledAsCustom() {
+  const result = workshop.saveScaledAsCustom()
+  if (result) {
+    saveScaledLabel.value = 'Saved!'
+    setTimeout(() => {
+      saveScaledLabel.value = 'Save Batch as Recipe'
+      router.push(`/my-recipes/${result.id}`)
+    }, 1200)
+  }
+}
+
 function openInWorkshop() {
   if (!calculatorRecipe.value) return
   workshop.openRecipe(calculatorRecipe.value)
@@ -125,6 +138,16 @@ function openInWorkshop() {
 function formatScore(val: number): string {
   return '●'.repeat(val) + '○'.repeat(5 - val)
 }
+
+// ── Record batch to history ───────────────────────────────────────
+watch(
+  () => [calculatorRecipe.value?.id, workshop.batchWeight] as const,
+  ([recipeId, weight]) => {
+    if (recipeId && calculatorRecipe.value && weight > 0) {
+      workshop.recordBatchScale(recipeId, calculatorRecipe.value.name, weight)
+    }
+  },
+)
 
 // ── Mount animation ───────────────────────────────────────────────
 const headerEl = ref<HTMLElement | null>(null)
@@ -141,6 +164,11 @@ onMounted(() => {
     <!-- Header -->
     <div ref="headerEl" class="calc-header">
       <div class="calc-header-inner">
+        <div class="breadcrumb">
+          <RouterLink to="/workshop" class="breadcrumb-link">Workshop</RouterLink>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current">Calculator</span>
+        </div>
         <h1 class="page-title">Batch Calculator</h1>
         <p class="page-sub">Scale any recipe by batch weight — with live chemistry and full recipe reference</p>
       </div>
@@ -343,6 +371,9 @@ onMounted(() => {
               <button class="btn btn-ghost" @click="copyRecipe">
                 {{ copyLabel }}
               </button>
+              <button class="btn btn-ghost" @click="saveScaledAsCustom">
+                {{ saveScaledLabel }}
+              </button>
             </div>
           </template>
 
@@ -356,6 +387,29 @@ onMounted(() => {
               <li>Ingredient weights and UMF chemistry update live</li>
               <li>Click ⇄ on any ingredient to explore substitutes</li>
             </ol>
+          </div>
+
+          <!-- Batch history -->
+          <div v-if="workshop.batchHistory.length" class="batch-history">
+            <h3 class="history-title">Recently Scaled</h3>
+            <div class="history-list">
+              <button
+                v-for="(entry, i) in workshop.batchHistory.slice(0, 8)"
+                :key="i"
+                class="history-item"
+                @mousedown.prevent="() => {
+                  const recipe = store.recipeById.get(entry.recipeId)
+                  if (recipe) {
+                    workshop.loadRecipeIntoCalculator(recipe)
+                    workshop.batchWeight = entry.weight
+                    showPicker = false
+                  }
+                }"
+              >
+                <span class="history-name">{{ entry.recipeName }}</span>
+                <span class="history-weight">{{ entry.weight }}g</span>
+              </button>
+            </div>
           </div>
 
         </aside>
@@ -381,6 +435,35 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.breadcrumb-link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone-light);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+
+.breadcrumb-link:hover { color: var(--cream); }
+
+.breadcrumb-sep {
+  color: var(--stone-light);
+  opacity: 0.5;
+}
+
+.breadcrumb-current {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cream);
+  letter-spacing: 0.03em;
 }
 
 .page-title {
@@ -841,6 +924,69 @@ onMounted(() => {
   font-size: var(--text-sm);
   color: var(--stone);
   line-height: 1.5;
+}
+
+/* Batch history */
+.batch-history {
+  background: var(--parchment);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  border: 1px solid var(--ink-10);
+}
+
+.history-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stone);
+  margin-bottom: var(--space-3);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--chalk);
+  border: 1px solid var(--ink-05);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.history-item:hover {
+  border-color: var(--clay);
+  transform: translateX(3px);
+}
+
+.history-name {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.history-weight {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--clay);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-left: var(--space-2);
 }
 
 /* ── Transitions ── */

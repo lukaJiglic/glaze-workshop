@@ -60,6 +60,40 @@ function createFromScratch() {
   router.push(`/my-recipes/${newRecipe.id}`)
 }
 
+function exportRecipe(id: string) {
+  const json = store.exportRecipeJSON(id)
+  if (!json) return
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  const recipe = store.customRecipes.find(r => r.id === id)
+  a.href = url
+  a.download = `${(recipe?.name ?? 'recipe').replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '-').toLowerCase()}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+const importFileRef = ref<HTMLInputElement | null>(null)
+
+function triggerImport() {
+  importFileRef.value?.click()
+}
+
+function handleImportFile(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    const result = store.importRecipeJSON(reader.result as string)
+    if (result) {
+      router.push(`/my-recipes/${result.id}`)
+    }
+  }
+  reader.readAsText(file)
+  // Reset input so same file can be imported again
+  if (importFileRef.value) importFileRef.value.value = ''
+}
+
 function formatDate(iso: string): string {
   const d = new Date(iso)
   return d.toLocaleDateString('en-US', {
@@ -79,6 +113,14 @@ function formatDate(iso: string): string {
         <p class="page-sub">
           {{ recipeCount }} custom recipe{{ recipeCount !== 1 ? 's' : '' }}
         </p>
+        <button class="import-btn" @click="triggerImport">Import Recipe JSON</button>
+        <input
+          ref="importFileRef"
+          type="file"
+          accept=".json"
+          style="display: none"
+          @change="handleImportFile"
+        />
       </div>
     </div>
 
@@ -138,6 +180,12 @@ function formatDate(iso: string): string {
         >
           <div class="card-header">
             <h3 class="card-name">{{ recipe.name }}</h3>
+            <button
+              class="card-fav-btn"
+              :class="{ active: store.isFavorite(recipe.id) }"
+              @click.stop="store.toggleFavorite(recipe.id)"
+              :aria-label="store.isFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'"
+            >{{ store.isFavorite(recipe.id) ? '♥' : '♡' }}</button>
             <span class="card-cone">Cone {{ recipe.cone || '?' }}</span>
           </div>
 
@@ -165,6 +213,12 @@ function formatDate(iso: string): string {
               @click="openInCalculator(recipe)"
             >
               Open in Calculator
+            </button>
+            <button
+              class="card-btn card-btn-export"
+              @click="exportRecipe(recipe.id)"
+            >
+              Export
             </button>
             <button
               class="card-btn card-btn-delete"
@@ -244,6 +298,25 @@ function formatDate(iso: string): string {
   font-size: var(--text-sm);
   color: var(--stone-light);
   letter-spacing: 0.04em;
+}
+
+.import-btn {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid rgba(245, 240, 232, 0.3);
+  border-radius: var(--radius-md);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone-light);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.import-btn:hover {
+  border-color: var(--cream);
+  color: var(--cream);
 }
 
 /* ---- Content area ---- */
@@ -432,6 +505,22 @@ function formatDate(iso: string): string {
   -webkit-box-orient: vertical;
 }
 
+.card-fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--stone);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.card-fav-btn:hover,
+.card-fav-btn.active {
+  color: var(--clay);
+  transform: scale(1.15);
+}
+
 .card-cone {
   flex-shrink: 0;
   font-family: var(--font-mono);
@@ -523,6 +612,17 @@ function formatDate(iso: string): string {
 .card-btn-calc:hover {
   border-color: var(--clay);
   color: var(--clay);
+}
+
+.card-btn-export {
+  background: transparent;
+  color: var(--stone);
+  border-color: var(--ink-10);
+}
+
+.card-btn-export:hover {
+  border-color: var(--sage);
+  color: var(--sage-dark);
 }
 
 .card-btn-delete {

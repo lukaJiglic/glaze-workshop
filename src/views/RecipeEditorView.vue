@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useWorkshopStore } from '@/stores/workshop'
 import { useGlazeStore } from '@/stores/glaze'
 import { materialInfo, changeImpacts, substitutions, colorantHeuristics } from '@/data/materials-knowledge'
+import { cautions } from '@/data/cautions'
 import type { SubstitutionOption } from '@/data/materials-knowledge'
 import TagBadge from '@/components/ui/TagBadge.vue'
 import IngredientSwitcher from '@/components/recipe/IngredientSwitcher.vue'
@@ -36,6 +37,70 @@ const atmosphereOptions = [
   { id: 'oxidation', label: 'Oxidation' },
   { id: 'reduction', label: 'Reduction' },
   { id: 'neutral', label: 'Neutral' },
+]
+
+// ── Caution options ───────────────────────────────────────────────
+const cautionOptions = computed(() => {
+  const items: { id: string; label: string; severity: string }[] = []
+  cautions.forEach((c, id) => { items.push({ id, label: c.label, severity: c.severity }) })
+  return items.sort((a, b) => a.label.localeCompare(b.label))
+})
+
+function toggleCaution(id: string) {
+  if (!editableRecipe.value) return
+  if (!editableRecipe.value.cautionIds) editableRecipe.value.cautionIds = []
+  const idx = editableRecipe.value.cautionIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.cautionIds.push(id)
+  } else {
+    editableRecipe.value.cautionIds.splice(idx, 1)
+  }
+}
+
+// ── Surface & style options ──────────────────────────────────────
+const surfaceOptions = computed(() => {
+  const surfaces = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const s of r.surfaceIds) surfaces.add(s)
+  }
+  return Array.from(surfaces).sort()
+})
+
+const styleOptions = computed(() => {
+  const styles = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const s of r.styleIds) styles.add(s)
+  }
+  return Array.from(styles).sort()
+})
+
+function toggleSurface(id: string) {
+  if (!editableRecipe.value) return
+  const idx = editableRecipe.value.surfaceIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.surfaceIds.push(id)
+  } else {
+    editableRecipe.value.surfaceIds.splice(idx, 1)
+  }
+}
+
+function toggleStyle(id: string) {
+  if (!editableRecipe.value) return
+  if (!editableRecipe.value.styleIds) editableRecipe.value.styleIds = []
+  const idx = editableRecipe.value.styleIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.styleIds.push(id)
+  } else {
+    editableRecipe.value.styleIds.splice(idx, 1)
+  }
+}
+
+// ── Swatch color presets ──────────────────────────────────────────
+const swatchPresets = [
+  '#ede6d6', '#e7efef', '#f1ede4', '#a5b8a0', '#cf7a37',
+  '#2b211b', '#cdb99e', '#89a8ba', '#8d3026', '#ddd9d1',
+  '#7a5a43', '#d6c1a1', '#d9cfbc', '#b8a088', '#5a7862',
+  '#c4a35a', '#3d5a80', '#614a3a', '#d4a373', '#a0522d',
 ]
 
 // ── Material list for dropdowns ────────────────────────────────────
@@ -338,6 +403,8 @@ onMounted(() => {
                   <IngredientSwitcher
                     :ingredient="ing"
                     :visible="openSwitcherIndex === idx"
+                    :all-ingredients="editableRecipe.ingredients"
+                    :firing-range-id="editableRecipe.firingRangeId"
                     @close="openSwitcherIndex = null"
                     @swap="(origId, opt) => handleSwap(idx, origId, opt)"
                   />
@@ -446,6 +513,87 @@ onMounted(() => {
               rows="6"
               placeholder="Firing observations, surface results, glaze thickness notes..."
             ></textarea>
+          </section>
+
+          <!-- ─── CAUTION PICKER ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.12 }">
+            <h2 class="card-title">Cautions</h2>
+            <p class="field-hint">Flag safety concerns for anyone using this recipe.</p>
+            <div class="tag-picker">
+              <button
+                v-for="opt in cautionOptions"
+                :key="opt.id"
+                class="tag-pick-btn"
+                :class="{
+                  active: editableRecipe.cautionIds?.includes(opt.id),
+                  warning: opt.severity === 'warning',
+                  danger: opt.severity === 'danger',
+                }"
+                @click="toggleCaution(opt.id)"
+              >
+                {{ opt.label }}
+              </button>
+            </div>
+          </section>
+
+          <!-- ─── SURFACE & STYLE TAGS ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.14 }">
+            <h2 class="card-title">Surface & Style</h2>
+
+            <div class="field-group">
+              <label class="field-label">Surface</label>
+              <div class="tag-picker">
+                <button
+                  v-for="s in surfaceOptions"
+                  :key="s"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.surfaceIds.includes(s) }"
+                  @click="toggleSurface(s)"
+                >
+                  {{ s.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Style</label>
+              <div class="tag-picker">
+                <button
+                  v-for="s in styleOptions"
+                  :key="s"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.styleIds?.includes(s) }"
+                  @click="toggleStyle(s)"
+                >
+                  {{ s.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── SWATCH COLOR ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.16 }">
+            <h2 class="card-title">Swatch Color</h2>
+            <p class="field-hint">Pick a color to represent this recipe on cards.</p>
+            <div class="swatch-picker">
+              <button
+                v-for="hex in swatchPresets"
+                :key="hex"
+                class="swatch-preset"
+                :class="{ active: editableRecipe.swatchColor === hex }"
+                :style="{ background: hex }"
+                @click="editableRecipe.swatchColor = hex"
+              />
+              <div class="swatch-custom-row">
+                <input
+                  type="color"
+                  :value="editableRecipe.swatchColor || '#ede6d6'"
+                  @input="editableRecipe.swatchColor = ($event.target as HTMLInputElement).value"
+                  class="swatch-color-input"
+                />
+                <span class="swatch-hex-label">{{ editableRecipe.swatchColor || '#ede6d6' }}</span>
+              </div>
+            </div>
           </section>
 
           <!-- Swap toast -->
@@ -1249,6 +1397,106 @@ onMounted(() => {
 .notes-textarea:focus {
   border-color: var(--clay);
   box-shadow: 0 0 0 3px var(--clay-10);
+}
+
+/* ─── TAG PICKER ─── */
+.field-hint {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--stone);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
+
+.tag-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag-pick-btn {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: capitalize;
+  border: 1px solid var(--ink-10);
+  color: var(--stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: transparent;
+}
+
+.tag-pick-btn:hover {
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+.tag-pick-btn.active {
+  background: var(--carbon);
+  border-color: var(--carbon);
+  color: var(--cream);
+}
+
+.tag-pick-btn.active.warning {
+  background: var(--clay);
+  border-color: var(--clay);
+}
+
+.tag-pick-btn.active.danger {
+  background: #c0392b;
+  border-color: #c0392b;
+}
+
+/* ─── SWATCH PICKER ─── */
+.swatch-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.swatch-preset {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--ink-10);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-block;
+  margin: 0 var(--space-1) var(--space-1) 0;
+}
+
+.swatch-preset:hover {
+  transform: scale(1.15);
+  border-color: var(--ink-20);
+}
+
+.swatch-preset.active {
+  border-color: var(--carbon);
+  box-shadow: 0 0 0 2px var(--chalk), 0 0 0 4px var(--carbon);
+}
+
+.swatch-custom-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.swatch-color-input {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: 2px;
+  background: var(--chalk);
+}
+
+.swatch-hex-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone);
 }
 
 /* ─── ACTION BAR ─── */

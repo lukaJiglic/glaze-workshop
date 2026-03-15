@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "title": "Earthenware glaze recipes",
+    "createdAt": "2026-03-10"
+  },
+  "recipes": [
+    {
+      "id": "earthenware-clear-gloss-1",
+      "name": "Earthenware Clear Gloss",
+      "firingRangeId": "low-fire",
+      "cone": "02-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["red-earthenware", "white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-4110", "sourceLabel": "Frit 4110", "amount": 80.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 5.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 15.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Simple frit clear for low-fire earthenware."],
+      "sourceIds": ["ct-earthenware"]
+    },
+    {
+      "id": "earthenware-clear-gloss-2",
+      "name": "Earthenware Clear Gloss #2",
+      "firingRangeId": "low-fire",
+      "cone": "03-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["red-earthenware", "white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 90.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 10.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Very simple frit-plus-kaolin clear."],
+      "sourceIds": ["ct-earthenware"]
+    },
+    {
+      "id": "maiolica-glaze",
+      "name": "Maiolica Glaze",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware"],
+      "techniqueIds": ["majolica"],
+      "styleIds": ["majolica"],
+      "colourIds": ["white"],
+      "surfaceIds": ["opaque", "glossy"],
+      "ingredients": [
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 15.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 13.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 48.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 20.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Opaque white base for painted low-fire decoration."],
+      "sourceIds": ["ct-earthenware"]
+    },
+    {
+      "id": "aqua-blue-dry-glaze",
+      "name": "Aqua Blue Dry Glaze",
+      "firingRangeId": "low-fire",
+      "cone": "05-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["matte", "variegated"],
+      "colourIds": ["turquoise", "blue"],
+      "surfaceIds": ["dry", "matte", "opaque"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 26.65 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 26.65 },
+        { "materialId": "barium-carbonate", "sourceLabel": "Barium carbonate", "amount": 9.96 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 16.04 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 14.12 },
+        { "materialId": "zinc-oxide", "sourceLabel": "Zinc oxide", "amount": 6.57 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 9.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["soluble-barium", "metal-oxide-handling", "food-surface-testing"],
+      "notes": ["Historic low-fire specialty glaze with strong copper load."],
+      "sourceIds": ["ct-earthenware"]
+    },
+    {
+      "id": "bright-bronze-glaze",
+      "name": "Bright Bronze Glaze",
+      "firingRangeId": "low-fire",
+      "cone": "06-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["red-earthenware", "white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["brown", "metallic", "amber"],
+      "surfaceIds": ["glossy", "runny"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 67.3 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 14.4 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 9.8 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.9 },
+        { "materialId": "yellow-iron-oxide", "sourceLabel": "Yellow iron oxide", "amount": 2.9 },
+        { "materialId": "manganese-dioxide", "sourceLabel": "Manganese dioxide", "amount": 2.9 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": ["Historic metallic-effect low-fire glaze."],
+      "sourceIds": ["ct-earthenware"]
+    },
+    {
+      "id": "transparent-flowing-glaze",
+      "name": "Transparent Flowing Glaze",
+      "firingRangeId": "low-fire",
+      "cone": "06-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["green"],
+      "surfaceIds": ["glossy", "transparent", "runny"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3107", "sourceLabel": "Frit 3107", "amount": 78.4 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 11.8 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 9.8 },
+        { "materialId": "red-lead", "sourceLabel": "Red lead", "amount": 14.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 6.4 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["lead-caution", "metal-oxide-handling"],
+      "notes": ["Archived for completeness only because it contains lead."],
+      "sourceIds": ["ct-earthenware"]
+    }
+  ]
+}

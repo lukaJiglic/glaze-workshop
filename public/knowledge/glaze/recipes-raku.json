@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "title": "Raku glaze recipes",
+    "createdAt": "2026-03-10"
+  },
+  "recipes": [
+    {
+      "id": "turquoise-raku",
+      "name": "Turquoise Raku",
+      "firingRangeId": "raku",
+      "cone": "06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["turquoise"],
+      "surfaceIds": ["crackle", "variegated"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 80.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 10.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 10.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Classic copper raku turquoise."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "jade-green-raku",
+      "name": "Jade Green",
+      "firingRangeId": "raku",
+      "cone": "06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["green"],
+      "surfaceIds": ["crackle", "variegated"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 87.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 7.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 5.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 1.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Copper-cobalt raku green."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "copper-red-raku",
+      "name": "Copper Red",
+      "firingRangeId": "raku",
+      "cone": "06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["copper-red", "metallic-raku"],
+      "colourIds": ["copper-red", "red"],
+      "surfaceIds": ["variegated", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 92.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 8.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 8.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Raku copper red family."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "metallic-red-1-raku",
+      "name": "Metallic Red #1",
+      "firingRangeId": "raku",
+      "cone": "06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "copper-red"],
+      "colourIds": ["metallic", "red"],
+      "surfaceIds": ["variegated", "runny"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 53.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 29.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 9.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 9.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 5.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Metallic red raku variation with feldspar in the base."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "metallic-copper-raku",
+      "name": "Metallic Copper",
+      "firingRangeId": "raku",
+      "cone": "06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["metallic", "copper-red"],
+      "surfaceIds": ["variegated", "runny"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 53.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 29.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 9.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 9.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 11.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Heavier copper version of the metallic raku base."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "dry-alligator-raku",
+      "name": "Dry Alligator",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "variegated"],
+      "colourIds": ["black", "metallic"],
+      "surfaceIds": ["dry", "crackle", "variegated"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 66.5 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 23.5 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 10.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Dry cracked raku surface."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "copper-lustre-raku",
+      "name": "Copper Lustre",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["metallic", "copper-red"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 62.0 },
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 31.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 7.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 11.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Classic raku copper lustre."],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "rusty-red-black-fire",
+      "name": "Rusty Red / Black Fire",
+      "firingRangeId": "raku",
+      "cone": "010-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "variegated"],
+      "colourIds": ["red", "black"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 67.0 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 33.0 },
+        { "materialId": "black-copper-oxide", "sourceLabel": "Black copper oxide", "amount": 8.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": ["Copper-heavy raku black-and-rust surface."],
+      "sourceIds": ["ct-raku"]
+    }
+  ]
+}

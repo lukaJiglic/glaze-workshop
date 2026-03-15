@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import { useStorage } from '@vueuse/core'
 import { useGlazeStore } from '@/stores/glaze'
 import { useWorkshopStore } from '@/stores/workshop'
 import { gsap } from 'gsap'
@@ -22,6 +23,14 @@ const stats = computed(() => [
   { value: store.families.length, label: 'Glaze families', suffix: '' },
 ])
 
+// Onboarding — show for first-time visitors
+const onboardingDismissed = useStorage('glaze-onboarding-dismissed', false)
+const showOnboarding = computed(() =>
+  !onboardingDismissed.value &&
+  workshopStore.recentlyViewed.length === 0 &&
+  workshopStore.favoriteIds.length === 0
+)
+
 const statsEl = ref<HTMLElement | null>(null)
 
 onMounted(() => {
@@ -33,6 +42,22 @@ onMounted(() => {
 <template>
   <div class="home-view">
     <HeroSection />
+
+    <!-- Onboarding for first-time visitors -->
+    <section v-if="showOnboarding" class="onboarding" v-reveal.fade>
+      <div class="onboarding-inner">
+        <button class="onboarding-dismiss" @click="onboardingDismissed = true">×</button>
+        <h2 class="onboarding-title">New here?</h2>
+        <p class="onboarding-text">
+          This is a glaze recipe reference for ceramics. Start by browsing a glaze family below,
+          or jump straight into the Workshop to search and filter all recipes.
+        </p>
+        <div class="onboarding-links">
+          <RouterLink to="/workshop" class="btn btn-primary">Open the Workshop</RouterLink>
+          <RouterLink to="/colors" class="btn btn-secondary">Explore Colors</RouterLink>
+        </div>
+      </div>
+    </section>
 
     <!-- Stats band -->
     <div ref="statsEl" class="stats-band" v-reveal>
@@ -80,6 +105,17 @@ onMounted(() => {
           <p>Crazing, crawling, pinholes? Tap a symptom and walk through causes and fixes step by step.</p>
           <RouterLink to="/troubleshooter" class="feature-link">Get Help →</RouterLink>
         </div>
+      </div>
+    </section>
+
+    <!-- Custom recipes in progress -->
+    <section v-if="workshopStore.customRecipes.length" class="custom-banner" v-reveal.fade>
+      <div class="custom-banner-inner">
+        <span class="custom-icon">✎</span>
+        <p class="custom-text">
+          You have <strong>{{ workshopStore.customRecipes.length }}</strong> custom recipe{{ workshopStore.customRecipes.length !== 1 ? 's' : '' }} in progress.
+        </p>
+        <RouterLink to="/my-recipes" class="custom-link">Continue editing →</RouterLink>
       </div>
     </section>
 
@@ -213,6 +249,115 @@ onMounted(() => {
 }
 
 .feature-link:hover { color: var(--clay-dark); }
+
+/* Onboarding */
+.onboarding {
+  padding: var(--space-6) var(--space-8);
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.onboarding-inner {
+  position: relative;
+  background: var(--chalk);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--ink-10);
+  border-left: 4px solid var(--clay);
+}
+
+.onboarding-dismiss {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--parchment);
+  border-radius: var(--radius-full);
+  font-size: 16px;
+  color: var(--stone);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.onboarding-dismiss:hover {
+  background: var(--clay-10);
+  color: var(--clay);
+}
+
+.onboarding-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--carbon);
+  margin-bottom: var(--space-2);
+}
+
+.onboarding-text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--stone);
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: var(--space-4);
+}
+
+.onboarding-links {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.custom-banner {
+  padding: var(--space-6) var(--space-8);
+  border-top: 1px solid var(--ink-10);
+}
+
+.custom-banner-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-left: 3px solid var(--clay);
+  border-radius: var(--radius-md);
+}
+
+.custom-icon {
+  font-size: 1.2rem;
+  color: var(--clay);
+}
+
+.custom-text {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  flex: 1;
+}
+
+.custom-text strong {
+  font-family: var(--font-mono);
+  color: var(--clay);
+}
+
+.custom-link {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--clay);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.custom-link:hover { color: var(--clay-dark); }
 
 .recent-section {
   background: var(--cream);

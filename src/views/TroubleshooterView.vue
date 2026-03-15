@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useGlazeStore } from '@/stores/glaze'
 import { gsap } from 'gsap'
+
+const router = useRouter()
+const glazeStore = useGlazeStore()
+
+interface DefectLink {
+  label: string
+  query: string        // search query for workshop
+  material?: string    // materialId for substitution context
+}
 
 interface Defect {
   id: string
@@ -10,6 +21,9 @@ interface Defect {
   likelyCauses: string[]
   actions: string[]
   icon: string
+  workshopLinks?: DefectLink[]
+  avoidScoreKey?: string  // visual score key that indicates avoidance
+  avoidScoreMax?: number  // max value = good avoidance
 }
 
 const defects = ref<Defect[]>([
@@ -18,42 +32,63 @@ const defects = ref<Defect[]>([
     symptom: 'Fine crack network after cooling or after use.',
     firstChecks: ['Confirm body and firing schedule match the recipe', 'Check if it crazes on one body but not another'],
     likelyCauses: ['Glaze expansion too high for the body', 'Too much Na2O or K2O', 'Glaze applied too thick', 'Body underfired or too porous'],
-    actions: ['Raise SiO2 modestly in a line blend', 'Reduce high-expansion fluxes (sodium, potassium)', 'Switch to a lower-expansion frit', 'Test on a different body']
+    actions: ['Raise SiO2 modestly in a line blend', 'Reduce high-expansion fluxes (sodium, potassium)', 'Switch to a lower-expansion frit', 'Test on a different body'],
+    workshopLinks: [
+      { label: 'Recipes using low-expansion frits', query: 'frit 3249' },
+      { label: 'Recipes with wollastonite (CaO without high expansion)', query: 'wollastonite' },
+    ],
   },
   {
     id: 'shivering', name: 'Shivering', icon: '⌇',
     symptom: 'Glaze chips or peels away from the body, especially on rims and edges.',
     firstChecks: ['Opposite of crazing — glaze is in too much compression', 'Look for chip-shaped flakes, not cracks'],
     likelyCauses: ['Glaze expansion too low for the body', 'Too much silica or lithium', 'Talc body with a low-expansion glaze'],
-    actions: ['Lower SiO2 in a test blend', 'Try a higher-expansion frit', 'Test on a different body']
+    actions: ['Lower SiO2 in a test blend', 'Try a higher-expansion frit', 'Test on a different body'],
+    workshopLinks: [
+      { label: 'Recipes using nepheline syenite (high expansion)', query: 'nepheline' },
+    ],
   },
   {
     id: 'pinholing', name: 'Pinholing', icon: '∘',
     symptom: 'Small holes in the glaze surface that did not heal over during firing.',
     firstChecks: ['Check if the kiln reached full temperature', 'Look at bisque quality — underfired bisque gasses more'],
     likelyCauses: ['Gases from carbonates or organics escaping too late', 'Insufficient top soak', 'Glaze applied too thick', 'Bisque too low or firing too fast'],
-    actions: ['Add a 10-15 minute top soak', 'Slow the bisque firing through quartz inversion', 'Apply glaze thinner', 'Reduce carbonate materials (whiting → wollastonite)']
+    actions: ['Add a 10-15 minute top soak', 'Slow the bisque firing through quartz inversion', 'Apply glaze thinner', 'Reduce carbonate materials (whiting → wollastonite)'],
+    workshopLinks: [
+      { label: 'Recipes using whiting (high LOI carbonate)', query: 'whiting', material: 'whiting' },
+      { label: 'Recipes using dolomite (high LOI)', query: 'dolomite', material: 'dolomite' },
+      { label: 'Recipes using wollastonite (low-LOI alternative)', query: 'wollastonite' },
+    ],
   },
   {
     id: 'blistering', name: 'Blistering', icon: '◌',
     symptom: 'Large bubbles or burst craters in the glaze surface.',
     firstChecks: ['Worse than pinholes — larger disruptions', 'Often related to overfiring or thick application'],
     likelyCauses: ['Overfiring or too-fast firing', 'Contamination from kiln wash or dust', 'Reduction timing too aggressive', 'Glaze too thick'],
-    actions: ['Lower peak temperature or shorten soak', 'Apply glaze thinner', 'Clean bisqueware before glazing', 'Check kiln furniture for contamination']
+    actions: ['Lower peak temperature or shorten soak', 'Apply glaze thinner', 'Clean bisqueware before glazing', 'Check kiln furniture for contamination'],
   },
   {
     id: 'crawling', name: 'Crawling', icon: '◠',
     symptom: 'Glaze pulls away from the body in patches, exposing bare clay.',
     firstChecks: ['Crawling usually happens before the glaze fully melts', 'Check for dusty or oily bisqueware'],
     likelyCauses: ['Dusty or greasy bisqueware', 'Too much raw clay (kaolin/ball clay) causing high dry shrinkage', 'Glaze applied too thick', 'Excessive bentonite'],
-    actions: ['Clean bisqueware — wipe with damp sponge before glazing', 'Replace some raw clay with calcined kaolin', 'Apply thinner coats', 'Reduce bentonite below 3%']
+    actions: ['Clean bisqueware — wipe with damp sponge before glazing', 'Replace some raw clay with calcined kaolin', 'Apply thinner coats', 'Reduce bentonite below 3%'],
+    workshopLinks: [
+      { label: 'Recipes using calcined kaolin (less crawling)', query: 'calcined kaolin' },
+      { label: 'Recipes using bentonite (check amount)', query: 'bentonite' },
+    ],
   },
   {
     id: 'running', name: 'Running / Dripping', icon: '▽',
     symptom: 'Glaze flows down the pot and pools at the bottom, may stick to the kiln shelf.',
     firstChecks: ['Check if the kiln is overfiring', 'Was the glaze applied too thick at the bottom?'],
     likelyCauses: ['Too much flux, too little alumina', 'Overfiring or too long a soak', 'Glaze applied too thick', 'Zinc or boron levels too high'],
-    actions: ['Add alumina (kaolin) to stiffen the melt', 'Reduce flux materials', 'Apply thinner at the bottom half', 'Use a catch plate for testing', 'Wax the foot ring before glazing']
+    actions: ['Add alumina (kaolin) to stiffen the melt', 'Reduce flux materials', 'Apply thinner at the bottom half', 'Use a catch plate for testing', 'Wax the foot ring before glazing'],
+    workshopLinks: [
+      { label: 'Recipes using kaolin (adds alumina — stiffens melt)', query: 'kaolin' },
+    ],
+    avoidScoreKey: 'runRisk',
+    avoidScoreMax: 1,
   },
   {
     id: 'cutlery-marking', name: 'Cutlery Marking', icon: '─',
@@ -72,6 +107,23 @@ const selectedDefect = computed(() => defects.value.find(d => d.id === activeDef
 function selectDefect(id: string) {
   activeDefect.value = activeDefect.value === id ? null : id
 }
+
+function searchWorkshop(query: string) {
+  router.push({ path: '/workshop', query: { q: query } })
+}
+
+const avoidRecipes = computed(() => {
+  const defect = selectedDefect.value
+  if (!defect?.avoidScoreKey || !glazeStore.isLoaded) return []
+  const key = defect.avoidScoreKey as keyof ReturnType<typeof glazeStore.getScores & object>
+  const maxVal = defect.avoidScoreMax ?? 1
+  return glazeStore.recipes
+    .filter(r => {
+      const s = glazeStore.getScores(r.id, r.firingRangeId) as Record<string, number> | null | undefined
+      return s && typeof s[key] === 'number' && s[key] <= maxVal
+    })
+    .slice(0, 6)
+})
 
 onMounted(() => {
   if (headerEl.value) {
@@ -152,6 +204,38 @@ onMounted(() => {
                 {{ action }}
               </li>
             </ol>
+          </section>
+
+          <!-- Workshop links -->
+          <section v-if="selectedDefect.workshopLinks?.length" class="detail-section">
+            <h3 class="detail-label">Find in Workshop</h3>
+            <div class="workshop-links">
+              <button
+                v-for="link in selectedDefect.workshopLinks"
+                :key="link.query"
+                class="workshop-link"
+                @click="searchWorkshop(link.query)"
+              >
+                <span class="link-arrow">→</span>
+                {{ link.label }}
+              </button>
+            </div>
+          </section>
+
+          <!-- Recipes that avoid this problem -->
+          <section v-if="avoidRecipes.length" class="detail-section">
+            <h3 class="detail-label">Recipes with low risk</h3>
+            <p class="detail-note">These recipes score low on {{ selectedDefect.avoidScoreKey?.replace(/([A-Z])/g, ' $1').toLowerCase() }}.</p>
+            <div class="avoid-chips">
+              <button
+                v-for="r in avoidRecipes"
+                :key="r.id"
+                class="avoid-chip"
+                @click="router.push({ path: '/workshop', query: { q: r.name } })"
+              >
+                {{ r.name }}
+              </button>
+            </div>
           </section>
 
           <!-- General advice -->
@@ -433,6 +517,68 @@ onMounted(() => {
   color: var(--stone-dark);
   line-height: 1.6;
   font-style: italic;
+}
+
+/* Workshop links */
+.workshop-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.workshop-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.workshop-link:hover {
+  border-color: var(--clay);
+  background: var(--clay-10);
+  color: var(--clay);
+}
+
+.link-arrow {
+  font-family: var(--font-mono);
+  color: var(--clay);
+  font-weight: 700;
+}
+
+/* Avoid chips */
+.avoid-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.avoid-chip {
+  padding: var(--space-1) var(--space-3);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.avoid-chip:hover {
+  border-color: var(--sage);
+  background: rgba(122, 143, 110, 0.1);
+  color: var(--sage);
 }
 
 /* General tips */

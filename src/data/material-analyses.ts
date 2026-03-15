@@ -39,6 +39,7 @@ export const OXIDE_MW: Record<string, number> = {
   cr2o3: 152.00,
   nio:   74.69,
   sno2:  150.71,
+  pbo:   223.20,
 }
 
 // ─── Oxide group classification ────────────────────────────────────────────────
@@ -48,7 +49,7 @@ export const OXIDE_GROUPS: Record<string, OxideGroup> = {
   // R₂O — monovalent alkali fluxes (high expansion, strong melters)
   na2o: 'r2o', k2o: 'r2o', li2o: 'r2o',
   // RO — divalent earth fluxes (moderate expansion, durability)
-  cao: 'ro', mgo: 'ro', zno: 'ro', bao: 'ro', sro: 'ro', mno: 'ro',
+  cao: 'ro', mgo: 'ro', zno: 'ro', bao: 'ro', sro: 'ro', mno: 'ro', pbo: 'ro',
   // R₂O₃ — intermediate oxides (stiffeners, stabilisers)
   al2o3: 'r2o3', b2o3: 'r2o3', fe2o3: 'r2o3', cr2o3: 'r2o3',
   // RO₂ — glass-forming oxides (network formers)
@@ -66,6 +67,7 @@ export const OXIDE_LABELS: Record<string, string> = {
   zno: 'ZnO', bao: 'BaO', sro: 'SrO', mno: 'MnO', mno2: 'MnO₂',
   fe2o3: 'Fe₂O₃', tio2: 'TiO₂', zro2: 'ZrO₂', p2o5: 'P₂O₅',
   coo: 'CoO', cuo: 'CuO', cr2o3: 'Cr₂O₃', nio: 'NiO', sno2: 'SnO₂',
+  pbo: 'PbO',
 }
 
 // ─── Expansion coefficients (Seger approximation, × 10⁻⁷/°C per unity mole) ──
@@ -88,6 +90,7 @@ export const EXPANSION_FACTORS: Record<string, number> = {
   sio2:   3.8,
   tio2:   8.0,
   zro2:   2.0,
+  pbo:   10.6,
 }
 
 // ─── UMF target ranges by firing range ────────────────────────────────────────
@@ -413,6 +416,53 @@ export const materialAnalyses = new Map<string, MaterialAnalysis>([
   ['nickel-oxide', {
     loi: 0,
     oxides: { nio: 100.0 },
+  }],
+
+  // ── ADDITIONAL FRITS ──────────────────────────────────────────────────────
+  ['fusion-frit-f524', {
+    loi: 0,
+    oxides: { b2o3: 14.00, cao: 14.00, na2o: 6.00, al2o3: 6.00, sio2: 60.00 },
+    note: 'Fusion Frit F-524. Balanced borosilicate — similar role to Ferro 3195. Used in Digitalfire clear/liner recipes.',
+  }],
+  ['fusion-frit-f69', {
+    loi: 0,
+    oxides: { b2o3: 10.00, cao: 11.00, na2o: 5.00, k2o: 1.00, al2o3: 11.00, sio2: 62.00 },
+    note: 'Fusion Frit F-69. High-alumina borosilicate frit — stiff melt, excellent for clear glazes.',
+  }],
+
+  // ── ADDITIONAL COLORANTS ────────────────────────────────────────────────────
+  ['black-copper-oxide', {
+    loi: 0,
+    oxides: { cuo: 100.0 },
+    note: 'Cu₂O — cuprous oxide. Slightly different oxidation state than CuO (copper oxide) but same CuO UMF contribution.',
+  }],
+
+  // ── ADDITIONAL REFRACTORY MATERIALS ─────────────────────────────────────────
+  ['calcined-alumina', {
+    loi: 0,
+    oxides: { al2o3: 99.50 },
+    note: 'Calcined Al₂O₃. Pure refractory. Used as kiln wash, glaze stiffener, and to reduce running.',
+  }],
+
+  // ── STAINS ──────────────────────────────────────────────────────────────────
+  ['mason-stain-generic', {
+    loi: 0,
+    oxides: { sio2: 30.0, al2o3: 15.0, zro2: 10.0, fe2o3: 5.0, cr2o3: 5.0 },
+    note: 'Generic Mason Stain approximation. Actual chemistry varies greatly by colour number. UMF contribution is minor at typical 5–10% addition levels.',
+  }],
+
+  // ── LEAD MATERIALS ──────────────────────────────────────────────────────────
+  ['red-lead', {
+    loi: 2.3,
+    oxides: { pbo: 97.70 },
+    note: 'Pb₃O₄ (red lead / minium). HIGHLY TOXIC. Historical earthenware flux — brilliant surface, extreme health risk.',
+  }],
+
+  // ── CALCINED SLIP MATERIALS ─────────────────────────────────────────────────
+  ['alberta-slip-roasted', {
+    loi: 0,
+    oxides: { sio2: 63.80, al2o3: 15.10, fe2o3: 6.38, mgo: 2.91, cao: 4.81, k2o: 3.58, na2o: 1.01, tio2: 1.01 },
+    note: 'Calcined Alberta Slip. No LOI — same chemistry as raw but concentrated. Reduces drying shrinkage and crawling.',
   }],
 
   // ── SUSPENSION AIDS ───────────────────────────────────────────────────────

@@ -55,6 +55,29 @@ const tablewareOptions = [
   { id: 'decorative', label: 'Decorative', icon: '◦' },
 ]
 
+const kilnOptions = [
+  { id: 'electric-kiln', label: 'Electric' },
+  { id: 'gas-kiln', label: 'Gas' },
+  { id: 'wood-kiln', label: 'Wood' },
+  { id: 'raku-kiln', label: 'Raku kiln' },
+]
+
+const techniqueOptions = computed(() => {
+  const techniques = new Set<string>()
+  glazeStore.recipes.forEach(r => r.techniqueIds.forEach(t => techniques.add(t)))
+  return Array.from(techniques).sort()
+})
+
+const clayOptions = [
+  { id: 'stoneware', label: 'Stoneware' },
+  { id: 'white-stoneware', label: 'White stoneware' },
+  { id: 'porcelain', label: 'Porcelain' },
+  { id: 'red-earthenware', label: 'Red earthenware' },
+  { id: 'white-earthenware', label: 'White earthenware' },
+  { id: 'raku-clay', label: 'Raku body' },
+  { id: 'grogged-sculpture', label: 'Grogged / sculpture' },
+]
+
 function isActive(type: FilterType, value: string) {
   const map: Record<FilterType, string[]> = {
     cones: props.filters.selectedCones,
@@ -64,6 +87,9 @@ function isActive(type: FilterType, value: string) {
     families: props.filters.selectedFamilies,
     styles: props.filters.selectedStyles,
     tableware: props.filters.selectedTablewareStatuses,
+    kilns: props.filters.selectedKilns,
+    techniques: props.filters.selectedTechniques,
+    clays: props.filters.selectedClays,
   }
   return map[type].includes(value)
 }
@@ -119,6 +145,73 @@ function isActive(type: FilterType, value: string) {
           @click="emit('toggle', 'atmospheres', opt.id)"
         >
           {{ opt.name }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Kiln type -->
+    <div class="filter-group">
+      <h3 class="group-label">Kiln</h3>
+      <InfoPanel title="What kiln types are there?">
+        The <GlossaryTip term="kiln">kiln</GlossaryTip> type determines what temperatures and
+        <GlossaryTip term="atmosphere">atmospheres</GlossaryTip> you can achieve.
+        Electric kilns fire in <GlossaryTip term="oxidation">oxidation</GlossaryTip>,
+        gas kilns can do <GlossaryTip term="reduction">reduction</GlossaryTip>,
+        and wood kilns add natural ash effects.
+      </InfoPanel>
+      <div class="filter-options">
+        <button
+          v-for="opt in kilnOptions"
+          :key="opt.id"
+          class="filter-option"
+          :class="{ active: isActive('kilns', opt.id) }"
+          @click="emit('toggle', 'kilns', opt.id)"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Clay body -->
+    <div class="filter-group">
+      <h3 class="group-label">Clay Body</h3>
+      <InfoPanel title="Why does clay body matter?">
+        The clay body affects glaze fit, color response, and durability.
+        <GlossaryTip term="stoneware">Stoneware</GlossaryTip> and
+        <GlossaryTip term="porcelain">porcelain</GlossaryTip> are mid-to-high-fire bodies.
+        <GlossaryTip term="earthenware">Earthenware</GlossaryTip> is low-fire and stays porous unless glazed.
+      </InfoPanel>
+      <div class="filter-options">
+        <button
+          v-for="opt in clayOptions"
+          :key="opt.id"
+          class="filter-option"
+          :class="{ active: isActive('clays', opt.id) }"
+          @click="emit('toggle', 'clays', opt.id)"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Technique -->
+    <div class="filter-group" v-if="techniqueOptions.length">
+      <h3 class="group-label">Technique</h3>
+      <InfoPanel title="About techniques">
+        Technique describes the glazing method or tradition a recipe belongs to —
+        <GlossaryTip term="ash">ash glazing</GlossaryTip>,
+        <GlossaryTip term="raku">raku</GlossaryTip> reduction,
+        <GlossaryTip term="crystalline">crystalline</GlossaryTip> growth, and others.
+      </InfoPanel>
+      <div class="filter-options color-grid">
+        <button
+          v-for="tech in techniqueOptions"
+          :key="tech"
+          class="filter-option"
+          :class="{ active: isActive('techniques', tech) }"
+          @click="emit('toggle', 'techniques', tech)"
+        >
+          {{ tech.replace(/-/g, ' ') }}
         </button>
       </div>
     </div>
