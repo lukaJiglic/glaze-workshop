@@ -147,7 +147,7 @@ watch(sortedRecipes, async () => {
 }
 
 .favorites-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-8)) var(--space-8) var(--space-8);
 }
 
@@ -163,7 +163,7 @@ watch(sortedRecipes, async () => {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .page-sub {
@@ -203,8 +203,8 @@ watch(sortedRecipes, async () => {
 .sort-btn:hover { border-color: var(--ink-20); color: var(--ink); }
 
 .sort-btn.active {
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   border-color: var(--carbon);
 }
 

@@ -17,7 +17,7 @@ const emit = defineEmits<{ remove: [] }>()
   gap: var(--space-1);
   padding: var(--space-1) var(--space-2);
   background: var(--clay-10);
-  border: 1px solid rgba(196, 83, 42, 0.25);
+  border: 1px solid var(--clay-25);
   border-radius: var(--radius-full);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -30,7 +30,7 @@ const emit = defineEmits<{ remove: [] }>()
 }
 
 .filter-chip:hover {
-  background: rgba(196, 83, 42, 0.2);
+  background: var(--clay-25);
   transform: scale(0.97);
 }
 

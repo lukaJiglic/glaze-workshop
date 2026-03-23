@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useWorkshopStore } from '@/stores/workshop'
 import { useGlazeStore } from '@/stores/glaze'
 import { useRouter } from 'vue-router'
@@ -10,14 +10,26 @@ import { cautions } from '@/data/cautions'
 import { sources } from '@/data/sources'
 import { findCombinationHints } from '@/data/colorant-combinations'
 import type { SubstitutionOption } from '@/data/materials-knowledge'
+import type { Recipe } from '@/types'
 import { useGlazeChemistry } from '@/composables/useGlazeChemistry'
 import ChemistryPanel from '@/components/recipe/ChemistryPanel.vue'
+import { explainRecipe } from '@/composables/useRecipeExplainer'
+import RecipeSimilarList from '@/components/recipe/RecipeSimilarList.vue'
+import ColourGuidePanel from '@/components/recipe/ColourGuidePanel.vue'
+import FiringProgramPanel from '@/components/recipe/FiringProgramPanel.vue'
+import BodyResponsePanel from '@/components/recipe/BodyResponsePanel.vue'
+import { findApplicationNote } from '@/data/application-notes'
 
 const workshopStore = useWorkshopStore()
 const glazeStore = useGlazeStore()
 const router = useRouter()
 
 const recipe = computed(() => workshopStore.activeRecipe)
+
+// Lazy-load expansion data when a recipe is opened
+watch(recipe, (r) => {
+  if (r) glazeStore.loadExpansionPanelData()
+}, { immediate: true })
 
 const profileId = computed(() => recipe.value ? glazeStore.profileForRecipe.get(recipe.value.id) : null)
 const profile = computed(() => profileId.value ? glazeStore.colorProfileById.get(profileId.value) : null)
@@ -46,15 +58,22 @@ const newNote = ref('')
 // ─── Collapsible sections (mobile) ─────────────────────────────────────────
 const isMobile = ref(typeof window !== 'undefined' && window.innerWidth <= 768)
 let resizeHandler: (() => void) | null = null
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && workshopStore.activeRecipe) {
+    workshopStore.closeDrawer()
+  }
+}
 onMounted(() => {
   resizeHandler = () => { isMobile.value = window.innerWidth <= 768 }
   window.addEventListener('resize', resizeHandler)
+  window.addEventListener('keydown', handleKeydown)
 })
 onUnmounted(() => {
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
+  window.removeEventListener('keydown', handleKeydown)
 })
 
-const collapsedSections = ref<Set<string>>(new Set(['chemistry', 'similar', 'crossRange', 'notes', 'cautions', 'twins']))
+const collapsedSections = ref<Set<string>>(new Set(['chemistry', 'similar', 'crossRange', 'notes', 'cautions', 'twins', 'colourGuide', 'firing', 'bodyResponse']))
 function toggleSection(key: string) {
   if (collapsedSections.value.has(key)) {
     collapsedSections.value.delete(key)
@@ -120,6 +139,12 @@ const recipeCautions = computed(() =>
     .filter(Boolean)
 )
 
+// ─── Application notes ──────────────────────────────────────────────────────
+const applicationNote = computed(() => {
+  if (!recipe.value) return null
+  return findApplicationNote(recipe.value.firingRangeId, recipe.value.surfaceIds)
+})
+
 // ─── Sources ─────────────────────────────────────────────────────────────────
 const recipeSources = computed(() =>
   (recipe.value?.sourceIds ?? [])
@@ -132,6 +157,46 @@ const recipeIngredients = computed(() => recipe.value?.ingredients ?? [])
 const recipeFiringRange = computed(() => recipe.value?.firingRangeId)
 const { chemistry } = useGlazeChemistry(recipeIngredients, recipeFiringRange)
 
+// ─── Variation Generator ("What If?") ────────────────────────────────────────
+const showWhatIf = ref(false)
+const whatIfIndex = ref<number>(0)
+const whatIfDelta = ref<number>(0)
+
+const whatIfIngredients = computed(() => {
+  if (!recipe.value) return []
+  return recipe.value.ingredients.map((ing, i) => {
+    if (i !== whatIfIndex.value) return ing
+    return { ...ing, amount: Math.max(0, ing.amount + whatIfDelta.value) }
+  })
+})
+
+const whatIfFiringRange = computed(() => recipe.value?.firingRangeId)
+const { chemistry: whatIfChemistry } = useGlazeChemistry(whatIfIngredients, whatIfFiringRange)
+
+const whatIfSelectedIngredient = computed(() =>
+  recipe.value?.ingredients[whatIfIndex.value] ?? null
+)
+
+function formatDelta(base: number, altered: number): string {
+  const d = altered - base
+  if (Math.abs(d) < 0.005) return '—'
+  const sign = d > 0 ? '+' : ''
+  return `${sign}${d.toFixed(2)}`
+}
+
+function deltaClass(base: number, altered: number): string {
+  const d = altered - base
+  if (Math.abs(d) < 0.005) return ''
+  return d > 0 ? 'delta-pos' : 'delta-neg'
+}
+
+// ─── Recipe explanation ───────────────────────────────────────────────────────
+const showExplanation = ref(false)
+const explanation = computed(() => {
+  if (!recipe.value || !chemistry.value.isValid) return null
+  return explainRecipe(recipe.value, chemistry.value, scores.value ?? null)
+})
+
 // ─── Colorant combination hints ───────────────────────────────────────────────
 const colorantIds = computed(() =>
   (recipe.value?.ingredients ?? [])
@@ -143,77 +208,63 @@ const combinationHints = computed(() =>
   colorantIds.value.length >= 2 ? findCombinationHints(colorantIds.value) : []
 )
 
-// ─── Similar recipes ──────────────────────────────────────────────────────────
-const similarRecipes = computed(() => {
-  if (!recipe.value) return []
+// ─── Related recipes — single pass over recipe list ─────────────────────────
+const relatedRecipes = computed(() => {
+  if (!recipe.value) return { similar: [] as Recipe[], crossRange: [] as Recipe[], twins: [] as Recipe[] }
   const current = recipe.value
   const currentIds = new Set(current.ingredients.map(i => i.materialId))
-
-  // Search within same firing range first, then expand if needed
-  const pool = glazeStore.recipes.filter(r =>
-    r.id !== current.id && r.firingRangeId === current.firingRangeId
-  )
-
-  const scored = pool.map(r => {
-    const candidateIds = r.ingredients.map(i => i.materialId)
-    const matches = candidateIds.filter(id => currentIds.has(id)).length
-    const score = matches / Math.max(currentIds.size, candidateIds.length)
-    return { recipe: r, score }
-  }).filter(s => s.score >= 0.25)
-
-  scored.sort((a, b) => b.score - a.score)
-  return scored.slice(0, 4).map(s => s.recipe)
-})
-
-// Similar across other firing ranges (sharing 3+ ingredients at different cones)
-const crossRangeSimilar = computed(() => {
-  if (!recipe.value) return []
-  const current = recipe.value
-  const currentIds = new Set(current.ingredients.map(i => i.materialId))
-
-  const pool = glazeStore.recipes.filter(r =>
-    r.id !== current.id && r.firingRangeId !== current.firingRangeId
-  )
-
-  const scored = pool.map(r => {
-    const matches = r.ingredients.filter(i => currentIds.has(i.materialId)).length
-    return { recipe: r, matches }
-  }).filter(s => s.matches >= 3)
-
-  scored.sort((a, b) => b.matches - a.matches)
-  return scored.slice(0, 3).map(s => s.recipe)
-})
-
-// ─── Visual twins — same color/surface, different materials ──────────────────
-const visualTwins = computed(() => {
-  if (!recipe.value) return []
-  const current = recipe.value
   const currentProfile = profileId.value
   const currentSurfaces = new Set(current.surfaceIds)
-  const currentIds = new Set(current.ingredients.map(i => i.materialId))
+  const currentFamilyId = currentProfile ? glazeStore.colorProfileById.get(currentProfile)?.familyId : null
+  const checkTwins = !!(currentProfile || currentSurfaces.size > 0)
 
-  if (!currentProfile && currentSurfaces.size === 0) return []
+  const similarScored: { recipe: Recipe; score: number }[] = []
+  const crossScored: { recipe: Recipe; matches: number }[] = []
+  const twins: Recipe[] = []
 
-  const pool = glazeStore.recipes.filter(r => r.id !== current.id)
+  for (const r of glazeStore.recipes) {
+    if (r.id === current.id) continue
 
-  return pool.filter(r => {
-    // Must share color family or surface
-    const rProfile = glazeStore.profileForRecipe.get(r.id)
-    const colorMatch = currentProfile && rProfile && (() => {
-      const cp = glazeStore.colorProfileById.get(currentProfile)
-      const rp = glazeStore.colorProfileById.get(rProfile)
-      return cp && rp && cp.familyId === rp.familyId
-    })()
-    const surfaceMatch = r.surfaceIds.some(s => currentSurfaces.has(s))
-    if (!colorMatch && !surfaceMatch) return false
+    const rIngIds = r.ingredients.map(i => i.materialId)
+    const matchCount = rIngIds.filter(id => currentIds.has(id)).length
+    const maxLen = Math.max(currentIds.size, rIngIds.length)
+    const overlapRatio = maxLen > 0 ? matchCount / maxLen : 0
 
-    // Must have mostly different materials (overlap < 30%)
-    const rIds = new Set(r.ingredients.map(i => i.materialId))
-    const overlap = [...currentIds].filter(id => rIds.has(id)).length
-    const maxLen = Math.max(currentIds.size, rIds.size)
-    return overlap / maxLen < 0.3
-  }).slice(0, 3)
+    // Similar (same firing range, 25%+ overlap)
+    if (r.firingRangeId === current.firingRangeId && overlapRatio >= 0.25) {
+      similarScored.push({ recipe: r, score: overlapRatio })
+    }
+
+    // Cross-range similar (different firing range, 3+ shared ingredients)
+    if (r.firingRangeId !== current.firingRangeId && matchCount >= 3) {
+      crossScored.push({ recipe: r, matches: matchCount })
+    }
+
+    // Visual twins (same color family or surface, <30% material overlap)
+    if (checkTwins && twins.length < 3 && overlapRatio < 0.3) {
+      const rProfile = glazeStore.profileForRecipe.get(r.id)
+      const rFamilyId = rProfile ? glazeStore.colorProfileById.get(rProfile)?.familyId : null
+      const colorMatch = !!(currentFamilyId && rFamilyId && currentFamilyId === rFamilyId)
+      const surfaceMatch = r.surfaceIds.some(s => currentSurfaces.has(s))
+      if (colorMatch || surfaceMatch) {
+        twins.push(r)
+      }
+    }
+  }
+
+  similarScored.sort((a, b) => b.score - a.score)
+  crossScored.sort((a, b) => b.matches - a.matches)
+
+  return {
+    similar: similarScored.slice(0, 4).map(s => s.recipe),
+    crossRange: crossScored.slice(0, 3).map(s => s.recipe),
+    twins,
+  }
 })
+
+const similarRecipes = computed(() => relatedRecipes.value.similar)
+const crossRangeSimilar = computed(() => relatedRecipes.value.crossRange)
+const visualTwins = computed(() => relatedRecipes.value.twins)
 
 // ─── Export as PDF (print) ──────────────────────────────────────────────────
 function exportAsPDF() {
@@ -383,6 +434,84 @@ function handleSwap(originalId: string, opt: SubstitutionOption) {
   }
 }
 
+// ─── Expansion: Colour development guides ───────────────────────────────────
+const matchingColourGuides = computed(() => {
+  if (!recipe.value || !glazeStore.colourGuides.length) return []
+  const r = recipe.value
+  const rColours = new Set(r.colourIds)
+  const rSurfaces = new Set(r.surfaceIds)
+
+  return glazeStore.colourGuides.filter(g => {
+    // Match by referenceRecipeIds
+    if (g.referenceRecipeIds.includes(r.id)) return true
+    // Match by colour id keywords
+    const gId = g.id.toLowerCase()
+    for (const c of rColours) {
+      if (gId.includes(c.toLowerCase())) return true
+    }
+    // Match reactive surfaces to floating-blue guide
+    if (gId.includes('floating') && (rSurfaces.has('variegated') || rSurfaces.has('breaking'))) return true
+    return false
+  })
+})
+
+// ─── Expansion: Firing programs ─────────────────────────────────────────────
+const matchingFiringPrograms = computed(() => {
+  if (!recipe.value || !glazeStore.firingPrograms.length) return []
+  const r = recipe.value
+  const cone = r.cone.toLowerCase()
+  const firingRange = r.firingRangeId
+
+  return glazeStore.firingPrograms.filter(p => {
+    if (p.kind === 'bisque') return false // only show glaze programs
+    const target = p.targetConeOrRange.toLowerCase()
+    // Match by cone overlap or firing range keywords
+    if (target.includes(cone)) return true
+    if (firingRange === 'low-fire' && (target.includes('04') || target.includes('06') || target.includes('02'))) return true
+    if (firingRange === 'mid-fire' && (target.includes('5') || target.includes('6'))) return true
+    if (firingRange === 'high-fire' && (target.includes('9') || target.includes('10') || target.includes('11'))) return true
+    return false
+  })
+})
+
+// ─── Expansion: Body response ───────────────────────────────────────────────
+const matchingBodyResponse = computed(() => {
+  if (!recipe.value || !glazeStore.familyResponses.length) return null
+  const r = recipe.value
+
+  // Match by referenceRecipeIds first
+  let match = glazeStore.familyResponses.find(fr =>
+    fr.referenceRecipeIds.includes(r.id)
+  )
+  if (match) return match
+
+  // Fallback: match by family ID keywords against firingRange + surface
+  const rSurfaces = new Set(r.surfaceIds)
+  match = glazeStore.familyResponses.find(fr => {
+    const fId = fr.id.toLowerCase()
+    if (r.firingRangeId === 'low-fire' && fId.includes('lowfire')) {
+      if (rSurfaces.has('glossy') && fId.includes('clear')) return true
+    }
+    if (r.firingRangeId === 'mid-fire' && fId.includes('cone6')) {
+      if (rSurfaces.has('glossy') && fId.includes('clear')) return true
+      if (rSurfaces.has('matte') && fId.includes('matte')) return true
+    }
+    if (r.firingRangeId === 'high-fire' && fId.includes('highfire')) return true
+    return false
+  })
+  return match ?? null
+})
+
+// ─── Expansion: Material switching playbooks ────────────────────────────────
+function getPlaybooks(materialId: string) {
+  return glazeStore.playbooksByMaterialId.get(materialId) ?? []
+}
+
+// ─── Expansion: Expanded material info ──────────────────────────────────────
+function getExpandedMaterial(materialId: string) {
+  return glazeStore.expandedMaterialById.get(materialId)
+}
+
 function formatScore(val: number): string {
   return '●'.repeat(val) + '○'.repeat(5 - val)
 }
@@ -401,7 +530,7 @@ function formatScore(val: number): string {
         <!-- Header swatch -->
         <div class="drawer-swatch" :style="{ background: swatchHex }">
           <div class="swatch-sheen" />
-          <button class="close-btn" @click="workshopStore.closeDrawer()" aria-label="Close">✕</button>
+          <button class="close-btn" @click="workshopStore.closeDrawer()" aria-label="Close" title="Close (Esc)">✕</button>
         </div>
 
         <div class="drawer-content">
@@ -511,6 +640,39 @@ function formatScore(val: number): string {
                       <span class="tip-label">Typical range</span>
                       <p class="tip-range">{{ getColorantRange(ing.materialId)!.range }}</p>
                     </div>
+                    <!-- Expanded material info -->
+                    <div v-if="getExpandedMaterial(ing.materialId)" class="tip-section">
+                      <span class="tip-label">Adds</span>
+                      <ul class="tip-expanded-list">
+                        <li v-for="(w, wi) in getExpandedMaterial(ing.materialId)!.whatItAdds" :key="wi">{{ w }}</li>
+                      </ul>
+                      <div v-if="getExpandedMaterial(ing.materialId)!.watchFor.length" class="tip-watch">
+                        <span class="tip-watch-label">Watch for:</span>
+                        <span v-for="w in getExpandedMaterial(ing.materialId)!.watchFor" :key="w" class="tip-watch-item">{{ w }}</span>
+                      </div>
+                      <div v-if="getExpandedMaterial(ing.materialId)!.typicalUsePercent" class="tip-use-pct">
+                        {{ getExpandedMaterial(ing.materialId)!.typicalUsePercent }}
+                      </div>
+                    </div>
+                    <!-- Switching playbooks -->
+                    <div v-if="getPlaybooks(ing.materialId).length" class="tip-section">
+                      <span class="tip-label">Switching guide</span>
+                      <div v-for="pb in getPlaybooks(ing.materialId)" :key="pb.id" class="playbook-block">
+                        <p class="playbook-why">{{ pb.whyThisIsHard }}</p>
+                        <p class="playbook-first"><strong>First move:</strong> {{ pb.firstMove }}</p>
+                        <div class="playbook-test">
+                          <span class="playbook-test-label">Test sequence</span>
+                          <ol class="playbook-test-list">
+                            <li v-for="(s, si) in pb.testSequence" :key="si">{{ s }}</li>
+                          </ol>
+                        </div>
+                        <div v-if="pb.stopIf.length" class="playbook-stop">
+                          <div v-for="(s, si) in pb.stopIf" :key="si" class="playbook-stop-item">
+                            <span class="playbook-stop-icon">!</span> {{ s }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div v-if="hasSubstitutes(ing.materialId)" class="tip-sub-hint">
                       Click ⇄ to see substitutes for this ingredient
                     </div>
@@ -545,6 +707,93 @@ function formatScore(val: number): string {
             <div v-if="isSectionOpen('chemistry')" class="collapsible-body">
               <ChemistryPanel :chemistry="chemistry" :compact="true" />
             </div>
+          </section>
+
+          <!-- ─── What If? Variation Generator ─── -->
+          <section v-if="chemistry.isValid && recipe.ingredients.length > 0" class="drawer-section">
+            <div class="whatif-header">
+              <h3 class="section-label">What If?</h3>
+              <button
+                class="whatif-toggle-btn"
+                :class="{ active: showWhatIf }"
+                @click="showWhatIf = !showWhatIf; whatIfDelta = 0"
+              >{{ showWhatIf ? 'Close' : 'Adjust an ingredient' }}</button>
+            </div>
+
+            <Transition name="expand">
+              <div v-if="showWhatIf" class="whatif-body">
+                <div class="whatif-controls">
+                  <div class="whatif-control-row">
+                    <label class="whatif-label">Ingredient</label>
+                    <select v-model.number="whatIfIndex" class="whatif-select" @change="whatIfDelta = 0">
+                      <option v-for="(ing, i) in recipe.ingredients" :key="i" :value="i">
+                        {{ ing.sourceLabel }} ({{ ing.amount }}%)
+                      </option>
+                    </select>
+                  </div>
+                  <div class="whatif-control-row">
+                    <label class="whatif-label">
+                      Adjust
+                      <span class="whatif-delta-display" :class="{ pos: whatIfDelta > 0, neg: whatIfDelta < 0 }">
+                        {{ whatIfDelta > 0 ? '+' : '' }}{{ whatIfDelta }}%
+                      </span>
+                    </label>
+                    <input
+                      type="range"
+                      min="-20"
+                      max="20"
+                      step="1"
+                      v-model.number="whatIfDelta"
+                      class="whatif-slider"
+                    />
+                  </div>
+                </div>
+
+                <div v-if="whatIfChemistry.isValid" class="whatif-compare">
+                  <div class="whatif-compare-header">
+                    <span>Metric</span>
+                    <span>Before</span>
+                    <span>After</span>
+                    <span>Δ</span>
+                  </div>
+                  <div class="whatif-row">
+                    <span>Si : Al</span>
+                    <span class="whatif-val">{{ chemistry.siToAl !== null ? chemistry.siToAl.toFixed(2) : '—' }}</span>
+                    <span class="whatif-val">{{ whatIfChemistry.siToAl !== null ? whatIfChemistry.siToAl.toFixed(2) : '—' }}</span>
+                    <span class="whatif-delta" :class="deltaClass(chemistry.siToAl ?? 0, whatIfChemistry.siToAl ?? 0)">
+                      {{ chemistry.siToAl !== null && whatIfChemistry.siToAl !== null ? formatDelta(chemistry.siToAl, whatIfChemistry.siToAl) : '—' }}
+                    </span>
+                  </div>
+                  <div class="whatif-row">
+                    <span>KNaO</span>
+                    <span class="whatif-val">{{ chemistry.knaO.toFixed(3) }}</span>
+                    <span class="whatif-val">{{ whatIfChemistry.knaO.toFixed(3) }}</span>
+                    <span class="whatif-delta" :class="deltaClass(chemistry.knaO, whatIfChemistry.knaO)">{{ formatDelta(chemistry.knaO, whatIfChemistry.knaO) }}</span>
+                  </div>
+                  <div class="whatif-row">
+                    <span>Al₂O₃</span>
+                    <span class="whatif-val">{{ chemistry.totalAl.toFixed(3) }}</span>
+                    <span class="whatif-val">{{ whatIfChemistry.totalAl.toFixed(3) }}</span>
+                    <span class="whatif-delta" :class="deltaClass(chemistry.totalAl, whatIfChemistry.totalAl)">{{ formatDelta(chemistry.totalAl, whatIfChemistry.totalAl) }}</span>
+                  </div>
+                  <div class="whatif-row">
+                    <span>SiO₂</span>
+                    <span class="whatif-val">{{ chemistry.totalSi.toFixed(3) }}</span>
+                    <span class="whatif-val">{{ whatIfChemistry.totalSi.toFixed(3) }}</span>
+                    <span class="whatif-delta" :class="deltaClass(chemistry.totalSi, whatIfChemistry.totalSi)">{{ formatDelta(chemistry.totalSi, whatIfChemistry.totalSi) }}</span>
+                  </div>
+                  <div class="whatif-row">
+                    <span>Expansion</span>
+                    <span class="whatif-val">{{ chemistry.expansionIndex.toFixed(1) }}</span>
+                    <span class="whatif-val">{{ whatIfChemistry.expansionIndex.toFixed(1) }}</span>
+                    <span class="whatif-delta" :class="deltaClass(chemistry.expansionIndex, whatIfChemistry.expansionIndex)">{{ formatDelta(chemistry.expansionIndex, whatIfChemistry.expansionIndex) }}</span>
+                  </div>
+                  <p class="whatif-note">
+                    Preview only — no changes are saved. The percentages are renormalised in UMF calculation.
+                  </p>
+                </div>
+              </div>
+            </Transition>
           </section>
 
           <!-- Swap confirmation toast -->
@@ -631,78 +880,66 @@ function formatScore(val: number): string {
           </div>
 
           <!-- Similar recipes (collapsible on mobile) -->
-          <section v-if="similarRecipes.length" class="drawer-section collapsible-section">
-            <h3 class="section-label section-toggle" @click="toggleSection('similar')">
-              Similar Recipes
-              <span class="toggle-arrow">{{ isSectionOpen('similar') ? '▾' : '▸' }}</span>
-            </h3>
-            <div v-if="isSectionOpen('similar')" class="similar-list">
-              <button
-                v-for="sim in similarRecipes"
-                :key="sim.id"
-                class="similar-card"
-                @click="workshopStore.openRecipe(sim)"
-              >
-                <div
-                  class="similar-swatch"
-                  :style="{ background: glazeStore.colorProfileById.get(glazeStore.profileForRecipe.get(sim.id) ?? '')?.swatchHex ?? '#ede6d6' }"
-                />
-                <div class="similar-info">
-                  <span class="similar-name">{{ sim.name }}</span>
-                  <span class="similar-cone">C{{ sim.cone }}</span>
-                </div>
-              </button>
-            </div>
-          </section>
+          <RecipeSimilarList
+            :recipes="similarRecipes"
+            title="Similar Recipes"
+            section-key="similar"
+            :is-section-open="isSectionOpen('similar')"
+            @toggle="toggleSection"
+          />
 
           <!-- Cross-range similar (collapsible on mobile) -->
-          <section v-if="crossRangeSimilar.length" class="drawer-section collapsible-section">
-            <h3 class="section-label section-toggle" @click="toggleSection('crossRange')">
-              Similar at Other Temps
-              <span class="toggle-arrow">{{ isSectionOpen('crossRange') ? '▾' : '▸' }}</span>
+          <RecipeSimilarList
+            :recipes="crossRangeSimilar"
+            title="Similar at Other Temps"
+            section-key="crossRange"
+            :is-section-open="isSectionOpen('crossRange')"
+            :cone-label="(r) => `C${r.cone} · ${r.firingRangeId.replace(/-/g, ' ')}`"
+            @toggle="toggleSection"
+          />
+
+          <!-- Visual twins -->
+          <RecipeSimilarList
+            :recipes="visualTwins"
+            title="Visual Twins"
+            section-key="twins"
+            hint="same look, different path"
+            :is-section-open="isSectionOpen('twins')"
+            :cone-label="(r) => `C${r.cone} · ${r.ingredients.length} materials`"
+            @toggle="toggleSection"
+          />
+
+          <!-- Colour Development Guide (collapsible on mobile) -->
+          <section v-if="matchingColourGuides.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('colourGuide')">
+              Colour Guide
+              <span class="toggle-arrow">{{ isSectionOpen('colourGuide') ? '▾' : '▸' }}</span>
             </h3>
-            <div v-if="isSectionOpen('crossRange')" class="similar-list">
-              <button
-                v-for="sim in crossRangeSimilar"
-                :key="sim.id"
-                class="similar-card"
-                @click="workshopStore.openRecipe(sim)"
-              >
-                <div
-                  class="similar-swatch"
-                  :style="{ background: glazeStore.colorProfileById.get(glazeStore.profileForRecipe.get(sim.id) ?? '')?.swatchHex ?? '#ede6d6' }"
-                />
-                <div class="similar-info">
-                  <span class="similar-name">{{ sim.name }}</span>
-                  <span class="similar-cone">C{{ sim.cone }} · {{ sim.firingRangeId.replace(/-/g, ' ') }}</span>
-                </div>
-              </button>
+            <div v-if="isSectionOpen('colourGuide')" class="collapsible-body">
+              <ColourGuidePanel :guides="matchingColourGuides" />
             </div>
           </section>
 
-          <!-- Visual twins -->
-          <section v-if="visualTwins.length" class="drawer-section collapsible-section">
-            <h3 class="section-label section-toggle" @click="toggleSection('twins')">
-              Visual Twins
-              <span class="section-hint">same look, different path</span>
-              <span class="toggle-arrow">{{ isSectionOpen('twins') ? '▾' : '▸' }}</span>
+          <!-- Firing Programs (collapsible on mobile) -->
+          <section v-if="matchingFiringPrograms.length" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('firing')">
+              Firing Programs
+              <span class="toggle-arrow">{{ isSectionOpen('firing') ? '▾' : '▸' }}</span>
             </h3>
-            <div v-if="isSectionOpen('twins')" class="similar-list">
-              <button
-                v-for="twin in visualTwins"
-                :key="twin.id"
-                class="similar-card"
-                @click="workshopStore.openRecipe(twin)"
-              >
-                <div
-                  class="similar-swatch"
-                  :style="{ background: glazeStore.colorProfileById.get(glazeStore.profileForRecipe.get(twin.id) ?? '')?.swatchHex ?? '#ede6d6' }"
-                />
-                <div class="similar-info">
-                  <span class="similar-name">{{ twin.name }}</span>
-                  <span class="similar-cone">C{{ twin.cone }} · {{ twin.ingredients.length }} materials</span>
-                </div>
-              </button>
+            <div v-if="isSectionOpen('firing')" class="collapsible-body">
+              <FiringProgramPanel :programs="matchingFiringPrograms" />
+            </div>
+          </section>
+
+          <!-- Body Response (collapsible on mobile) -->
+          <section v-if="matchingBodyResponse" class="drawer-section collapsible-section">
+            <h3 class="section-label section-toggle" @click="toggleSection('bodyResponse')">
+              Body Response
+              <span class="section-hint">how this glaze behaves on different clays</span>
+              <span class="toggle-arrow">{{ isSectionOpen('bodyResponse') ? '▾' : '▸' }}</span>
+            </h3>
+            <div v-if="isSectionOpen('bodyResponse')" class="collapsible-body">
+              <BodyResponsePanel :responses="matchingBodyResponse.responses" :bodies="glazeStore.bodyDefinitions" />
             </div>
           </section>
 
@@ -724,6 +961,33 @@ function formatScore(val: number): string {
               />
               <button class="user-note-add" :disabled="!newNote.trim()" @click="submitNote">+</button>
             </div>
+          </section>
+
+          <!-- Application notes -->
+          <section v-if="applicationNote" class="drawer-section">
+            <h3 class="section-label">Application Guide</h3>
+            <div class="app-note-grid">
+              <div class="app-note-item">
+                <span class="app-note-label">Thickness</span>
+                <span class="app-note-value">{{ applicationNote.thickness }}</span>
+                <span class="app-note-desc">{{ applicationNote.thicknessNote }}</span>
+              </div>
+              <div class="app-note-item">
+                <span class="app-note-label">Specific Gravity</span>
+                <span class="app-note-value">{{ applicationNote.specificGravity }}</span>
+              </div>
+              <div class="app-note-item">
+                <span class="app-note-label">Dipping Time</span>
+                <span class="app-note-value">{{ applicationNote.dippingTime }}</span>
+              </div>
+              <div class="app-note-item full-width">
+                <span class="app-note-label">Layering</span>
+                <span class="app-note-desc">{{ applicationNote.layeringNote }}</span>
+              </div>
+            </div>
+            <ul v-if="applicationNote.generalTips.length" class="app-tips">
+              <li v-for="(tip, i) in applicationNote.generalTips" :key="i">{{ tip }}</li>
+            </ul>
           </section>
 
           <!-- Sources -->
@@ -756,7 +1020,26 @@ function formatScore(val: number): string {
             <button class="btn btn-ghost" @click="exportAsPDF">
               Export PDF
             </button>
+            <button v-if="explanation" class="btn btn-ghost" @click="showExplanation = !showExplanation">
+              {{ showExplanation ? 'Hide Explanation' : 'Explain This Recipe' }}
+            </button>
           </div>
+
+          <!-- Recipe Explanation -->
+          <Transition name="slide-down">
+            <div v-if="showExplanation && explanation" class="explanation-panel">
+              <p class="explanation-summary">{{ explanation.summary }}</p>
+              <ul v-if="explanation.details.length" class="explanation-details">
+                <li v-for="(detail, i) in explanation.details" :key="i">{{ detail }}</li>
+              </ul>
+              <div v-if="explanation.warnings.length" class="explanation-warnings">
+                <div v-for="(warning, i) in explanation.warnings" :key="i" class="explanation-warning">
+                  <span class="warning-icon">!</span>
+                  <span>{{ warning }}</span>
+                </div>
+              </div>
+            </div>
+          </Transition>
         </div>
       </aside>
     </Transition>
@@ -803,7 +1086,7 @@ function formatScore(val: number): string {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background: rgba(245, 240, 232, 0.9);
+  background: var(--cream-90);
   border: none;
   cursor: pointer;
   font-size: 16px;
@@ -1281,61 +1564,6 @@ function formatScore(val: number): string {
 .status-icon { font-size: var(--text-base); }
 
 /* Similar recipes */
-.similar-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.similar-card {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--ink-10);
-  background: var(--chalk);
-  cursor: pointer;
-  text-align: left;
-  width: 100%;
-  transition: all var(--transition-fast);
-}
-
-.similar-card:hover {
-  border-color: var(--clay);
-  background: var(--parchment);
-  transform: translateX(3px);
-}
-
-.similar-swatch {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-}
-
-.similar-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.similar-name {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  color: var(--carbon);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.similar-cone {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--stone);
-}
-
 /* Sources */
 .sources-line {
   display: flex;
@@ -1538,12 +1766,248 @@ function formatScore(val: number): string {
   padding-top: var(--space-2);
 }
 
+/* ── Explanation panel ── */
+/* ─── What If? ─── */
+.whatif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.whatif-toggle-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--ink-20);
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.whatif-toggle-btn:hover,
+.whatif-toggle-btn.active {
+  border-color: var(--clay);
+  color: var(--clay);
+  background: var(--clay-10);
+}
+
+.whatif-body {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.whatif-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.whatif-control-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.whatif-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.whatif-delta-display {
+  font-weight: 700;
+}
+
+.whatif-delta-display.pos {
+  color: var(--sage);
+}
+
+.whatif-delta-display.neg {
+  color: var(--clay);
+}
+
+.whatif-select {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: var(--parchment);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.whatif-slider {
+  width: 100%;
+  accent-color: var(--clay);
+  cursor: pointer;
+}
+
+.whatif-compare {
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.whatif-compare-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--ink-05);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.whatif-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding: 6px var(--space-3);
+  border-top: 1px solid var(--ink-05);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink);
+}
+
+.whatif-val {
+  min-width: 52px;
+  text-align: right;
+  color: var(--stone);
+}
+
+.whatif-delta {
+  min-width: 52px;
+  text-align: right;
+  font-weight: 700;
+}
+
+.delta-pos {
+  color: var(--sage);
+}
+
+.delta-neg {
+  color: var(--clay);
+}
+
+.whatif-note {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--stone);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--ink-05);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.explanation-panel {
+  background: var(--parchment);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-left: 3px solid var(--sage);
+}
+
+.explanation-summary {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.explanation-details {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.explanation-details li {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.6;
+  padding-left: var(--space-4);
+  position: relative;
+}
+
+.explanation-details li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--sage);
+  font-weight: 700;
+}
+
+.explanation-warnings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.explanation-warning {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(196, 83, 42, 0.06);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--clay);
+}
+
+.explanation-warning .warning-icon {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--clay);
+  flex-shrink: 0;
+}
+
+.explanation-warning span:last-child {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.slide-down-enter-active, .slide-down-leave-active {
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  overflow: hidden;
+}
+.slide-down-enter-from, .slide-down-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+.slide-down-enter-to, .slide-down-leave-from {
+  max-height: 600px;
+}
+
 /* Swap confirmation toast */
 .swap-toast {
   position: sticky;
   bottom: var(--space-4);
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-4);
   display: flex;
@@ -1592,4 +2056,209 @@ function formatScore(val: number): string {
 
 .slide-right-enter-active, .slide-right-leave-active { transition: transform var(--transition-slow); }
 .slide-right-enter-from, .slide-right-leave-to { transform: translateX(100%); }
+
+/* Expanded material info in ingredient panel */
+.tip-expanded-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tip-expanded-list li {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.45;
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.tip-expanded-list li::before {
+  content: '·';
+  position: absolute;
+  left: var(--space-1);
+  color: var(--stone);
+  font-weight: 700;
+}
+
+.tip-use-pct {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  margin-top: var(--space-1);
+}
+
+/* Switching playbook block */
+.playbook-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(122, 143, 110, 0.06);
+  border-left: 2px solid rgba(122, 143, 110, 0.3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.playbook-why {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--stone-dark);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.playbook-first {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.playbook-first strong {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sage);
+}
+
+.playbook-test {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.playbook-test-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+  font-weight: 700;
+}
+
+.playbook-test-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  counter-reset: pstep;
+}
+
+.playbook-test-list li {
+  counter-increment: pstep;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--ink);
+  line-height: 1.45;
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.playbook-test-list li::before {
+  content: counter(pstep) '.';
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+}
+
+.playbook-stop {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.playbook-stop-item {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--clay);
+  line-height: 1.45;
+}
+
+.playbook-stop-icon {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+}
+
+/* Application notes */
+.app-note-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.app-note-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-3);
+  background: var(--parchment);
+  border-radius: var(--radius-md);
+  border-left: 2px solid var(--ink-10);
+}
+
+.app-note-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.app-note-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.app-note-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--clay);
+  font-weight: 600;
+}
+
+.app-note-desc {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.app-tips {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: rgba(122, 143, 110, 0.06);
+  border-left: 2px solid rgba(122, 143, 110, 0.3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.app-tips li {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink);
+  line-height: 1.55;
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.app-tips li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--sage);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .app-note-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

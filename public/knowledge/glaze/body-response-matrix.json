@@ -1,0 +1,626 @@
+{
+  "meta": {
+    "title": "Body response matrix for glaze families",
+    "createdAt": "2026-03-15",
+    "note": "This matrix is a directional guide to help choose test paths. It does not replace body-specific fit testing and witness-cone confirmation."
+  },
+  "bodies": [
+    {
+      "id": "red-earthenware",
+      "label": "Red earthenware",
+      "traits": ["warm body color", "often porous at low fire", "high visual contrast for defect lines"]
+    },
+    {
+      "id": "white-earthenware",
+      "label": "White earthenware",
+      "traits": ["bright background", "low-fire porosity still common", "strong color presentation"]
+    },
+    {
+      "id": "stoneware",
+      "label": "Stoneware",
+      "traits": ["mid to high-fire functional range", "often iron-bearing", "moderate fit forgiveness"]
+    },
+    {
+      "id": "white-stoneware",
+      "label": "White stoneware",
+      "traits": ["cleaner color than iron stoneware", "good comparison body", "mid-fire functional target"]
+    },
+    {
+      "id": "porcelain",
+      "label": "Porcelain",
+      "traits": ["very white", "tight mature body", "exposes fit issues quickly"]
+    },
+    {
+      "id": "grogged-sculpture",
+      "label": "Grogged sculpture body",
+      "traits": ["coarser texture", "higher shock tolerance", "less ideal for thin transparent liners"]
+    },
+    {
+      "id": "raku-clay",
+      "label": "Raku clay",
+      "traits": ["intentionally open", "thermal-shock focused", "decorative firing context"]
+    }
+  ],
+  "familyResponses": [
+    {
+      "id": "lowfire-clear-host",
+      "name": "Low-fire clear host family",
+      "referenceRecipeIds": ["g3879", "g1916q", "g2931k", "g2931l"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "medium-high",
+          "colorShift": "strong warm cast under clear",
+          "surfaceShift": "clarity can look lower because body tone dominates",
+          "applicationTolerance": "medium; over-thick coats cloud quickly",
+          "recommendedVariantIds": ["lf-clear-high-expansion-branch", "lf-clear-lower-expansion-branch"],
+          "watchFor": ["crazing lines are obvious", "durability claims are limited by body porosity"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "medium",
+          "colorShift": "cleanest low-fire color host behavior",
+          "surfaceShift": "good brightness if melt is complete",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["lf-clear-bright"],
+          "watchFor": ["pinholes if burnout is incomplete"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "high",
+          "colorShift": "warmer and dimmer than intended",
+          "surfaceShift": "low-fire clear may underfit maturity expectations",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": ["lf-clear-zero3-branch"],
+          "watchFor": ["body and glaze temperature mismatch can invalidate tests"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "high",
+          "colorShift": "cleaner than iron stoneware but still outside low-fire target behavior",
+          "surfaceShift": "host may look underdeveloped",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": ["lf-clear-zero3-branch"],
+          "watchFor": ["use cone-6 families instead when practical"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "very-high",
+          "colorShift": "visually clean but often not fit-safe at low-fire chemistry",
+          "surfaceShift": "apparent clarity can hide stress",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": ["lf-clear-lower-expansion-branch"],
+          "watchFor": ["delayed crazing after cooldown"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "high",
+          "colorShift": "body texture dominates clear read",
+          "surfaceShift": "roughness and pinholes are amplified",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": ["lf-clear-high-expansion-branch"],
+          "watchFor": ["clear liners rarely align with this body intent"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "unreliable for clean clear-host goals",
+          "surfaceShift": "decorative crackle tendencies dominate",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["treat as decorative-only context"]
+        }
+      ]
+    },
+    {
+      "id": "cone6-clear-liner",
+      "name": "Cone-6 clear liner family",
+      "referenceRecipeIds": ["g2926b", "g1214m", "g1216m", "g2926j", "g3838a"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "body warmth strongly tints clear",
+          "surfaceShift": "can appear more amber than expected",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-clear-warm-host"],
+          "watchFor": ["temperature and body mismatch for true cone-6 intent"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "cleaner than red earthenware but still not primary target body",
+          "surfaceShift": "can look overmelted or incompatible depending on body line",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-clear-warm-host"],
+          "watchFor": ["validate body maturity first"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium",
+          "colorShift": "slight warmth on iron-bearing bodies",
+          "surfaceShift": "stable and practical with correct fit branch",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": ["c6-clear-low-expansion-branch", "c6-clear-industrial-benchmark"],
+          "watchFor": ["compare liner interior separately from exterior effects"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "low-medium",
+          "colorShift": "clean and neutral host behavior",
+          "surfaceShift": "best balance of clarity and forgiveness",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": ["c6-clear-low-expansion-branch", "c6-clear-warm-host"],
+          "watchFor": ["still verify delayed crazing on rims"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium-high",
+          "colorShift": "maximum color purity",
+          "surfaceShift": "fit stress appears faster than on stoneware",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-clear-porcelain-fit", "c6-clear-low-expansion-branch"],
+          "watchFor": ["base clear may craze even when it looks ideal"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium-high",
+          "colorShift": "clear read is disrupted by body tooth",
+          "surfaceShift": "pinholes and uneven sheen become more likely",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": ["c6-clear-low-expansion-branch"],
+          "watchFor": ["use sculptural surface families when possible"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "not reliable for cone-6 clear role",
+          "surfaceShift": "thermal-shock context dominates result",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["not a functional liner path"]
+        }
+      ]
+    },
+    {
+      "id": "cone6-warm-color-host",
+      "name": "Cone-6 warm-color host clear family",
+      "referenceRecipeIds": ["g1214m"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "warm body overwhelms sensitive pink and maroon goals",
+          "surfaceShift": "host clarity remains but warm target colors flatten",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": [],
+          "watchFor": ["body selection can fail warm-color goal before host chemistry"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "better than red body but still outside preferred temperature/body match",
+          "surfaceShift": "decent color read with limited fit confidence",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": [],
+          "watchFor": ["confirm body maturity and fit rigorously"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium",
+          "colorShift": "moderate warming on iron stoneware",
+          "surfaceShift": "usable but less color-clean than white bodies",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": ["c6-clear-warm-host"],
+          "watchFor": ["warm host benefit can be lost on dark body tone"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "low-medium",
+          "colorShift": "strong warm-color performance",
+          "surfaceShift": "best practical balance for warm color hosts",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": ["c6-clear-warm-host"],
+          "watchFor": ["still compare against base clear for fit margin"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium",
+          "colorShift": "highest warm-color purity",
+          "surfaceShift": "host appears clean but can reveal fit stress",
+          "applicationTolerance": "medium-high",
+          "recommendedVariantIds": ["c6-clear-porcelain-fit", "c6-clear-warm-host"],
+          "watchFor": ["if fit fails, blend approach with lower-expansion clear branch"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium-high",
+          "colorShift": "fine warm-color nuance is mostly lost",
+          "surfaceShift": "surface tooth reduces host clarity value",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": [],
+          "watchFor": ["not ideal for color-critical warm host work"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "warm-color host strategy does not transfer",
+          "surfaceShift": "decorative shock path dominates",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["use raku-specific families instead"]
+        }
+      ]
+    },
+    {
+      "id": "cone6-reactive-floating-blue",
+      "name": "Cone-6 floating-blue reactive family",
+      "referenceRecipeIds": ["g2826r", "gr6-m"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "blue shifts toward muddy green-brown zones",
+          "surfaceShift": "cream breaks flatten and lose contrast",
+          "applicationTolerance": "low-medium",
+          "recommendedVariantIds": ["c6-floating-blue-natural-base"],
+          "watchFor": ["body warmth can nullify floating effect"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "better contrast but still outside preferred body/firing match",
+          "surfaceShift": "reactive movement can overrun low-fire body assumptions",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-floating-blue-engineered-base"],
+          "watchFor": ["run control and fit become unreliable"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium",
+          "colorShift": "deeper storm blue with warmer breaks",
+          "surfaceShift": "strong break and pool behavior",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-floating-blue-engineered-base", "c6-floating-blue-natural-base"],
+          "watchFor": ["thickness and texture drive result more than recipe name"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "medium",
+          "colorShift": "cleanest blue/cream separation for production-style tests",
+          "surfaceShift": "high visual range with manageable control",
+          "applicationTolerance": "medium-high",
+          "recommendedVariantIds": ["c6-floating-blue-engineered-base"],
+          "watchFor": ["confirm run distance before production use"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium-high",
+          "colorShift": "very bright contrast and strong pool depth",
+          "surfaceShift": "reactivity can become excessive quickly",
+          "applicationTolerance": "low-medium",
+          "recommendedVariantIds": ["c6-floating-blue-engineered-base"],
+          "watchFor": ["small thickness changes can create large run changes"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium-high",
+          "colorShift": "color complexity rises but clarity drops",
+          "surfaceShift": "texture-driven break can be dramatic but rough",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-floating-blue-natural-base"],
+          "watchFor": ["body tooth and glaze run can combine into instability"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "unreliable transfer of cone-6 floating behavior",
+          "surfaceShift": "thermal-shock process dominates",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["treat as separate decorative test path"]
+        }
+      ]
+    },
+    {
+      "id": "cone6-functional-matte",
+      "name": "Cone-6 functional matte family",
+      "referenceRecipeIds": ["g2934", "g2934y", "g1214z1"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "matte warms quickly and can look muddy",
+          "surfaceShift": "dryness risk rises",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": ["c6-matte-functional-silk"],
+          "watchFor": ["functional matte goals usually mismatch low-fire porous bodies"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "softer pastel read",
+          "surfaceShift": "can appear chalky if under-melted",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-matte-functional-silk"],
+          "watchFor": ["cone and body mismatch before chemistry"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium",
+          "colorShift": "warmer matte language",
+          "surfaceShift": "good matte depth with controlled cooling",
+          "applicationTolerance": "medium-high",
+          "recommendedVariantIds": ["c6-matte-functional-silk", "c6-matte-calcium-contrast"],
+          "watchFor": ["cutlery marking and cleanability checks are mandatory"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "low-medium",
+          "colorShift": "clean matte and satin reads",
+          "surfaceShift": "most reliable body for matte branch comparisons",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": ["c6-matte-functional-silk", "c6-matte-calcium-contrast"],
+          "watchFor": ["cooling profile can shift sheen more than expected"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium-high",
+          "colorShift": "cooler, cleaner matte tones",
+          "surfaceShift": "fit stress and dryness appear early on tight body",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-matte-functional-silk"],
+          "watchFor": ["use lower-thickness tests before full-coverage application"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium-high",
+          "colorShift": "matte can accent body roughness strongly",
+          "surfaceShift": "dryness and pinholes are more likely",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["c6-matte-calcium-contrast"],
+          "watchFor": ["prefer sculptural surface families for coarse bodies"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "functional matte framework does not map",
+          "surfaceShift": "decorative response dominates",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["not a functional matte path"]
+        }
+      ]
+    },
+    {
+      "id": "natural-base-amber-family",
+      "name": "Natural-base amber and branch family",
+      "referenceRecipeIds": ["ga6-a", "ga6-b", "ga6-g", "gr6-n"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "amber collapses toward darker brown",
+          "surfaceShift": "natural transitions become heavy",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["nat-amber-roasted-stability"],
+          "watchFor": ["too much warmth can erase family nuance"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "warmer amber still visible",
+          "surfaceShift": "branch differences are visible but body fit remains weak at target cone",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["nat-amber-honey-reactive"],
+          "watchFor": ["evaluate as aesthetic test, not production fit conclusion"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium",
+          "colorShift": "rich amber and rutile-brown transitions",
+          "surfaceShift": "strong natural movement with moderate control",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["nat-amber-honey-reactive", "nat-amber-roasted-stability"],
+          "watchFor": ["raw-slip drying behavior can confuse chemistry interpretation"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "medium",
+          "colorShift": "cleanest reading of family transitions",
+          "surfaceShift": "best platform for branch comparison",
+          "applicationTolerance": "medium-high",
+          "recommendedVariantIds": ["nat-amber-honey-reactive", "nat-base-celadon-branch"],
+          "watchFor": ["branch intent can diverge quickly with thickness"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium-high",
+          "colorShift": "lighter and sometimes unexpectedly bright transitions",
+          "surfaceShift": "reactive branches can run more dramatically",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": ["nat-base-celadon-branch"],
+          "watchFor": ["use conservative thickness and catch support"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium-high",
+          "colorShift": "earthier and rougher natural look",
+          "surfaceShift": "texture emphasizes natural branch character",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": ["nat-amber-roasted-stability"],
+          "watchFor": ["surface roughness may exceed functional tolerance"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "family does not map cleanly to raku process",
+          "surfaceShift": "thermal-shock route overrides intended cone-6 behavior",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["treat as separate decorative experimentation"]
+        }
+      ]
+    },
+    {
+      "id": "highfire-clear-family",
+      "name": "Cone-10 clear and liner family",
+      "referenceRecipeIds": ["g1947u", "gr10-a", "gr10-b"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "very-high",
+          "colorShift": "body/firing mismatch invalidates high-fire clear intent",
+          "surfaceShift": "not a practical use path",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["do not generalize high-fire clear behavior to low-fire bodies"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "very-high",
+          "colorShift": "outside normal body range",
+          "surfaceShift": "non-representative result",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["body suitability fails first"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "low-medium",
+          "colorShift": "slight warmth on iron bodies",
+          "surfaceShift": "reliable clear and liner behavior with proper maturity",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": [],
+          "watchFor": ["atmosphere and reduction control become major variables"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "low-medium",
+          "colorShift": "clean transparent read",
+          "surfaceShift": "strong functional-candidate platform",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": [],
+          "watchFor": ["verify cone placement across kiln zones"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "medium",
+          "colorShift": "maximum clarity and pool visibility",
+          "surfaceShift": "fit and run shifts are highly visible",
+          "applicationTolerance": "medium-high",
+          "recommendedVariantIds": [],
+          "watchFor": ["porcelain exposes fit stress quickly"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium",
+          "colorShift": "texture softens clarity value",
+          "surfaceShift": "transparent role may be less useful than atmospheric families",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": [],
+          "watchFor": ["evaluate if clear intent matches sculptural surface goals"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "very-high",
+          "colorShift": "high-fire clear model does not transfer",
+          "surfaceShift": "decorative process mismatch",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["keep raku and high-fire functional paths separate"]
+        }
+      ]
+    },
+    {
+      "id": "raku-surface-family",
+      "name": "Raku metallic and crackle family",
+      "referenceRecipeIds": ["turquoise-raku", "copper-red-raku", "metallic-copper-raku", "dry-alligator-raku"],
+      "responses": [
+        {
+          "bodyId": "red-earthenware",
+          "fitRisk": "high",
+          "colorShift": "raku effects are unstable and low-repeatability on non-raku bodies",
+          "surfaceShift": "thermal-shock mismatch can cause failures",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["use raku clay for process validity"]
+        },
+        {
+          "bodyId": "white-earthenware",
+          "fitRisk": "high",
+          "colorShift": "decorative effects appear but reliability is poor",
+          "surfaceShift": "crackle and carbon effects are unpredictable",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["body thermal-shock behavior is limiting factor"]
+        },
+        {
+          "bodyId": "stoneware",
+          "fitRisk": "medium-high",
+          "colorShift": "raku effects possible but body shock tolerance varies",
+          "surfaceShift": "risk of cracking increases with dense stoneware",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": [],
+          "watchFor": ["test small pieces before larger forms"]
+        },
+        {
+          "bodyId": "white-stoneware",
+          "fitRisk": "medium-high",
+          "colorShift": "can show bright decorative effects with careful process",
+          "surfaceShift": "still less shock-safe than true raku body",
+          "applicationTolerance": "medium-low",
+          "recommendedVariantIds": [],
+          "watchFor": ["decorative-only use remains likely"]
+        },
+        {
+          "bodyId": "porcelain",
+          "fitRisk": "very-high",
+          "colorShift": "high crack risk and low process reliability",
+          "surfaceShift": "not a stable raku substrate",
+          "applicationTolerance": "low",
+          "recommendedVariantIds": [],
+          "watchFor": ["avoid unless specifically researching failure envelope"]
+        },
+        {
+          "bodyId": "grogged-sculpture",
+          "fitRisk": "medium",
+          "colorShift": "decorative effects can be strong with coarse texture",
+          "surfaceShift": "surface ruggedness increases",
+          "applicationTolerance": "medium",
+          "recommendedVariantIds": [],
+          "watchFor": ["test reduction timing consistency"]
+        },
+        {
+          "bodyId": "raku-clay",
+          "fitRisk": "low-medium",
+          "colorShift": "intended metallic, crackle, and smoke effects",
+          "surfaceShift": "best shock resilience for raku process",
+          "applicationTolerance": "high",
+          "recommendedVariantIds": [],
+          "watchFor": ["maintain decorative-only functional status unless proven otherwise"]
+        }
+      ]
+    }
+  ],
+  "decisionRules": [
+    {
+      "id": "body-first-host-second",
+      "rule": "Pick body and firing context first, then select host or effect branch.",
+      "why": "Many color and fit failures are body-context failures, not recipe failures.",
+      "sourceIds": ["digitalfire-glaze-fit", "digitalfire-clay-porosity", "digitalfire-crazing"]
+    },
+    {
+      "id": "white-body-for-color-decisions",
+      "rule": "Use a white or light body for color-host and stain-host decisions before validating on warmer bodies.",
+      "why": "Body color can hide or fake host chemistry performance.",
+      "sourceIds": ["digitalfire-porcelain", "digitalfire-stoneware", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "separate-functional-and-decorative",
+      "rule": "Keep decorative branches and functional-candidate branches in separate test tracks.",
+      "why": "Reactive and raku surface success does not imply functional durability.",
+      "sourceIds": ["ct-raku", "digitalfire-g3806c", "insight-glazes"]
+    }
+  ]
+}

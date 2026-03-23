@@ -26,6 +26,44 @@ const canCompare = computed(() => workshopStore.compareIds.length < 3 || isInCom
 const primaryAtmosphere = computed(() => props.recipe.atmosphereIds[0] ?? '')
 const primarySurface = computed(() => props.recipe.surfaceIds[0] ?? '')
 
+// Visual scores for surface simulation
+const scores = computed(() => {
+  const familyId = profile.value?.familyId
+  return glazeStore.getScores(props.recipe.id, familyId ?? undefined)
+})
+
+// Generate CSS surface simulation based on scores
+const surfaceStyle = computed(() => {
+  if (!scores.value) return {}
+  const s = scores.value
+  const hex = swatchHex.value
+  const gloss = s.glossLevel / 5
+
+  // Build gradient layers
+  const layers: string[] = []
+
+  // Gloss highlight
+  if (gloss > 0.5) {
+    const intensity = Math.round((gloss - 0.5) * 0.3 * 100)
+    layers.push(`linear-gradient(135deg, rgba(255,255,255,${intensity / 100}) 0%, transparent 60%)`)
+  }
+
+  // Pooling: darker edges
+  if (s.poolingLevel >= 3) {
+    const poolIntensity = (s.poolingLevel / 5) * 0.25
+    layers.push(`radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,${poolIntensity}) 100%)`)
+  }
+
+  // Variation: subtle noise-like pattern
+  if (s.variationLevel >= 3) {
+    const varIntensity = (s.variationLevel / 5) * 0.08
+    layers.push(`repeating-conic-gradient(rgba(0,0,0,${varIntensity}) 0% 25%, transparent 0% 50%)`)
+  }
+
+  if (layers.length === 0) return {}
+  return { backgroundImage: layers.join(', ') }
+})
+
 function open() {
   workshopStore.openRecipe(props.recipe)
 }
@@ -35,6 +73,7 @@ function open() {
   <article class="recipe-card" @click="open" role="button" tabindex="0" @keydown.enter="open">
     <!-- Color swatch strip -->
     <div class="card-swatch" :style="{ background: swatchHex }">
+      <div class="swatch-surface" :style="surfaceStyle" />
       <div class="swatch-sheen" />
       <span
         v-if="workshopStore.hasUserNotes(recipe.id)"
@@ -109,6 +148,13 @@ function open() {
   flex-shrink: 0;
 }
 
+.swatch-surface {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
 .swatch-sheen {
   position: absolute;
   inset: 0;
@@ -122,7 +168,7 @@ function open() {
   width: 24px;
   height: 24px;
   border-radius: var(--radius-full);
-  background: rgba(245, 240, 232, 0.85);
+  background: var(--cream-85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,7 +184,7 @@ function open() {
   width: 28px;
   height: 28px;
   border-radius: var(--radius-full);
-  background: rgba(245, 240, 232, 0.85);
+  background: var(--cream-85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,11 +195,13 @@ function open() {
   transition: all var(--transition-fast);
   backdrop-filter: blur(4px);
   opacity: 0;
+  visibility: hidden;
 }
 
 .recipe-card:hover .compare-btn,
 .compare-btn.active {
   opacity: 1;
+  visibility: visible;
 }
 
 .compare-btn:hover,
@@ -170,7 +218,7 @@ function open() {
   width: 28px;
   height: 28px;
   border-radius: var(--radius-full);
-  background: rgba(245, 240, 232, 0.85);
+  background: var(--cream-85);
   display: flex;
   align-items: center;
   justify-content: center;

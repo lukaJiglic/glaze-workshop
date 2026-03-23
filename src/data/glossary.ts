@@ -3,6 +3,7 @@ export interface GlossaryEntry {
   plain: string
   analogy?: string
   whyItMatters: string
+  seeAlso?: string[]
 }
 
 export const glossary = new Map<string, GlossaryEntry>([
@@ -10,242 +11,284 @@ export const glossary = new Map<string, GlossaryEntry>([
     term: 'Cone',
     plain: 'A measure of heat-work in a kiln — it combines temperature and time. Pyrometric cones are small ceramic pyramids that bend at a specific heat-work level.',
     analogy: 'Like an oven thermometer that also tracks how long you\'ve been baking.',
-    whyItMatters: 'Choosing the wrong cone can under-fire (weak, chalky) or over-fire (melted, warped) your work.'
+    whyItMatters: 'Choosing the wrong cone can under-fire (weak, chalky) or over-fire (melted, warped) your work.',
+    seeAlso: ['firing range', 'kiln', 'heat work'],
   }],
   ['firing range', {
     term: 'Firing Range',
     plain: 'The span of cone temperatures at which a clay body or glaze performs correctly. Most glazes are formulated for a specific range.',
     analogy: 'Like the temperature range on a cake recipe — too low and it\'s raw, too high and it burns.',
-    whyItMatters: 'A glaze designed for one range won\'t work at another; matching range to your clay is essential.'
+    whyItMatters: 'A glaze designed for one range won\'t work at another; matching range to your clay is essential.',
+    seeAlso: ['cone', 'low-fire', 'mid-fire', 'high-fire'],
   }],
   ['low-fire', {
     term: 'Low Fire',
-    plain: 'Ceramics fired to roughly cone 06–02 (about 1000–1120 °C / 1830–2050 °F). Bright colors are easier to achieve at these temperatures.',
-    whyItMatters: 'Great for beginners — lower energy cost, vivid colors, and most hobby kilns reach these temps easily.'
+    plain: 'Ceramics fired to roughly cone 06–02 (about 1000–1120 °C). Bright colors are easier to achieve at these temperatures.',
+    whyItMatters: 'Great for beginners — lower energy cost, vivid colors, and most hobby kilns reach these temps easily.',
+    seeAlso: ['cone', 'firing range', 'earthenware', 'frit', 'b2o3'],
   }],
   ['mid-fire', {
     term: 'Mid Fire',
-    plain: 'Ceramics fired to roughly cone 5–7 (about 1180–1240 °C / 2160–2260 °F). A popular sweet spot between durability and color variety.',
-    whyItMatters: 'The most common range for functional pottery — strong enough for daily use, with a wide color palette.'
+    plain: 'Ceramics fired to roughly cone 5–7 (about 1180–1240 °C). A popular sweet spot between durability and color variety.',
+    whyItMatters: 'The most common range for functional pottery — strong enough for daily use, with a wide color palette.',
+    seeAlso: ['cone 6', 'firing range', 'stoneware'],
   }],
   ['high-fire', {
     term: 'High Fire',
-    plain: 'Ceramics fired to cone 8–10 (about 1260–1300 °C / 2300–2380 °F). Produces very dense, durable ware.',
-    whyItMatters: 'High-fire stoneware and porcelain are the strongest, most water-resistant ceramics you can make.'
+    plain: 'Ceramics fired to cone 8–10 (about 1260–1300 °C). Produces very dense, durable ware.',
+    whyItMatters: 'High-fire stoneware and porcelain are the strongest, most water-resistant ceramics you can make.',
+    seeAlso: ['cone 10', 'firing range', 'stoneware', 'porcelain', 'reduction'],
   }],
   ['raku', {
     term: 'Raku',
     plain: 'A low-fire technique where pots are pulled from the kiln while red-hot and placed in combustible material for dramatic surface effects.',
     analogy: 'Like flash-frying instead of slow roasting — fast, dramatic, and a little unpredictable.',
-    whyItMatters: 'Raku pieces are decorative, not food-safe. It\'s exciting but the results are hard to repeat exactly.'
+    whyItMatters: 'Raku pieces are decorative, not food-safe. It\'s exciting but the results are hard to repeat exactly.',
+    seeAlso: ['low-fire', 'cuo', 'carbon trapping', 'thermal shock'],
   }],
   ['atmosphere', {
     term: 'Atmosphere',
     plain: 'The air environment inside the kiln during firing. It can be oxygen-rich (oxidation), oxygen-starved (reduction), or balanced (neutral).',
-    whyItMatters: 'The same glaze recipe can look completely different depending on the kiln atmosphere.'
+    whyItMatters: 'The same glaze recipe can look completely different depending on the kiln atmosphere.',
+    seeAlso: ['oxidation', 'reduction', 'neutral', 'kiln'],
   }],
   ['oxidation', {
     term: 'Oxidation',
     plain: 'Firing with plenty of oxygen, typical of electric kilns. Colors tend to be clean and predictable.',
     analogy: 'Like cooking on an electric stove — even, steady heat with no smoke.',
-    whyItMatters: 'Most beginners fire in oxidation. Results are repeatable and easier to control.'
+    whyItMatters: 'Most beginners fire in oxidation. Results are repeatable and easier to control.',
+    seeAlso: ['atmosphere', 'reduction', 'kiln'],
   }],
   ['reduction', {
     term: 'Reduction',
     plain: 'Firing in an oxygen-starved atmosphere, typical of gas kilns. The lack of oxygen pulls oxygen from the glaze, changing colors dramatically.',
     analogy: 'Like smothering a campfire — the smoke changes everything it touches.',
-    whyItMatters: 'Reduction creates unique effects (iron reds, celadons) that can\'t be replicated in electric kilns.'
+    whyItMatters: 'Reduction creates unique effects (iron reds, celadons) that can\'t be replicated in electric kilns.',
+    seeAlso: ['atmosphere', 'oxidation', 'celadon', 'tenmoku', 'fe2o3'],
   }],
   ['neutral', {
     term: 'Neutral',
     plain: 'A kiln atmosphere that is neither oxidizing nor reducing — a balanced mix of gases.',
-    whyItMatters: 'Some special glazes perform best in a neutral atmosphere, sitting between the two extremes.'
+    whyItMatters: 'Some special glazes perform best in a neutral atmosphere, sitting between the two extremes.',
+    seeAlso: ['atmosphere', 'oxidation', 'reduction'],
   }],
   ['flux', {
     term: 'Flux',
     plain: 'A material that lowers the melting point of a glaze, helping silica turn into glass at reachable temperatures.',
     analogy: 'Like adding salt to ice — it makes things melt at a lower temperature.',
-    whyItMatters: 'Without flux, glaze ingredients wouldn\'t melt in your kiln. The type of flux also affects texture and color.'
+    whyItMatters: 'Without flux, glaze ingredients wouldn\'t melt in your kiln. The type of flux also affects texture and color.',
+    seeAlso: ['glass former', 'stabilizer', 'cao', 'na2o', 'k2o'],
   }],
   ['glass former', {
     term: 'Glass Former',
     plain: 'The ingredient that actually becomes glass in a glaze — almost always silica (SiO₂). It\'s the backbone of every glaze.',
     analogy: 'Like flour in bread — it provides the main structure.',
-    whyItMatters: 'Too little and the glaze won\'t form a proper glass surface; too much and it won\'t melt.'
+    whyItMatters: 'Too little and the glaze won\'t form a proper glass surface; too much and it won\'t melt.',
+    seeAlso: ['sio2', 'flux', 'stabilizer'],
   }],
   ['stabilizer', {
     term: 'Stabilizer',
     plain: 'A material (usually alumina) that keeps the melted glaze from running off the pot. It adds viscosity.',
     analogy: 'Like adding cornstarch to a sauce — it thickens things up so they stay put.',
-    whyItMatters: 'Without enough stabilizer, your glaze will slide right off the pot and stick to the kiln shelf.'
+    whyItMatters: 'Without enough stabilizer, your glaze will slide right off the pot and stick to the kiln shelf.',
+    seeAlso: ['al2o3', 'flux', 'glass former', 'running'],
   }],
   ['feldspar', {
     term: 'Feldspar',
     plain: 'A natural mineral that acts as both flux and glass former. It\'s the most common glaze ingredient in mid- and high-fire recipes.',
-    whyItMatters: 'Feldspar is the workhorse of most glazes — understanding it helps you read and tweak recipes.'
+    whyItMatters: 'Feldspar is the workhorse of most glazes — understanding it helps you read and tweak recipes.',
+    seeAlso: ['flux', 'glass former', 'k2o', 'na2o', 'nepheline syenite'],
   }],
   ['kaolin', {
     term: 'Kaolin',
     plain: 'A pure white clay, also called china clay. In glazes it adds alumina (a stabilizer) and helps the glaze stay in suspension.',
-    whyItMatters: 'Kaolin keeps your glaze from settling into a brick at the bottom of the bucket.'
+    whyItMatters: 'Kaolin keeps your glaze from settling into a brick at the bottom of the bucket.',
+    seeAlso: ['al2o3', 'stabilizer', 'ball clay', 'crawling'],
   }],
   ['silica', {
     term: 'Silica',
     plain: 'Silicon dioxide (SiO₂) — the main glass-forming oxide. Added as flint or quartz in glaze recipes.',
     analogy: 'The "glass" in glaze, literally. Sand is mostly silica.',
-    whyItMatters: 'Adjusting silica changes the glaze surface from matte to glossy and affects durability.'
+    whyItMatters: 'Adjusting silica changes the glaze surface from matte to glossy and affects durability.',
+    seeAlso: ['sio2', 'glass former', 'matte', 'glossy'],
   }],
   ['whiting', {
     term: 'Whiting',
     plain: 'Calcium carbonate (CaCO₃), a common flux in mid- and high-fire glazes. It promotes a hard, durable glass.',
-    whyItMatters: 'Whiting is cheap, reliable, and in almost every stoneware glaze recipe you\'ll encounter.'
+    whyItMatters: 'Whiting is cheap, reliable, and in almost every stoneware glaze recipe you\'ll encounter.',
+    seeAlso: ['cao', 'flux', 'wollastonite', 'loi'],
   }],
   ['frit', {
     term: 'Frit',
     plain: 'A pre-melted, ground-up glass used in glazes. Manufacturers melt raw materials together and then grind the result into a powder.',
     analogy: 'Like pre-made pie crust — the hard work is already done for you.',
-    whyItMatters: 'Frits make toxic materials (like lead, boron) safe to handle and give more consistent results.'
+    whyItMatters: 'Frits make toxic materials (like lead, boron) safe to handle and give more consistent results.',
+    seeAlso: ['b2o3', 'low-fire', 'flux'],
   }],
   ['ball clay', {
     term: 'Ball Clay',
     plain: 'A fine-grained, plastic clay used in both clay bodies and glazes. It improves workability and suspension.',
-    whyItMatters: 'Ball clay helps glaze stay mixed in the bucket and adhere to the pot before firing.'
+    whyItMatters: 'Ball clay helps glaze stay mixed in the bucket and adhere to the pot before firing.',
+    seeAlso: ['kaolin', 'al2o3', 'bentonite'],
   }],
   ['matte', {
     term: 'Matte',
     plain: 'A glaze surface that is smooth but not shiny — it has a soft, velvety look with no gloss.',
     analogy: 'Like matte photo paper versus glossy.',
-    whyItMatters: 'Matte glazes are popular for modern, tactile pottery. They can feel wonderful to hold.'
+    whyItMatters: 'Matte glazes are popular for modern, tactile pottery. They can feel wonderful to hold.',
+    seeAlso: ['satin', 'glossy', 'al2o3', 'mgo'],
   }],
   ['satin', {
     term: 'Satin',
     plain: 'A glaze surface between matte and glossy — it has a soft sheen, like satin fabric.',
-    whyItMatters: 'Satin finishes hide fingerprints better than glossy and feel smoother than matte.'
+    whyItMatters: 'Satin finishes hide fingerprints better than glossy and feel smoother than matte.',
+    seeAlso: ['matte', 'glossy'],
   }],
   ['glossy', {
     term: 'Glossy',
     plain: 'A shiny, reflective glaze surface. Light bounces off it like glass.',
-    whyItMatters: 'Glossy glazes are the easiest to clean and show colors at their most vibrant.'
+    whyItMatters: 'Glossy glazes are the easiest to clean and show colors at their most vibrant.',
+    seeAlso: ['satin', 'matte', 'sio2', 'flux'],
   }],
   ['crackle', {
     term: 'Crackle',
     plain: 'A glaze with an intentional network of fine cracks in the surface, created by mismatching the glaze\'s thermal expansion with the clay body.',
     analogy: 'Like the cracked pattern on old china — but done on purpose.',
-    whyItMatters: 'Crackle is decorative but not food-safe (bacteria hide in the cracks), so it\'s best for display pieces.'
+    whyItMatters: 'Crackle is decorative but not food-safe (bacteria hide in the cracks), so it\'s best for display pieces.',
+    seeAlso: ['crazing', 'thermal expansion', 'fit'],
   }],
   ['crystalline', {
     term: 'Crystalline',
     plain: 'A glaze that grows visible crystal formations during cooling. Requires very specific firing schedules.',
     analogy: 'Like growing rock candy in a jar — slow cooling lets crystals form.',
-    whyItMatters: 'Crystalline glazes are stunning but advanced — they tend to run heavily and need special kiln furniture.'
+    whyItMatters: 'Crystalline glazes are stunning but advanced — they tend to run heavily and need special kiln furniture.',
+    seeAlso: ['zno', 'firing schedule', 'running'],
   }],
   ['opaque', {
     term: 'Opaque',
     plain: 'A glaze you can\'t see through. It completely hides the clay body underneath.',
-    whyItMatters: 'Opaque glazes cover dark clay bodies and underglaze decoration. Good for a clean, solid look.'
+    whyItMatters: 'Opaque glazes cover dark clay bodies and underglaze decoration. Good for a clean, solid look.',
+    seeAlso: ['transparent', 'opacifier', 'zro2', 'sno2'],
   }],
   ['transparent', {
     term: 'Transparent',
     plain: 'A clear glaze that lets the clay or underglaze decoration show through.',
     analogy: 'Like a clear coat of nail polish — it protects and adds shine without hiding what\'s underneath.',
-    whyItMatters: 'Transparent glazes are essential for showing off underglaze painting and the natural beauty of clay.'
+    whyItMatters: 'Transparent glazes are essential for showing off underglaze painting and the natural beauty of clay.',
+    seeAlso: ['opaque', 'underglaze', 'glossy'],
   }],
   ['variegated', {
     term: 'Variegated',
     plain: 'A glaze that shows multiple colors or tones across its surface, often breaking differently over texture.',
-    whyItMatters: 'Variegated glazes add visual interest and make each piece unique.'
+    whyItMatters: 'Variegated glazes add visual interest and make each piece unique.',
+    seeAlso: ['rutile', 'tio2', 'fe2o3'],
   }],
   ['umf', {
     term: 'UMF (Unity Molecular Formula)',
     plain: 'A way of expressing a glaze recipe as a ratio of oxides, with fluxes normalized to 1.0. It\'s the universal language for comparing glazes.',
     analogy: 'Like converting all recipes to percentages so you can compare apples to apples.',
-    whyItMatters: 'UMF lets you predict glaze behavior, compare recipes, and troubleshoot problems scientifically.'
+    whyItMatters: 'UMF lets you predict glaze behavior, compare recipes, and troubleshoot problems scientifically.',
+    seeAlso: ['sio2', 'al2o3', 'flux', 'recipe'],
   }],
   ['loi', {
     term: 'LOI (Loss on Ignition)',
     plain: 'The weight a material loses during firing as water, carbonates, and organics burn away.',
-    whyItMatters: 'LOI affects how thick your raw glaze layer needs to be — high-LOI glazes shrink more during firing.'
+    whyItMatters: 'LOI affects how thick your raw glaze layer needs to be — high-LOI glazes shrink more during firing.',
+    seeAlso: ['pinholing', 'blistering', 'whiting'],
   }],
   ['thermal expansion', {
     term: 'Thermal Expansion',
     plain: 'How much a material grows when heated and shrinks when cooled. Both the clay body and glaze expand and contract.',
     analogy: 'Like how a metal lid on a jar gets easier to open when you run it under hot water.',
-    whyItMatters: 'If the glaze and clay expand at different rates, you get crazing or shivering — both are defects.'
+    whyItMatters: 'If the glaze and clay expand at different rates, you get crazing or shivering — both are defects.',
+    seeAlso: ['fit', 'crazing', 'shivering', 'na2o', 'k2o'],
   }],
   ['fit', {
     term: 'Fit',
     plain: 'How well a glaze\'s thermal expansion matches the clay body underneath. Good fit means no crazing or shivering.',
     analogy: 'Like matching a lid to a pot — they need to be the same size.',
-    whyItMatters: 'Poor glaze fit is the #1 cause of defects in functional pottery.'
+    whyItMatters: 'Poor glaze fit is the #1 cause of defects in functional pottery.',
+    seeAlso: ['thermal expansion', 'crazing', 'shivering'],
   }],
   ['crazing', {
     term: 'Crazing',
     plain: 'A network of fine cracks in the glaze surface caused by the glaze contracting more than the clay body during cooling.',
-    whyItMatters: 'Crazed pots aren\'t food-safe and can leak. It\'s the most common glaze defect.'
+    whyItMatters: 'Crazed pots aren\'t food-safe and can leak. It\'s the most common glaze defect.',
+    seeAlso: ['fit', 'thermal expansion', 'shivering'],
   }],
   ['crawling', {
     term: 'Crawling',
     plain: 'A defect where the glaze pulls away from the clay surface during firing, leaving bare patches. Often caused by dust, oil, or too-thick application.',
     analogy: 'Like water beading up on a waxed car — the glaze doesn\'t want to stick.',
-    whyItMatters: 'Crawling ruins the look of a piece and exposes bare clay. It\'s usually preventable with clean technique.'
+    whyItMatters: 'Crawling ruins the look of a piece and exposes bare clay. It\'s usually preventable with clean technique.',
+    seeAlso: ['kaolin', 'bentonite', 'bisque'],
   }],
   ['pinholing', {
     term: 'Pinholing',
     plain: 'Tiny holes in the fired glaze surface, caused by gases escaping from the clay body during firing.',
-    whyItMatters: 'Pinholes trap food and bacteria, making a piece unsuitable for functional use.'
+    whyItMatters: 'Pinholes trap food and bacteria, making a piece unsuitable for functional use.',
+    seeAlso: ['loi', 'soak', 'blistering', 'whiting'],
   }],
   ['blistering', {
     term: 'Blistering',
     plain: 'Bubbles or craters in the glaze surface, caused by gases escaping too late in the firing when the glaze is already sealing over.',
-    whyItMatters: 'Blistering is a sign of firing too fast or applying glaze too thick. Slowing down the firing often fixes it.'
+    whyItMatters: 'Blistering is a sign of firing too fast or applying glaze too thick. Slowing down the firing often fixes it.',
+    seeAlso: ['pinholing', 'ramp rate', 'soak'],
   }],
   ['running', {
     term: 'Running',
     plain: 'When a glaze melts too much and flows down the pot, sometimes dripping onto the kiln shelf.',
     analogy: 'Like icing sliding off a warm cake.',
-    whyItMatters: 'Running glaze can permanently bond your pot to the kiln shelf — an expensive mistake.'
+    whyItMatters: 'Running glaze can permanently bond your pot to the kiln shelf — an expensive mistake.',
+    seeAlso: ['stabilizer', 'al2o3', 'kiln wash', 'crystalline'],
   }],
   ['stoneware', {
     term: 'Stoneware',
     plain: 'A strong, dense clay body fired at mid to high temperatures. It\'s the standard for functional pottery.',
-    whyItMatters: 'Stoneware is durable, food-safe, and the most popular choice for everyday dishes and mugs.'
+    whyItMatters: 'Stoneware is durable, food-safe, and the most popular choice for everyday dishes and mugs.',
+    seeAlso: ['mid-fire', 'high-fire', 'porcelain', 'earthenware', 'vitrification'],
   }],
   ['porcelain', {
     term: 'Porcelain',
     plain: 'A white, translucent clay body fired at high temperatures. Made primarily from kaolin, it\'s prized for its beauty but is tricky to work with.',
     analogy: 'The "fine linen" of ceramics — elegant but demanding.',
-    whyItMatters: 'Porcelain shows glaze colors at their purest and can be thrown very thin, but it warps and cracks easily.'
+    whyItMatters: 'Porcelain shows glaze colors at their purest and can be thrown very thin, but it warps and cracks easily.',
+    seeAlso: ['kaolin', 'high-fire', 'stoneware', 'vitrification'],
   }],
   ['earthenware', {
     term: 'Earthenware',
     plain: 'A porous, low-fire clay body. Terra cotta is the most familiar example. It stays porous unless glazed.',
-    whyItMatters: 'Earthenware is the easiest clay to work with and fires in any kiln, but it\'s less durable than stoneware.'
+    whyItMatters: 'Earthenware is the easiest clay to work with and fires in any kiln, but it\'s less durable than stoneware.',
+    seeAlso: ['low-fire', 'stoneware', 'majolica'],
   }],
   ['kiln', {
     term: 'Kiln',
     plain: 'A high-temperature oven designed for firing ceramics. They can be electric, gas, or wood-fired.',
     analogy: 'Like a kitchen oven, but reaching 10x the temperature.',
-    whyItMatters: 'The kiln type determines what atmospheres and temperatures you can reach, which determines your glazes.'
+    whyItMatters: 'The kiln type determines what atmospheres and temperatures you can reach, which determines your glazes.',
+    seeAlso: ['atmosphere', 'cone', 'bisque', 'glaze fire'],
   }],
   ['bisque', {
     term: 'Bisque',
     plain: 'The first firing of raw clay (greenware), typically to around cone 06. It makes the clay hard but still porous enough to absorb glaze.',
     analogy: 'Like par-baking a pie crust — partially cooked to prepare it for the next step.',
-    whyItMatters: 'Bisque firing is essential — it burns out organics and makes the clay strong enough to handle during glazing.'
+    whyItMatters: 'Bisque firing is essential — it burns out organics and makes the clay strong enough to handle during glazing.',
+    seeAlso: ['greenware', 'glaze fire', 'kiln'],
   }],
   ['glaze fire', {
     term: 'Glaze Fire',
     plain: 'The second (and usually final) firing, where the glaze melts and fuses to the clay body.',
-    whyItMatters: 'This is the firing that determines the final look and feel of your piece.'
+    whyItMatters: 'This is the firing that determines the final look and feel of your piece.',
+    seeAlso: ['bisque', 'firing schedule', 'soak', 'cone'],
   }],
   ['cone 6', {
     term: 'Cone 6',
-    plain: 'A specific heat-work level, roughly 1220 °C (2230 °F). The most popular temperature for studio pottery.',
+    plain: 'A specific heat-work level, roughly 1220 °C. The most popular temperature for studio pottery.',
     whyItMatters: 'Cone 6 is the sweet spot — most electric kilns reach it easily, and there are thousands of tested recipes.'
   }],
   ['cone 10', {
     term: 'Cone 10',
-    plain: 'A high-fire heat-work level, roughly 1300 °C (2380 °F). Common in gas kilns and academic programs.',
+    plain: 'A high-fire heat-work level, roughly 1300 °C. Common in gas kilns and academic programs.',
     whyItMatters: 'Cone 10 produces the strongest ware and allows reduction firing for unique glaze effects.'
   }],
   ['underglaze', {
@@ -263,7 +306,8 @@ export const glossary = new Map<string, GlossaryEntry>([
     term: 'Dipping',
     plain: 'A glazing technique where bisqueware is submerged in a bucket of liquid glaze for a few seconds.',
     analogy: 'Like dipping a strawberry in chocolate — quick, even, and satisfying.',
-    whyItMatters: 'Dipping is the fastest way to apply an even coat of glaze and is the standard method in most studios.'
+    whyItMatters: 'Dipping is the fastest way to apply an even coat of glaze and is the standard method in most studios.',
+    seeAlso: ['specific gravity', 'layering', 'brushing', 'spraying'],
   }],
   ['batch weight', {
     term: 'Batch Weight',
@@ -303,22 +347,621 @@ export const glossary = new Map<string, GlossaryEntry>([
   }],
   ['cone 4', {
     term: 'Cone 4',
-    plain: 'A heat-work level of roughly 1160 °C (2120 °F). Sits at the low end of mid-fire.',
+    plain: 'A heat-work level of roughly 1160 °C. Sits at the low end of mid-fire.',
     whyItMatters: 'Some studio potters fire to cone 4 for brighter colors while still achieving reasonable durability.'
   }],
   ['cone 5', {
     term: 'Cone 5',
-    plain: 'A heat-work level of roughly 1180 °C (2160 °F). Often paired with cone 6 — many glazes work across the cone 5–6 range.',
+    plain: 'A heat-work level of roughly 1180 °C. Often paired with cone 6 — many glazes work across the cone 5–6 range.',
     whyItMatters: 'Cone 5 gives you access to most cone 6 glazes with slightly lower energy cost.'
   }],
   ['cone 8', {
     term: 'Cone 8',
-    plain: 'A heat-work level of roughly 1260 °C (2300 °F). The lower boundary of high-fire.',
+    plain: 'A heat-work level of roughly 1260 °C. The lower boundary of high-fire.',
     whyItMatters: 'Cone 8 is where stoneware really vitrifies. Many gas kilns target cone 8–10 for their firings.'
   }],
   ['cone 9', {
     term: 'Cone 9',
-    plain: 'A heat-work level of roughly 1280 °C (2340 °F). Common in university and professional gas kiln programs.',
-    whyItMatters: 'Cone 9 reduction is a classic combination — the temperature and atmosphere produce deep, rich surfaces.'
+    plain: 'A heat-work level of roughly 1280 °C. Common in university and professional gas kiln programs.',
+    whyItMatters: 'Cone 9 reduction is a classic combination — the temperature and atmosphere produce deep, rich surfaces.',
+    seeAlso: ['high-fire', 'reduction', 'cone 10'],
+  }],
+
+  // ── OXIDE NAMES ─────────────────────────────────────────────────────────────
+  ['sio2', {
+    term: 'SiO\u2082 (Silica)',
+    plain: 'Silicon dioxide — the primary glass-forming oxide in every glaze. It creates the hard, glassy surface and is the single most abundant oxide in almost all ceramic glazes.',
+    analogy: 'The flour in a cake — it provides the main structure that everything else modifies.',
+    whyItMatters: 'More SiO\u2082 means a harder, more durable, more acid-resistant glaze. Too much and the glaze won\'t melt; too little and it\'s soft and easily scratched.',
+    seeAlso: ['glass former', 'silica', 'umf'],
+  }],
+  ['al2o3', {
+    term: 'Al\u2082O\u2083 (Alumina)',
+    plain: 'Aluminium oxide — the main stabilizer in glazes. It stiffens the melt so the glaze stays on the pot instead of running off.',
+    analogy: 'Like thickening a soup — it keeps things from flowing where you don\'t want them.',
+    whyItMatters: 'Alumina controls whether your glaze runs, goes matte, or stays glossy. It\'s the second most important oxide after silica.',
+    seeAlso: ['stabilizer', 'kaolin', 'running', 'matte'],
+  }],
+  ['b2o3', {
+    term: 'B\u2082O\u2083 (Boron Oxide)',
+    plain: 'Boron oxide — a powerful flux that also acts as a glass former at low and mid-fire temperatures. It\'s the key ingredient in most ceramic frits.',
+    analogy: 'A secret weapon that does two jobs — it melts things and forms glass at the same time.',
+    whyItMatters: 'Boron makes low-fire and mid-fire glazes possible. Without it, you\'d need much higher temperatures to melt a glaze.',
+    seeAlso: ['frit', 'flux', 'low-fire', 'mid-fire'],
+  }],
+  ['cao', {
+    term: 'CaO (Calcium Oxide)',
+    plain: 'Calcium oxide, also called calcia or quicklime. The most common flux in mid- and high-fire glazes. It promotes a hard, durable glass and brightens colors.',
+    whyItMatters: 'CaO is the workhorse flux — it\'s in nearly every stoneware glaze. It creates strong, scratch-resistant surfaces.',
+    seeAlso: ['whiting', 'wollastonite', 'flux'],
+  }],
+  ['mgo', {
+    term: 'MgO (Magnesium Oxide)',
+    plain: 'Magnesium oxide, also called magnesia. A high-fire flux that produces smooth, buttery matte surfaces when used in sufficient quantity.',
+    analogy: 'Like adding cream to coffee — it softens and smooths the result.',
+    whyItMatters: 'MgO is the key to silky matte glazes. It also has very low thermal expansion, which helps prevent crazing.',
+    seeAlso: ['dolomite', 'talc', 'matte', 'thermal expansion'],
+  }],
+  ['k2o', {
+    term: 'K\u2082O (Potassium Oxide)',
+    plain: 'Potassium oxide, also called potash. An alkali flux primarily contributed by potash feldspar. It has high thermal expansion.',
+    whyItMatters: 'K\u2082O is a strong melter but raises thermal expansion — too much can cause crazing. It\'s usually paired with Na\u2082O in the KNaO metric.',
+    seeAlso: ['na2o', 'feldspar', 'flux', 'crazing', 'thermal expansion'],
+  }],
+  ['na2o', {
+    term: 'Na\u2082O (Sodium Oxide)',
+    plain: 'Sodium oxide, also called soda. The strongest common flux with the highest thermal expansion of any glaze oxide. Contributed by soda feldspar, nepheline syenite, and many frits.',
+    whyItMatters: 'Na\u2082O is a powerful melter but the #1 cause of crazing. Managing sodium is key to good glaze fit.',
+    seeAlso: ['k2o', 'feldspar', 'crazing', 'thermal expansion', 'flux'],
+  }],
+  ['li2o', {
+    term: 'Li\u2082O (Lithium Oxide)',
+    plain: 'Lithium oxide — a very powerful flux with unusually low thermal expansion for an alkali oxide. Small amounts have dramatic effects on melting.',
+    whyItMatters: 'Li\u2082O brightens colors and reduces crazing while being a strong flux. It\'s expensive but a little goes a long way.',
+    seeAlso: ['flux', 'thermal expansion', 'spodumene'],
+  }],
+  ['zno', {
+    term: 'ZnO (Zinc Oxide)',
+    plain: 'Zinc oxide — a mid-fire flux that promotes crystalline and matte surfaces. It can also mute or shift colors from certain stains.',
+    whyItMatters: 'Zinc creates unique surface textures and crystal growth, but it interferes with many commercial ceramic stains — check compatibility.',
+    seeAlso: ['crystalline', 'flux', 'opacifier'],
+  }],
+  ['bao', {
+    term: 'BaO (Barium Oxide)',
+    plain: 'Barium oxide — a flux that produces unique dry, crawled matte surfaces. Contributed by barium carbonate, which is toxic in raw form.',
+    whyItMatters: 'BaO creates distinctive surfaces no other flux can match, but barium is toxic — never use it in functional ware without thorough leach testing.',
+    seeAlso: ['flux', 'matte'],
+  }],
+  ['sro', {
+    term: 'SrO (Strontium Oxide)',
+    plain: 'Strontium oxide — a flux similar to CaO and BaO. It sits between them in thermal expansion and can substitute for barium without the toxicity.',
+    whyItMatters: 'SrO is a safer alternative to BaO that can produce similar surface effects. It\'s gaining popularity as potters move away from barium.',
+    seeAlso: ['bao', 'cao', 'flux'],
+  }],
+  ['fe2o3', {
+    term: 'Fe\u2082O\u2083 (Iron Oxide)',
+    plain: 'Iron oxide — the most versatile and commonly used colorant in ceramics. It produces colors ranging from pale celadon green to deep tenmoku black depending on amount and atmosphere.',
+    analogy: 'The "salt and pepper" of ceramic colorants — it\'s everywhere and does something different every time.',
+    whyItMatters: 'Iron is cheap, abundant, and produces an enormous range of colors. It\'s also a flux at high percentages, which can cause running.',
+    seeAlso: ['reduction', 'oxidation', 'colorant'],
+  }],
+  ['tio2', {
+    term: 'TiO\u2082 (Titanium Dioxide)',
+    plain: 'Titanium dioxide — an opacifier and variegation agent. It creates milky, opalescent effects and breaks into crystals during cooling.',
+    whyItMatters: 'TiO\u2082 produces beautiful crystalline variations and color-breaking effects, especially over iron-bearing glazes.',
+    seeAlso: ['rutile', 'opacifier', 'variegated'],
+  }],
+  ['zro2', {
+    term: 'ZrO\u2082 (Zirconium Dioxide)',
+    plain: 'Zirconium dioxide, also called zirconia. The primary opacifying oxide in ceramics, contributed by zirconium silicate (Zircopax).',
+    whyItMatters: 'ZrO\u2082 makes glazes opaque and white. It\'s the most cost-effective opacifier and doesn\'t affect other colors as much as tin oxide.',
+    seeAlso: ['opacifier', 'opaque', 'sno2'],
+  }],
+  ['coo', {
+    term: 'CoO (Cobalt Oxide)',
+    plain: 'Cobalt oxide — the strongest and most reliable blue colorant in ceramics. Even tiny amounts (0.25%) produce intense blue.',
+    whyItMatters: 'Cobalt is uniquely stable across all temperatures and atmospheres. It\'s expensive but produces blues no other oxide can match.',
+    seeAlso: ['colorant', 'oxidation', 'reduction'],
+  }],
+  ['cuo', {
+    term: 'CuO (Copper Oxide)',
+    plain: 'Copper oxide — a versatile colorant that produces green in oxidation, red in reduction, and metallic lusters in raku. One of the most atmosphere-sensitive colorants.',
+    whyItMatters: 'Copper is exciting because it changes dramatically with atmosphere — greens, reds, and lusters all from the same oxide.',
+    seeAlso: ['colorant', 'oxidation', 'reduction', 'raku'],
+  }],
+  ['mno', {
+    term: 'MnO (Manganese Oxide)',
+    plain: 'Manganese oxide — a colorant that produces browns, purples, and pinks depending on the glaze base and firing conditions.',
+    whyItMatters: 'Manganese is a useful colorant but releases fumes during firing — good ventilation is essential.',
+    seeAlso: ['colorant', 'mno2'],
+  }],
+  ['mno2', {
+    term: 'MnO\u2082 (Manganese Dioxide)',
+    plain: 'Manganese dioxide — a stronger form of manganese colorant that also acts as a glass former in UMF calculations. Produces dark brown to black speckle.',
+    whyItMatters: 'MnO\u2082 is the standard form for manganese speckling. It gasses heavily during firing — always ventilate the kiln room.',
+    seeAlso: ['colorant', 'mno'],
+  }],
+  ['cr2o3', {
+    term: 'Cr\u2082O\u2083 (Chromium Oxide)',
+    plain: 'Chromium oxide — a colorant that produces green, but turns pink or red when tin oxide is present in the glaze. Very small amounts (<0.5%) create pink with tin.',
+    whyItMatters: 'Chrome-tin pinks are one of the most beautiful glaze effects, but chrome can also cause brown spots in other glazes fired nearby.',
+    seeAlso: ['colorant', 'sno2'],
+  }],
+  ['nio', {
+    term: 'NiO (Nickel Oxide)',
+    plain: 'Nickel oxide — a colorant producing grey, brown, blue, or green depending on the glaze base and other oxides present. Often used as a modifier rather than a primary color.',
+    whyItMatters: 'Nickel is unpredictable on its own but excellent for muting or shifting other colorants. It produces unique greys in magnesia-rich glazes.',
+    seeAlso: ['colorant', 'mgo'],
+  }],
+  ['sno2', {
+    term: 'SnO\u2082 (Tin Oxide)',
+    plain: 'Tin oxide — the traditional opacifier for majolica and white glazes. It produces a softer, warmer white than zirconium silicate.',
+    whyItMatters: 'Tin creates the finest opaque whites and is essential for chrome-tin pink effects. It\'s expensive but unmatched for quality.',
+    seeAlso: ['opacifier', 'opaque', 'zro2', 'cr2o3'],
+  }],
+  ['pbo', {
+    term: 'PbO (Lead Oxide)',
+    plain: 'Lead oxide — a historically important flux that produces brilliant, smooth surfaces. HIGHLY TOXIC and no longer used in functional ware.',
+    whyItMatters: 'Lead glazes are part of ceramic history but pose serious health risks. Modern frits can achieve similar results safely.',
+    seeAlso: ['flux', 'frit'],
+  }],
+  ['p2o5', {
+    term: 'P\u2082O\u2085 (Phosphorus Pentoxide)',
+    plain: 'Phosphorus pentoxide — contributed by bone ash and some wood ashes. It creates opalescent, milky effects in glazes, especially in reduction.',
+    whyItMatters: 'Phosphorus creates the distinctive blue opalescence in chun/jun glazes and adds a soft milkiness to transparent glazes.',
+    seeAlso: ['ash', 'opacifier'],
+  }],
+
+  // ── FIRING TERMS ────────────────────────────────────────────────────────────
+  ['heat work', {
+    term: 'Heat Work',
+    plain: 'The combined effect of temperature and time during firing. A kiln reaching 1200 °C for two hours does more heat work than one reaching 1200 °C for thirty minutes.',
+    analogy: 'Like slow-cooking versus flash-frying — the same temperature but very different results based on time.',
+    whyItMatters: 'Heat work is why firing schedules matter. Two kilns at the same temperature can produce different results if the soak time differs.',
+    seeAlso: ['cone', 'soak', 'firing schedule'],
+  }],
+  ['soak', {
+    term: 'Soak',
+    plain: 'Holding the kiln at a specific temperature for a period of time, rather than continuing to climb. Also called a "hold."',
+    whyItMatters: 'Soaking gives glazes time to smooth out, heal pinholes, and develop full color. A 15–30 minute soak at peak temperature can dramatically improve results.',
+    seeAlso: ['heat work', 'firing schedule', 'pinholing'],
+  }],
+  ['firing schedule', {
+    term: 'Firing Schedule',
+    plain: 'A programmed sequence of temperature ramps, holds, and cooling rates that controls exactly how a kiln heats up and cools down.',
+    analogy: 'Like a recipe for the kiln itself — telling it when to speed up, slow down, and hold steady.',
+    whyItMatters: 'The right firing schedule prevents defects and develops the best glaze surface. Many problems (pinholes, crawling, dull surfaces) are firing schedule problems.',
+    seeAlso: ['soak', 'heat work', 'ramp rate'],
+  }],
+  ['ramp rate', {
+    term: 'Ramp Rate',
+    plain: 'How fast the kiln temperature rises or falls, measured in degrees per hour. Controllers let you set different ramp rates for different segments of the firing.',
+    whyItMatters: 'Ramping too fast can cause thermal shock (cracking), bloating, or trapping gases that cause pinholes. Slower is usually safer.',
+    seeAlso: ['firing schedule', 'thermal shock'],
+  }],
+  ['thermal shock', {
+    term: 'Thermal Shock',
+    plain: 'Stress caused by rapid temperature changes that can crack or shatter ceramic ware. It happens when one part of a piece expands or contracts faster than another.',
+    analogy: 'Like pouring boiling water into a cold glass — the sudden temperature difference can crack it.',
+    whyItMatters: 'Thermal shock cracks pots during firing and during daily use (like pouring hot coffee into a cold mug). Good clay bodies and glaze fit reduce the risk.',
+    seeAlso: ['ramp rate', 'fit'],
+  }],
+  ['kiln wash', {
+    term: 'Kiln Wash',
+    plain: 'A refractory coating painted on kiln shelves to prevent melted glaze from permanently bonding to them. Usually made from alumina hydrate and kaolin.',
+    whyItMatters: 'Kiln wash saves your shelves from glaze drips and makes cleanup much easier. Reapply it regularly.',
+    seeAlso: ['kiln', 'running'],
+  }],
+  ['greenware', {
+    term: 'Greenware',
+    plain: 'Unfired clay that has been shaped but not yet fired. It\'s fragile and will dissolve if it gets wet.',
+    analogy: 'Like unbaked cookie dough — it holds its shape but falls apart easily.',
+    whyItMatters: 'Greenware must be fully dry before firing or trapped moisture will turn to steam and explode the piece.',
+    seeAlso: ['bisque', 'bone dry'],
+  }],
+  ['bone dry', {
+    term: 'Bone Dry',
+    plain: 'The state of clay when all mechanical water has evaporated. The piece feels room temperature to the touch (no longer cool from evaporation).',
+    whyItMatters: 'Pieces must be bone dry before going into the kiln. Even small amounts of trapped moisture can cause explosions.',
+    seeAlso: ['greenware', 'bisque'],
+  }],
+  ['vitrification', {
+    term: 'Vitrification',
+    plain: 'The process of clay becoming glass-like and non-porous during high-temperature firing. The clay particles fuse together and the body densifies.',
+    analogy: 'Like sintering metal powder — individual particles merge into a solid mass.',
+    whyItMatters: 'Fully vitrified clay is waterproof even without glaze. Stoneware and porcelain are typically vitrified; earthenware is not.',
+    seeAlso: ['stoneware', 'porcelain', 'earthenware'],
+  }],
+  ['shivering', {
+    term: 'Shivering',
+    plain: 'A defect where the glaze is under too much compression and flakes or chips off the clay body. The opposite of crazing.',
+    whyItMatters: 'Shivering is dangerous on functional ware — glaze chips can end up in food. It\'s less common than crazing but harder to see.',
+    seeAlso: ['crazing', 'fit', 'thermal expansion'],
+  }],
+  ['dunting', {
+    term: 'Dunting',
+    plain: 'Cracking caused by cooling the kiln too quickly through critical temperature ranges (especially around 573 °C and 226 °C, the quartz and cristobalite inversions).',
+    whyItMatters: 'Dunting cracks are clean breaks that happen inside the kiln. Slowing the cooling rate through these danger zones prevents it.',
+    seeAlso: ['thermal shock', 'firing schedule', 'sio2'],
+  }],
+  ['colorant', {
+    term: 'Colorant',
+    plain: 'A metal oxide added to a glaze to produce color. Common colorants include iron (browns/reds/greens), cobalt (blue), copper (green/red), and manganese (brown/purple).',
+    whyItMatters: 'Colorants are what make glazes visually interesting. Understanding how they behave in different atmospheres and bases is a core ceramics skill.',
+    seeAlso: ['fe2o3', 'coo', 'cuo', 'cr2o3', 'oxidation', 'reduction'],
+  }],
+  ['stain', {
+    term: 'Stain (Ceramic Stain)',
+    plain: 'A manufactured, pre-reacted pigment that produces consistent colors in glazes. Unlike raw oxide colorants, stains are engineered for stability and predictability.',
+    analogy: 'Like using food coloring instead of real saffron — reliable and repeatable.',
+    whyItMatters: 'Stains give you access to colors (bright reds, oranges, pinks) that raw oxides can\'t produce reliably. Check compatibility with zinc and tin.',
+    seeAlso: ['colorant', 'zno'],
+  }],
+
+  // ── APPLICATION TERMS ───────────────────────────────────────────────────────
+  ['specific gravity', {
+    term: 'Specific Gravity',
+    plain: 'The ratio of a glaze slurry\'s weight to the weight of an equal volume of water. It tells you how thick or thin your mixed glaze is. Typical range: 1.40–1.55 for dipping.',
+    analogy: 'Like checking if pancake batter is the right consistency — too thin drips off, too thick clumps.',
+    whyItMatters: 'Getting specific gravity right is essential for even glaze application. Too thin = bare spots, too thick = crawling and running.',
+    seeAlso: ['dipping', 'crawling', 'running'],
+  }],
+  ['layering', {
+    term: 'Layering',
+    plain: 'Applying two or more different glazes on top of each other on the same piece. The interaction between layers can create effects neither glaze produces alone.',
+    analogy: 'Like layering different colored nail polishes — each layer changes the final look.',
+    whyItMatters: 'Layering is how potters create complex, unique surfaces. But too many layers or incompatible glazes can cause crawling or running.',
+    seeAlso: ['dipping', 'running', 'crawling', 'specific gravity'],
+  }],
+  ['brushing', {
+    term: 'Brushing',
+    plain: 'Applying glaze with a brush, usually in 2–3 coats. Requires a thicker glaze consistency than dipping and takes more time but offers precise control.',
+    whyItMatters: 'Brushing gives you the most control over where glaze goes and is ideal for detailed work, touch-ups, and small studios without big buckets.',
+    seeAlso: ['dipping', 'spraying', 'specific gravity'],
+  }],
+  ['spraying', {
+    term: 'Spraying',
+    plain: 'Applying glaze with a spray gun or airbrush. Produces the most even coat and allows very fine control of thickness, but requires a spray booth for safety.',
+    whyItMatters: 'Spraying is the professional standard for even coverage, especially on large pieces or complex shapes that are hard to dip.',
+    seeAlso: ['dipping', 'brushing', 'specific gravity'],
+  }],
+  ['wax resist', {
+    term: 'Wax Resist',
+    plain: 'A waxy emulsion applied to areas of a pot where you don\'t want glaze to stick — typically the foot ring and bottom. The wax repels the liquid glaze.',
+    analogy: 'Like masking tape when painting a wall — it protects the areas you want to keep clean.',
+    whyItMatters: 'Wax resist keeps the foot ring clean so your pot doesn\'t stick to the kiln shelf, and it\'s also used as a decorative technique.',
+    seeAlso: ['kiln wash', 'dipping'],
+  }],
+  ['deflocculant', {
+    term: 'Deflocculant',
+    plain: 'A chemical (like sodium silicate or Darvan) added in tiny amounts to a glaze or slip to thin it without adding water. It works by changing the electrical charge on clay particles.',
+    analogy: 'Like dish soap breaking up grease — a tiny amount makes particles let go of each other.',
+    whyItMatters: 'Deflocculation lets you achieve the right specific gravity with less water, which means less shrinkage and fewer drying defects.',
+    seeAlso: ['specific gravity', 'slip'],
+  }],
+  ['spodumene', {
+    term: 'Spodumene',
+    plain: 'A lithium-bearing mineral (LiAlSi\u2082O\u2086) used as a source of lithium oxide in glazes. It also contributes significant alumina and silica.',
+    whyItMatters: 'Spodumene is a less expensive way to add lithium than lithium carbonate, and the extra alumina and silica it brings often help the glaze.',
+    seeAlso: ['li2o', 'flux', 'feldspar'],
+  }],
+  ['rutile', {
+    term: 'Rutile',
+    plain: 'A naturally occurring titanium dioxide mineral with iron impurities. Unlike pure TiO\u2082, it produces warm, variegated, crystalline effects that vary batch to batch.',
+    analogy: 'Like using unrefined sea salt instead of pure table salt — the impurities are part of the character.',
+    whyItMatters: 'Rutile is one of the most-loved glaze additives for creating visual depth and warmth. Its natural variation makes each piece unique.',
+    seeAlso: ['tio2', 'variegated', 'colorant'],
+  }],
+  ['wollastonite', {
+    term: 'Wollastonite',
+    plain: 'A calcium silicate mineral (CaSiO\u2083) that provides calcium oxide without the high LOI of whiting. It also contributes silica to the recipe.',
+    whyItMatters: 'Wollastonite is a direct substitute for whiting that reduces pinholing risk because it releases almost no gas during firing.',
+    seeAlso: ['cao', 'whiting', 'loi', 'pinholing'],
+  }],
+  ['dolomite', {
+    term: 'Dolomite',
+    plain: 'A mineral that provides both calcium and magnesium in a single material. It has very high LOI (46.6%) because it releases CO\u2082 gas during firing.',
+    whyItMatters: 'Dolomite is the standard way to get MgO into mid- and high-fire glazes for silky matte effects. Fire slowly to avoid pinholes from its high gas release.',
+    seeAlso: ['cao', 'mgo', 'matte', 'loi', 'pinholing'],
+  }],
+  ['talc', {
+    term: 'Talc',
+    plain: 'A magnesium silicate mineral used in glazes and clay bodies. It\'s a major source of MgO and also contributes significant SiO\u2082.',
+    whyItMatters: 'Talc is the other main way to add magnesia, and it brings silica along for the ride. It\'s essential in many matte and satin glazes.',
+    seeAlso: ['mgo', 'matte', 'satin'],
+  }],
+  ['nepheline syenite', {
+    term: 'Nepheline Syenite',
+    plain: 'A sodium-potassium alumino-silicate mineral that melts at lower temperatures than feldspar. It\'s a powerful flux for mid-fire glazes.',
+    whyItMatters: 'Nepheline syenite brings a lot of sodium, so it melts aggressively. Great for getting mid-fire glazes to mature, but watch for crazing.',
+    seeAlso: ['feldspar', 'na2o', 'flux', 'crazing'],
+  }],
+  ['bentonite', {
+    term: 'Bentonite',
+    plain: 'A highly plastic clay used in tiny amounts (1-3%) as a suspension agent in glazes. It swells enormously in water and keeps heavier particles from settling.',
+    analogy: 'Like adding a thickener to salad dressing — a tiny amount keeps everything suspended.',
+    whyItMatters: 'Bentonite prevents your glaze from turning into a rock at the bottom of the bucket. Essential in glazes with few clay materials.',
+    seeAlso: ['ball clay', 'kaolin'],
+  }],
+  ['celadon', {
+    term: 'Celadon',
+    plain: 'A family of glazes historically associated with Chinese and Korean ceramics, characterized by subtle blue-green color from small amounts of iron fired in reduction.',
+    whyItMatters: 'Celadon is one of the most revered glaze traditions. Understanding it means understanding iron, reduction, and the interplay of chemistry and atmosphere.',
+    seeAlso: ['reduction', 'fe2o3', 'high-fire'],
+  }],
+  ['tenmoku', {
+    term: 'Tenmoku',
+    plain: 'A family of iron-rich glazes (8-12% iron oxide) that produce dark brown-black surfaces, often with rust-colored breaks over edges and texture.',
+    analogy: 'Like dark chocolate — rich, deep, and complex.',
+    whyItMatters: 'Tenmoku is one of the most classic high-fire glaze families. The way it breaks over edges reveals the form of the pot beautifully.',
+    seeAlso: ['fe2o3', 'high-fire', 'reduction'],
+  }],
+  ['shino', {
+    term: 'Shino',
+    plain: 'A family of glazes originating in Japan, typically made with nepheline syenite or soda ash. Known for thick, orange-peel textures and carbon trapping effects.',
+    whyItMatters: 'Shino glazes produce surfaces with incredible depth and warmth. Each piece is unique, especially when carbon trapping is achieved.',
+    seeAlso: ['carbon trapping', 'nepheline syenite', 'soda ash'],
+  }],
+  ['soda ash', {
+    term: 'Soda Ash',
+    plain: 'Sodium carbonate (Na\u2082CO\u2083) — a soluble sodium source used in shino glazes and soda firing. Because it dissolves in water, it migrates to the glaze surface as it dries.',
+    whyItMatters: 'Soda ash is essential for carbon trapping in shino glazes. Its solubility creates unique surface patterns as the glaze dries before firing.',
+    seeAlso: ['na2o', 'shino', 'carbon trapping'],
+  }],
+  ['majolica', {
+    term: 'Majolica',
+    plain: 'A low-fire decoration technique using an opaque white glaze as a canvas for painting colorful designs with oxide-based pigments.',
+    analogy: 'Like painting on a white plate — the opaque glaze is your canvas.',
+    whyItMatters: 'Majolica is one of the most accessible and visually striking ceramic traditions. It\'s great for beginners who want to paint on pottery.',
+    seeAlso: ['low-fire', 'opacifier', 'sno2'],
+  }],
+  ['soda firing', {
+    term: 'Soda Firing',
+    plain: 'A kiln firing technique where soda ash solution is sprayed into the kiln at peak temperature. The sodium vapour creates a glaze directly on the clay surface.',
+    analogy: 'Like seasoning a pan — the sodium coats everything inside the kiln.',
+    whyItMatters: 'Soda firing creates beautiful, varied surfaces that interact differently with every clay body in the kiln. No two pieces are exactly alike.',
+    seeAlso: ['na2o', 'soda ash', 'atmosphere'],
+  }],
+  ['engobe', {
+    term: 'Engobe',
+    plain: 'A thin clay-based coating applied to a pot before firing. It sits between a slip and a glaze — more refined than slip but not fully glassy like a glaze.',
+    whyItMatters: 'Engobes let you change the color or texture of a clay body without fully glazing it. They\'re especially useful for terra sigillata and burnished surfaces.',
+    seeAlso: ['slip', 'underglaze', 'burnishing'],
+  }],
+
+  // ── OXIDE NAMES (additional) ──────────────────────────────────────────────
+  ['knao', {
+    term: 'KNaO (Combined Alkali)',
+    plain: 'A convenient shorthand that lumps potassium oxide (K\u2082O) and sodium oxide (Na\u2082O) together because they behave almost identically in a glaze melt. UMF calculations often report them as a single number.',
+    analogy: 'Like counting "citrus fruits" instead of separately tracking lemons and limes — they do roughly the same job.',
+    whyItMatters: 'KNaO is the main driver of thermal expansion. High KNaO almost always means crazing risk, so it\u2019s one of the first numbers to check when troubleshooting glaze fit.',
+    seeAlso: ['k2o', 'na2o', 'thermal expansion', 'crazing', 'umf'],
+  }],
+
+  // ── FIRING TERMS (additional) ─────────────────────────────────────────────
+  ['candling', {
+    term: 'Candling',
+    plain: 'A very slow initial heating phase (usually below 100 \u00b0C) at the start of a firing, designed to drive off remaining moisture from ware that may not be completely bone dry.',
+    analogy: 'Like preheating an oven with the door cracked open so condensation can escape before you start baking.',
+    whyItMatters: 'Skipping the candle on damp ware risks steam explosions that can destroy an entire kiln load. When in doubt, candle longer.',
+    seeAlso: ['bone dry', 'greenware', 'firing schedule', 'ramp rate'],
+  }],
+  ['cone pack', {
+    term: 'Cone Pack',
+    plain: 'A small group of pyrometric cones (usually three consecutive numbers) set in a pat of clay and placed where you can see them through the kiln peephole. They bend in sequence to show how the firing is progressing.',
+    analogy: 'Like placing three thermometers in different spots of a roast — you get a picture of progress, not just a single reading.',
+    whyItMatters: 'Cone packs are the gold standard for verifying that your kiln controller is accurate. Electronic controllers drift over time; cones don\u2019t lie.',
+    seeAlso: ['cone', 'pyrometric cone', 'witness cone', 'kiln'],
+  }],
+  ['downdraft', {
+    term: 'Downdraft',
+    plain: 'A kiln design where the flame enters at the bottom, rises to the top, and is pulled back down through the ware to exit at the bottom. This creates more even heat distribution than updraft designs.',
+    analogy: 'Like a convection oven that circulates air — the heat wraps around the ware instead of just blasting past it.',
+    whyItMatters: 'Downdraft kilns produce more uniform results because every piece sees roughly the same heat work. Most modern gas kilns are downdraft.',
+    seeAlso: ['updraft', 'kiln', 'draft'],
+  }],
+  ['draft', {
+    term: 'Draft',
+    plain: 'The natural flow of air through a kiln, created by the chimney pulling hot gases upward. Adjusting the damper controls draft, which controls atmosphere and temperature distribution.',
+    analogy: 'Like adjusting the flue on a fireplace — more draft means more air and a hotter, cleaner burn.',
+    whyItMatters: 'Draft control is how gas kiln firers manage atmosphere. Closing the damper reduces draft and creates reduction; opening it increases airflow for oxidation.',
+    seeAlso: ['downdraft', 'updraft', 'atmosphere', 'reduction', 'oxidation'],
+  }],
+  ['kiln sitter', {
+    term: 'Kiln Sitter',
+    plain: 'A mechanical shut-off device that uses a small pyrometric cone bar to turn off the kiln when the cone bends at the target temperature. Common on older electric kilns without digital controllers.',
+    analogy: 'Like a pop-up timer in a turkey — when it\u2019s done, it trips.',
+    whyItMatters: 'Kiln sitters are simple and reliable but can\u2019t control ramp rates or soaking. They\u2019re being replaced by digital controllers, but many studios still use them.',
+    seeAlso: ['pyrometric cone', 'cone', 'kiln', 'firing schedule'],
+  }],
+  ['pyrometric cone', {
+    term: 'Pyrometric Cone',
+    plain: 'A small pyramid made of ceramic materials formulated to bend at a precise heat-work level. They are placed in the kiln to visually confirm that the correct amount of heat work has been achieved.',
+    analogy: 'Like a wax crayon that melts at a known temperature — it\u2019s a one-use heat-work indicator.',
+    whyItMatters: 'Pyrometric cones are the most reliable way to verify firing conditions. They integrate time and temperature, which a thermocouple alone cannot do.',
+    seeAlso: ['cone', 'cone pack', 'witness cone', 'heat work', 'thermocouple'],
+  }],
+  ['thermocouple', {
+    term: 'Thermocouple',
+    plain: 'A sensor made of two different metal wires joined at one end. When heated, the junction generates a tiny voltage proportional to the temperature, which the kiln controller reads.',
+    analogy: 'Like a digital meat thermometer that gives you an instant temperature reading.',
+    whyItMatters: 'Thermocouples are how digital kiln controllers know the current temperature. They degrade over time and can read low, so always verify with pyrometric cones.',
+    seeAlso: ['pyrometric cone', 'kiln', 'firing schedule'],
+  }],
+  ['updraft', {
+    term: 'Updraft',
+    plain: 'A kiln design where the flame enters at the bottom and exits directly out the top. Simple and inexpensive to build, but the top is usually hotter than the bottom.',
+    analogy: 'Like a chimney — heat rises straight up and out.',
+    whyItMatters: 'Updraft kilns are easier to build and maintain, but the temperature difference between top and bottom shelves can be significant. Great for learning kiln building.',
+    seeAlso: ['downdraft', 'kiln', 'draft'],
+  }],
+  ['ventilation', {
+    term: 'Ventilation',
+    plain: 'The system that exhausts kiln fumes from the firing room. Electric kilns need a powered vent or downdraft vent system; gas kilns vent through their chimney.',
+    whyItMatters: 'Kiln fumes contain carbon monoxide and metal oxide vapours that are harmful to breathe. Proper ventilation is a non-negotiable safety requirement.',
+    seeAlso: ['kiln', 'oxidation', 'reduction'],
+  }],
+  ['witness cone', {
+    term: 'Witness Cone',
+    plain: 'A pyrometric cone placed in the kiln to provide a permanent record of the heat work achieved during a specific firing. Often kept with firing notes for reference.',
+    analogy: 'Like keeping a receipt — it\u2019s proof of what actually happened in the kiln.',
+    whyItMatters: 'Witness cones help you compare firings over time. If a glaze looked different in two firings, the witness cones show whether the heat work was the same.',
+    seeAlso: ['pyrometric cone', 'cone pack', 'cone', 'heat work'],
+  }],
+
+  // ── APPLICATION TERMS (additional) ────────────────────────────────────────
+  ['banding wheel', {
+    term: 'Banding Wheel',
+    plain: 'A small, manually spun turntable used for glazing, decorating, and inspecting pottery. Unlike a potter\u2019s wheel, it\u2019s not motorized and spins freely on a bearing.',
+    analogy: 'Like a lazy Susan — you spin it by hand while working on the piece.',
+    whyItMatters: 'A banding wheel makes it easy to apply even bands of glaze or underglaze and to inspect a piece from all angles without picking it up.',
+    seeAlso: ['brushing', 'underglaze', 'dipping'],
+  }],
+  ['bisque ware', {
+    term: 'Bisque Ware',
+    plain: 'Pottery that has been through its first (bisque) firing. It\u2019s hard enough to handle but still porous enough to absorb liquid glaze.',
+    analogy: 'Like a sponge that\u2019s been baked solid — it holds its shape but still soaks things up.',
+    whyItMatters: 'Bisque ware is the stage at which you apply glaze. Its porosity sucks water out of the glaze slurry, leaving an even coating of dry glaze material on the surface.',
+    seeAlso: ['bisque', 'greenware', 'glaze fire', 'dipping'],
+  }],
+  ['burnishing', {
+    term: 'Burnishing',
+    plain: 'Polishing the surface of leather-hard or dry clay with a smooth tool (like a spoon or stone) to compress the clay particles and create a low sheen without glaze.',
+    analogy: 'Like buffing leather shoes — friction and pressure bring out a natural glow.',
+    whyItMatters: 'Burnished surfaces are beautiful but fragile — the sheen survives low-fire (pit firing, raku) but is destroyed at stoneware temperatures.',
+    seeAlso: ['leather hard', 'engobe', 'raku'],
+  }],
+  ['centering', {
+    term: 'Centering',
+    plain: 'The first step of throwing on the potter\u2019s wheel: forcing the clay into a perfectly symmetrical cone that spins without wobbling.',
+    analogy: 'Like balancing a spinning top — until it\u2019s perfectly centered, nothing else works.',
+    whyItMatters: 'Centering is the hardest skill for beginners to master, but everything else on the wheel depends on it. An off-center start means an uneven pot.',
+    seeAlso: ['throwing', 'wedging'],
+  }],
+  ['chuck', {
+    term: 'Chuck',
+    plain: 'A bisque-fired cylinder or ring used to support a pot upside-down on the wheel during trimming. It holds the pot steady so you can carve the foot ring.',
+    whyItMatters: 'Without a chuck, trimming bowls and enclosed forms is nearly impossible. Every potter needs a few chucks in different sizes.',
+    seeAlso: ['trimming', 'foot ring', 'throwing'],
+  }],
+  ['coil building', {
+    term: 'Coil Building',
+    plain: 'A hand-building technique where long ropes of clay are stacked and joined together to build up the walls of a vessel. One of the oldest methods of making pottery.',
+    analogy: 'Like stacking rings of dough to build a bread bowl — each ring adds height.',
+    whyItMatters: 'Coil building allows you to make forms that are impossible on the wheel — very large pots, asymmetric shapes, and sculptural work.',
+    seeAlso: ['scoring', 'greenware', 'leather hard'],
+  }],
+  ['drape mold', {
+    term: 'Drape Mold',
+    plain: 'A convex form (usually plaster or bisque) over which a slab of clay is draped to take on the mold\u2019s shape. Used for making plates, platters, and shallow bowls.',
+    analogy: 'Like draping fabric over a mannequin — the clay conforms to the shape underneath.',
+    whyItMatters: 'Drape molds let you produce consistent shapes quickly without a wheel. Great for plates, which are notoriously hard to throw evenly.',
+    seeAlso: ['leather hard', 'foot ring'],
+  }],
+  ['extruder', {
+    term: 'Extruder',
+    plain: 'A tool that forces clay through a shaped die to produce consistent cross-section forms — handles, tubes, tiles, and hollow sections.',
+    analogy: 'Like a pasta maker for clay — push it through a die and out comes a perfect shape.',
+    whyItMatters: 'Extruders save enormous time when making handles, tiles, or any form that needs consistent cross-sections. Essential for production pottery.',
+    seeAlso: ['pugmill', 'coil building'],
+  }],
+  ['foot ring', {
+    term: 'Foot Ring',
+    plain: 'The raised ring at the bottom of a pot that it sits on. Created during trimming by carving away clay from the base, leaving a clean ring.',
+    whyItMatters: 'A well-trimmed foot ring lifts the pot off the table, makes it feel lighter, and provides a surface to wax resist before glazing.',
+    seeAlso: ['trimming', 'chuck', 'wax resist', 'kiln wash'],
+  }],
+  ['gallery', {
+    term: 'Gallery (Lid Seat)',
+    plain: 'A recessed ledge on the rim of a pot designed to accept a lid. The lid sits inside the gallery, preventing it from sliding off.',
+    analogy: 'Like a picture frame ledge — it\u2019s a built-in shelf that holds the lid in place.',
+    whyItMatters: 'A well-thrown gallery makes the difference between a lid that fits beautifully and one that wobbles or falls off. It requires precise throwing.',
+    seeAlso: ['throwing', 'trimming'],
+  }],
+  ['grog', {
+    term: 'Grog',
+    plain: 'Pre-fired, ground-up clay (or sometimes sand) added to a clay body to reduce shrinkage, increase thermal shock resistance, and add texture. Available in different mesh sizes from fine to coarse.',
+    analogy: 'Like adding gravel to concrete — it provides structure and prevents cracking.',
+    whyItMatters: 'Grog makes clay more forgiving during drying and firing. Sculptural and raku clays use a lot of grog to survive thermal shock.',
+    seeAlso: ['thermal shock', 'raku', 'stoneware'],
+  }],
+  ['kiln furniture', {
+    term: 'Kiln Furniture',
+    plain: 'The shelves, posts, stilts, and setter plates used inside a kiln to support ware during firing. Made from refractory materials that withstand extreme heat.',
+    whyItMatters: 'Proper kiln furniture setup maximizes the number of pieces you can fire and ensures even heat circulation. Broken shelves can ruin an entire load.',
+    seeAlso: ['kiln', 'kiln wash', 'stilt'],
+  }],
+  ['leather hard', {
+    term: 'Leather Hard',
+    plain: 'The stage of drying clay that feels like stiff leather — firm enough to hold its shape but still damp enough to carve, trim, attach handles, or join pieces.',
+    analogy: 'Like a firm cheese — you can cut it cleanly but it\u2019s not brittle.',
+    whyItMatters: 'Leather hard is the ideal stage for trimming, carving, and assembly. Miss this window and the clay becomes too dry to work with.',
+    seeAlso: ['greenware', 'bone dry', 'trimming', 'scoring'],
+  }],
+  ['pugmill', {
+    term: 'Pugmill',
+    plain: 'A machine that mixes, de-airs, and extrudes clay into ready-to-use logs. It processes scraps back into usable clay without hand wedging.',
+    analogy: 'Like a meat grinder for clay — scraps go in one end, uniform clay comes out the other.',
+    whyItMatters: 'A pugmill saves hours of hand wedging, especially in studios recycling large amounts of scrap clay. The de-airing function removes air bubbles that cause blowouts.',
+    seeAlso: ['wedging', 'extruder'],
+  }],
+  ['pyrometric', {
+    term: 'Pyrometric',
+    plain: 'Relating to the measurement of high temperatures, especially in kilns. Pyrometric devices (cones, thermocouples) measure heat work or temperature during ceramic firing.',
+    whyItMatters: 'Understanding pyrometric measurement is fundamental to consistent firing results. Cones measure heat work; thermocouples measure temperature — they answer different questions.',
+    seeAlso: ['pyrometric cone', 'thermocouple', 'cone', 'heat work'],
+  }],
+  ['rib', {
+    term: 'Rib',
+    plain: 'A flat tool (wood, metal, or rubber) held against the clay while throwing to smooth, compress, and shape the walls of a pot. Metal ribs are also used for trimming.',
+    analogy: 'Like a trowel for smoothing plaster — it gives you a cleaner, more controlled surface than fingers alone.',
+    whyItMatters: 'Ribs compress the clay surface, reducing S-cracks and producing smoother walls. They\u2019re one of the most-used tools at the wheel.',
+    seeAlso: ['throwing', 'trimming', 'centering'],
+  }],
+  ['scoring', {
+    term: 'Scoring',
+    plain: 'Scratching a crosshatch pattern into the clay surface before joining two pieces together with slip. The scratches create more surface area for a stronger bond.',
+    analogy: 'Like roughing up wood with sandpaper before gluing — it gives the adhesive something to grip.',
+    whyItMatters: 'Forgetting to score and slip is the #1 reason handles fall off and coils separate. Always score both surfaces before joining.',
+    seeAlso: ['slip', 'leather hard', 'coil building'],
+  }],
+  ['slip trailing', {
+    term: 'Slip Trailing',
+    plain: 'A decorative technique where thick slip is squeezed through a small nozzle (like a squeeze bottle) to draw raised lines and patterns on the surface of a pot.',
+    analogy: 'Like decorating a cake with a piping bag — you draw with a stream of material.',
+    whyItMatters: 'Slip trailing adds texture and dimension that flat painting can\u2019t achieve. It\u2019s one of the most satisfying and accessible decorating techniques.',
+    seeAlso: ['slip', 'engobe', 'underglaze'],
+  }],
+  ['sponge', {
+    term: 'Sponge',
+    plain: 'A natural or synthetic sponge used for smoothing, cleaning, and absorbing water during throwing and hand-building. Essential for controlling moisture on the wheel.',
+    whyItMatters: 'A sponge is probably the most-used tool in any pottery studio. It controls water on the wheel, smooths surfaces, and cleans up.',
+    seeAlso: ['throwing', 'centering'],
+  }],
+  ['stilt', {
+    term: 'Stilt',
+    plain: 'A small refractory tripod that supports glazed ware off the kiln shelf so the glaze doesn\u2019t stick to it. Primarily used in low-fire where glazing the entire surface is common.',
+    whyItMatters: 'Stilts let you glaze the bottom of a piece, which is standard practice in low-fire and earthenware. The small stilt marks are sanded off after firing.',
+    seeAlso: ['kiln furniture', 'kiln wash', 'low-fire', 'foot ring'],
+  }],
+  ['throwing', {
+    term: 'Throwing',
+    plain: 'The process of shaping clay on a spinning potter\u2019s wheel. The potter centers a lump of clay, opens it, and pulls up the walls to form a vessel.',
+    analogy: 'Like shaping dough on a spinning turntable — centrifugal force and hand pressure do the work.',
+    whyItMatters: 'Wheel throwing is the most iconic ceramic technique. It\u2019s fast and produces symmetrical forms, but takes significant practice to master.',
+    seeAlso: ['centering', 'trimming', 'rib', 'leather hard'],
+  }],
+  ['trimming', {
+    term: 'Trimming',
+    plain: 'Carving excess clay from the bottom and foot of a leather-hard pot using a trimming tool while the pot spins upside-down on the wheel.',
+    whyItMatters: 'Trimming defines the foot ring, refines the profile, and removes excess weight. A well-trimmed pot feels balanced and lighter than its size suggests.',
+    seeAlso: ['foot ring', 'chuck', 'leather hard', 'throwing'],
+  }],
+  ['wedging', {
+    term: 'Wedging',
+    plain: 'A kneading technique that homogenizes clay, removes air bubbles, and aligns the clay particles before throwing or hand-building. Usually done on a plaster or canvas surface.',
+    analogy: 'Like kneading bread dough — you fold and press until the texture is smooth and even.',
+    whyItMatters: 'Unwedged clay contains air pockets that explode in the kiln and inconsistent moisture that causes cracking. Proper wedging prevents both.',
+    seeAlso: ['pugmill', 'centering', 'throwing'],
   }],
 ])

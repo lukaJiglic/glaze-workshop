@@ -1,0 +1,345 @@
+{
+  "meta": {
+    "title": "Expanded material and ingredient notes",
+    "createdAt": "2026-03-15",
+    "note": "These entries extend the root materials pack with more specific workshop-facing descriptions for materials that already appear in the codebase or in recipe references."
+  },
+  "materials": [
+    {
+      "id": "epk-kaolin",
+      "name": "EPK kaolin",
+      "group": "clay and alumina source",
+      "oxideIds": ["al2o3", "sio2", "tio2", "fe2o3"],
+      "whatItAdds": [
+        "reliable alumina and silica with good bucket suspension",
+        "a familiar default kaolin for cone-6 and cone-10 studio work"
+      ],
+      "bestUses": [
+        "general clear and liner glazes",
+        "recipes where handling and suspension matter as much as whiteness"
+      ],
+      "watchFor": [
+        "slightly warmer fired cast than Grolleg in white or transparent systems",
+        "too much raw kaolin can increase drying shrinkage and crawling risk"
+      ],
+      "switchingNotes": [
+        "move toward Grolleg when colour purity matters more than suspension strength",
+        "split with calcined kaolin when the dry glaze layer is cracking before firing"
+      ],
+      "typicalUsePercent": "10-25% in many clear, satin, and matte bases",
+      "sourceIds": ["digitalfire-g2926b", "digitalfire-g2934", "digitalfire-g1214w"]
+    },
+    {
+      "id": "grolleg-kaolin",
+      "name": "Grolleg kaolin",
+      "group": "clay and alumina source",
+      "oxideIds": ["al2o3", "sio2", "tio2", "fe2o3"],
+      "whatItAdds": [
+        "very white clay contribution with lower titanium contamination than ordinary kaolins",
+        "cleaner fired colour in porcelain-oriented hosts"
+      ],
+      "bestUses": [
+        "porcelain clears",
+        "chrome-tin and other colour-sensitive hosts"
+      ],
+      "watchFor": [
+        "less forgiving bucket behaviour than a more plastic kaolin",
+        "higher cost for benefits that only matter in some glaze families"
+      ],
+      "switchingNotes": [
+        "switch from EPK when a clear is good but still too warm on porcelain",
+        "test suspension after the swap because the cleaner material may brush and settle differently"
+      ],
+      "typicalUsePercent": "10-20% in white or colour-critical bases",
+      "sourceIds": ["digitalfire-g1216m", "digitalfire-g3838a", "insight-glazes"]
+    },
+    {
+      "id": "custer-feldspar",
+      "name": "Custer feldspar",
+      "group": "feldspathic flux",
+      "oxideIds": ["k2o", "na2o", "al2o3", "sio2", "cao"],
+      "whatItAdds": [
+        "the familiar North American high-fire feldspar backbone",
+        "a balanced K2O and Na2O flux package with alumina and silica"
+      ],
+      "bestUses": [
+        "cone-10 gloss and matte work",
+        "traditional feldspathic bodies and glazes"
+      ],
+      "watchFor": [
+        "brand-era changes matter when comparing old recipes to current batches",
+        "blind substitution with G-200 HP or nepheline syenite changes fit direction"
+      ],
+      "switchingNotes": [
+        "test side by side with G-200 HP rather than assuming the old recipe language still means the same thing",
+        "if replacing with nepheline syenite, expect a more aggressive melt and higher expansion direction"
+      ],
+      "typicalUsePercent": "15-45% in cone-6 to cone-10 bases",
+      "sourceIds": ["digitalfire-g1947u", "digitalfire-g2571a", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "g200-feldspar",
+      "name": "G-200 HP feldspar",
+      "group": "feldspathic flux",
+      "oxideIds": ["k2o", "na2o", "al2o3", "sio2", "cao"],
+      "whatItAdds": [
+        "a potash-rich feldspar alternative to Custer",
+        "slightly different K2O to Na2O balance than older G-200 or current Custer"
+      ],
+      "bestUses": [
+        "updating legacy North American recipes",
+        "direct comparison tests against Custer when reproducing older cone-10 surfaces"
+      ],
+      "watchFor": [
+        "historical recipes written for original G-200 may not map cleanly to current HP material",
+        "small chemistry shifts can still move colour break and fit"
+      ],
+      "switchingNotes": [
+        "run a two-batch comparison rather than a one-batch substitution if the surface matters",
+        "treat the swap as a flux-balance test, not only a supply substitution"
+      ],
+      "typicalUsePercent": "15-45% in feldspathic glaze families",
+      "sourceIds": ["digitalfire-material-substitution", "insight-glazes"]
+    },
+    {
+      "id": "cornwall-stone",
+      "name": "Cornwall stone",
+      "group": "feldspathic stone",
+      "oxideIds": ["k2o", "na2o", "cao", "al2o3", "sio2"],
+      "whatItAdds": [
+        "a traditional British combined flux and silica-bearing stone",
+        "a stiffer, more silica-rich feel than many modern feldspar-only routes"
+      ],
+      "bestUses": [
+        "traditional high-fire or ash-adjacent glaze lineages",
+        "comparing natural feldspathic character against cleaner industrial flux packages"
+      ],
+      "watchFor": [
+        "regional availability and analysis variation matter",
+        "it is not a straight feldspar replacement because it brings extra silica and calcium"
+      ],
+      "switchingNotes": [
+        "when replacing with feldspar, check whether silica also needs to rise",
+        "when replacing feldspar with Cornwall stone, expect a stiffer melt unless other fluxes compensate"
+      ],
+      "typicalUsePercent": "10-40% in traditional high-fire systems",
+      "sourceIds": ["ct-stoneware", "insight-glazes"]
+    },
+    {
+      "id": "colemanite",
+      "name": "Colemanite",
+      "group": "natural boron source",
+      "oxideIds": ["b2o3", "cao", "sio2"],
+      "whatItAdds": [
+        "boron with more calcium and less sodium than many frit routes",
+        "a more mineral-style melt path than a fully fritted boron source"
+      ],
+      "bestUses": [
+        "legacy low and mid-fire recipes where a natural borate direction is part of the surface",
+        "comparison tests against Gerstley Borate rebuilds"
+      ],
+      "watchFor": [
+        "still a natural mineral with batch personality",
+        "high LOI means firing and bubble release still matter"
+      ],
+      "switchingNotes": [
+        "often closer to old borate behaviour than a single frit, but still not a universal Gerstley replacement",
+        "test against a frit rebuild rather than trusting a simple 1:1 swap"
+      ],
+      "typicalUsePercent": "5-25% in boron-dependent glazes",
+      "sourceIds": ["digitalfire-gb-substitutes", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "soda-ash",
+      "name": "Soda ash",
+      "group": "soluble alkali flux",
+      "oxideIds": ["na2o"],
+      "whatItAdds": [
+        "a strong sodium push with no extra silica or alumina",
+        "classic carbon-trap and shino-style surface behaviour when the system supports it"
+      ],
+      "bestUses": [
+        "special-effect high-fire work",
+        "small controlled additions where sodium response itself is the goal"
+      ],
+      "watchFor": [
+        "it is soluble and migrates during drying",
+        "it can cause hard rims, uneven surfaces, and application instability"
+      ],
+      "switchingNotes": [
+        "if the drying behaviour becomes unmanageable, rebuild part of the sodium direction with feldspar or frit rather than forcing more soda ash",
+        "always separate bucket-behaviour problems from fired-chemistry goals"
+      ],
+      "typicalUsePercent": "0.5-5% in special-effect systems",
+      "sourceIds": ["ct-stoneware", "insight-glazes"]
+    },
+    {
+      "id": "epsom-salt",
+      "name": "Epsom salt",
+      "group": "slurry conditioner",
+      "oxideIds": ["mgo"],
+      "whatItAdds": [
+        "flocculation control rather than meaningful glaze chemistry",
+        "a quick way to tighten a watery or hard-settling glaze slurry"
+      ],
+      "bestUses": [
+        "bucket rescue for deflocculated or poorly suspended glazes",
+        "small process adjustments without rewriting the recipe"
+      ],
+      "watchFor": [
+        "overuse can gel the bucket and create false confidence that the recipe itself is healthy",
+        "it solves application behaviour, not fit or melt problems"
+      ],
+      "switchingNotes": [
+        "add it as a process correction only after checking water amount and sieve discipline",
+        "document the amount because flocculation changes brushing and thickness quickly"
+      ],
+      "typicalUsePercent": "trace additions dissolved in water rather than recipe-level percentages",
+      "sourceIds": ["digitalfire-rheology", "digitalfire-viscosity"]
+    },
+    {
+      "id": "black-iron-oxide",
+      "name": "Black iron oxide",
+      "group": "iron colorant",
+      "oxideIds": ["fe2o3"],
+      "whatItAdds": [
+        "a darker iron route that can melt slightly differently than red iron",
+        "dense brown to black direction in temmoku or dark gloss systems"
+      ],
+      "bestUses": [
+        "dark high-iron glazes",
+        "substituting down from red iron when a recipe is too rusty or too warm"
+      ],
+      "watchFor": [
+        "it is not just a cosmetic colour swap for red iron",
+        "it can make the same glaze slightly more fluid or darker at a lower loading"
+      ],
+      "switchingNotes": [
+        "start lower than the red-iron amount when converting an established recipe",
+        "test the same glaze on vertical tiles because the melt can shift slightly"
+      ],
+      "typicalUsePercent": "1-12% depending on the target family",
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "manganese-carbonate",
+      "name": "Manganese carbonate",
+      "group": "manganese colorant",
+      "oxideIds": ["mno"],
+      "whatItAdds": [
+        "a somewhat milder manganese route than manganese dioxide",
+        "brown, plum, and muted purple shifts especially in combination systems"
+      ],
+      "bestUses": [
+        "purple-brown development with cobalt",
+        "special-effect dark glazes where the studio wants a softer manganese move"
+      ],
+      "watchFor": [
+        "health and ventilation concerns remain real even if the material feels softer to use",
+        "manganese can affect fit and surface, not only colour"
+      ],
+      "switchingNotes": [
+        "when swapping from manganese dioxide, start with a small comparison rather than equal weight",
+        "document kiln ventilation and firing context because safety is part of the test"
+      ],
+      "typicalUsePercent": "1-6% in most studio glaze colour work",
+      "sourceIds": ["digitalfire-oxides", "ct-stoneware"]
+    },
+    {
+      "id": "copper-oxide",
+      "name": "Copper oxide",
+      "group": "copper colorant",
+      "oxideIds": ["cuo"],
+      "whatItAdds": [
+        "the same essential copper chemistry as carbonate with more strength per gram",
+        "a slightly leaner route when the recipe already carries too much carbonate gas"
+      ],
+      "bestUses": [
+        "switching a copper glaze away from excess LOI",
+        "strong oxidation turquoise or reduction metallic testing"
+      ],
+      "watchFor": [
+        "it is stronger than copper carbonate and can overdrive the glaze quickly",
+        "copper safety and food-surface caution do not disappear when the material form changes"
+      ],
+      "switchingNotes": [
+        "reduce the loading relative to copper carbonate and test side by side",
+        "separate colour gain from melt change because the lower LOI can also alter the surface"
+      ],
+      "typicalUsePercent": "0.75-4.5% in most oxidation work, higher only in special-effect systems",
+      "sourceIds": ["digitalfire-oxides", "ct-raku", "ct-earthenware"]
+    },
+    {
+      "id": "nickel-oxide",
+      "name": "Nickel oxide",
+      "group": "modifier colorant",
+      "oxideIds": ["nio"],
+      "whatItAdds": [
+        "muted grey, taupe, blue-grey, and olive shifts depending on the host",
+        "a strong modifier role even when the colour is subtle"
+      ],
+      "bestUses": [
+        "quieting a bright colour family",
+        "developing smoky blue-grey or complex neutrals"
+      ],
+      "watchFor": [
+        "results vary more by host glaze than many potters expect",
+        "it is better treated as a modifier than as a guaranteed solo colour"
+      ],
+      "switchingNotes": [
+        "test it in a stable transparent host first so you can see what the nickel is doing",
+        "avoid rewriting the whole base until you know whether the colour issue is the nickel or the host"
+      ],
+      "typicalUsePercent": "0.25-3% in most studio tests",
+      "sourceIds": ["digitalfire-oxides", "insight-glazes"]
+    },
+    {
+      "id": "ilmenite",
+      "name": "Ilmenite",
+      "group": "speckle and modifier material",
+      "oxideIds": ["tio2", "fe2o3"],
+      "whatItAdds": [
+        "iron-titanium speckle and broken dark spotting",
+        "a more particulate surface event than fine iron or rutile additions"
+      ],
+      "bestUses": [
+        "speckled matte and gloss surfaces",
+        "adding visible particulate texture without changing the whole recipe family"
+      ],
+      "watchFor": [
+        "particle size matters as much as chemistry",
+        "heavy additions can roughen the surface or overwhelm the glaze"
+      ],
+      "switchingNotes": [
+        "test the coarse grade separately from fine powder because they behave almost like different materials visually",
+        "keep the host stable so the speckle effect can be judged honestly"
+      ],
+      "typicalUsePercent": "2-8% depending on particle size and desired speckle density",
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "strontium-carbonate",
+      "name": "Strontium carbonate",
+      "group": "special-effect flux",
+      "oxideIds": ["sro"],
+      "whatItAdds": [
+        "a lower-toxicity route when a recipe historically used barium for surface reasons",
+        "a stable alkaline-earth flux that can support gloss or crystal response"
+      ],
+      "bestUses": [
+        "rebuilding older barium recipes more conservatively",
+        "surface experiments where a different alkaline-earth response is desired"
+      ],
+      "watchFor": [
+        "it is safer than barium in workflow terms but not chemically identical",
+        "blind swapping can flatten or redirect the original surface"
+      ],
+      "switchingNotes": [
+        "treat it as a new recipe branch when replacing barium rather than a box-check substitution",
+        "watch gloss, colour, and fit together because all three can shift"
+      ],
+      "typicalUsePercent": "2-20% depending on the family",
+      "sourceIds": ["digitalfire-oxides", "digitalfire-material-substitution"]
+    }
+  ]
+}

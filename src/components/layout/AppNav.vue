@@ -1,18 +1,55 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useWorkshopStore } from '@/stores/workshop'
+import { useTheme } from '@/composables/useTheme'
 
 const route = useRoute()
 const workshopStore = useWorkshopStore()
+const { theme, toggle: toggleTheme } = useTheme()
 const scrolled = ref(false)
 const menuOpen = ref(false)
+const mobileMenuEl = ref<HTMLElement | null>(null)
+const menuBtnEl = ref<HTMLElement | null>(null)
 
 const favCount = computed(() => workshopStore.favoriteIds.length)
 
 function onScroll() {
   scrolled.value = window.scrollY > 40
 }
+
+function onMenuKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    menuOpen.value = false
+    menuBtnEl.value?.focus()
+    return
+  }
+  if (e.key !== 'Tab' || !mobileMenuEl.value) return
+
+  const focusable = mobileMenuEl.value.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled])'
+  )
+  if (focusable.length === 0) return
+
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
+watch(menuOpen, async (open) => {
+  if (open) {
+    await nextTick()
+    const firstLink = mobileMenuEl.value?.querySelector<HTMLElement>('a[href], button')
+    firstLink?.focus()
+  }
+})
 
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
@@ -22,7 +59,10 @@ const links = [
   { to: '/workshop', label: 'Workshop' },
   { to: '/my-recipes', label: 'My Recipes' },
   { to: '/calculator', label: 'Calculator' },
+  { to: '/chemistry', label: 'Chemistry' },
   { to: '/colors', label: 'Color Atlas' },
+  { to: '/learn', label: 'Learn' },
+  { to: '/glossary', label: 'Glossary' },
   { to: '/troubleshooter', label: 'Help' },
 ]
 </script>
@@ -55,16 +95,21 @@ const links = [
             <span v-if="favCount > 0" class="fav-count">{{ favCount }}</span>
           </RouterLink>
         </li>
+        <li>
+          <button class="nav-link theme-toggle" @click="toggleTheme" :title="theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'">
+            {{ theme === 'light' ? '☽' : '☀' }}
+          </button>
+        </li>
       </ul>
 
-      <button class="nav-menu-btn" @click="menuOpen = !menuOpen" aria-label="Menu">
+      <button ref="menuBtnEl" class="nav-menu-btn" @click="menuOpen = !menuOpen" aria-label="Menu" :aria-expanded="menuOpen">
         <span /><span /><span />
       </button>
     </div>
 
     <!-- Mobile menu -->
     <Transition name="mobile-menu">
-      <div v-if="menuOpen" class="mobile-menu">
+      <div v-if="menuOpen" ref="mobileMenuEl" class="mobile-menu" @keydown="onMenuKeydown">
         <ul>
           <li v-for="link in links" :key="link.to">
             <RouterLink :to="link.to" class="mobile-link" @click="menuOpen = false">
@@ -75,6 +120,11 @@ const links = [
             <RouterLink to="/favorites" class="mobile-link" @click="menuOpen = false">
               ♥ Saved{{ favCount > 0 ? ` (${favCount})` : '' }}
             </RouterLink>
+          </li>
+          <li>
+            <button class="mobile-link theme-toggle-mobile" @click="toggleTheme">
+              {{ theme === 'light' ? '☽ Dark mode' : '☀ Light mode' }}
+            </button>
           </li>
         </ul>
       </div>
@@ -93,7 +143,7 @@ const links = [
 }
 
 .app-nav.scrolled {
-  background: rgba(245, 240, 232, 0.92);
+  background: var(--cream-92);
   backdrop-filter: blur(12px);
   box-shadow: 0 1px 0 var(--ink-10), var(--shadow-sm);
 }
@@ -132,7 +182,9 @@ const links = [
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
   list-style: none;
 }
 
@@ -219,7 +271,7 @@ const links = [
 }
 
 .mobile-menu {
-  background: rgba(245, 240, 232, 0.97);
+  background: var(--cream-97);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--ink-10);
   padding: var(--space-4) var(--space-8) var(--space-6);
@@ -248,6 +300,38 @@ const links = [
 .mobile-menu-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+.theme-toggle {
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 4px 8px;
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background: var(--clay-10);
+  border-color: var(--clay);
+  transform: scale(1.05);
+  color: var(--clay) !important;
+}
+
+.theme-toggle-mobile {
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink-05);
+  transition: color var(--transition-fast);
+  cursor: pointer;
+}
+
+.theme-toggle-mobile:hover {
+  color: var(--clay);
 }
 
 @media (max-width: 768px) {

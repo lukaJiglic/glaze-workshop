@@ -105,6 +105,7 @@ onBeforeUnmount(() => {
     @mouseleave="hide"
     @click.stop="toggle"
     @keydown.enter.prevent="toggle"
+    @keydown.escape="isVisible = false"
     tabindex="0"
     role="button"
     :aria-label="`Learn about ${entry.term}`"
@@ -140,7 +141,7 @@ onBeforeUnmount(() => {
 .glossary-trigger {
   position: relative;
   cursor: help;
-  border-bottom: 1.5px dotted rgba(139, 115, 85, 0.6);
+  border-bottom: 1.5px dotted var(--stone);
   text-decoration: none;
   display: inline;
 }
@@ -185,7 +186,7 @@ onBeforeUnmount(() => {
 /* Tooltip styles are unscoped because they render in a Teleport */
 .glossary-tooltip {
   position: fixed;
-  z-index: 500;
+  z-index: var(--z-toast);
   max-width: 320px;
   padding: 14px 16px 12px;
   background: var(--chalk);

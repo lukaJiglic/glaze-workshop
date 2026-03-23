@@ -31,6 +31,14 @@
   clip-path: polygon(0 60px, 100% 0, 100% 60px);
 }
 
+[data-theme="dark"] .texture-overlay::before {
+  opacity: 0.02;
+}
+
+[data-theme="dark"] .diagonal-sep::after {
+  background: var(--cream);
+}
+
 .diagonal-sep--parchment::after {
   background: var(--parchment);
 }

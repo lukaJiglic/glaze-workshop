@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -11,11 +11,15 @@ const layer2 = ref<HTMLElement | null>(null)
 const layer3 = ref<HTMLElement | null>(null)
 const textEl = ref<HTMLElement | null>(null)
 
+const tweens: gsap.core.Tween[] = []
+let timeline: gsap.core.Timeline | null = null
+let scrollTriggerInstance: ScrollTrigger | null = null
+
 onMounted(() => {
-  const tl = gsap.timeline()
+  timeline = gsap.timeline()
 
   // Text reveal
-  tl.fromTo(
+  timeline.fromTo(
     textEl.value?.querySelectorAll('.reveal-line') ?? [],
     { opacity: 0, y: 40 },
     { opacity: 1, y: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' },
@@ -24,21 +28,21 @@ onMounted(() => {
 
   // Orb layer animations
   if (layer1.value) {
-    gsap.to(layer1.value, { rotation: 360, duration: 18, ease: 'none', repeat: -1 })
+    tweens.push(gsap.to(layer1.value, { rotation: 360, duration: 18, ease: 'none', repeat: -1 }))
   }
   if (layer2.value) {
-    gsap.to(layer2.value, { rotation: -360, duration: 24, ease: 'none', repeat: -1 })
+    tweens.push(gsap.to(layer2.value, { rotation: -360, duration: 24, ease: 'none', repeat: -1 }))
   }
   if (layer3.value) {
-    gsap.to(layer3.value, { rotation: 360, duration: 32, ease: 'none', repeat: -1, scale: 1.08, yoyo: true })
+    tweens.push(gsap.to(layer3.value, { rotation: 360, duration: 32, ease: 'none', repeat: -1, scale: 1.08, yoyo: true }))
   }
 
   // Orb entrance
   if (orb.value) {
-    gsap.fromTo(orb.value, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.7)', delay: 0.1 })
+    tweens.push(gsap.fromTo(orb.value, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.7)', delay: 0.1 }))
 
     // Scroll: scale down orb
-    ScrollTrigger.create({
+    scrollTriggerInstance = ScrollTrigger.create({
       trigger: 'body',
       start: 'top top',
       end: '400px top',
@@ -50,6 +54,12 @@ onMounted(() => {
       },
     })
   }
+})
+
+onUnmounted(() => {
+  timeline?.kill()
+  tweens.forEach(t => t.kill())
+  scrollTriggerInstance?.kill()
 })
 </script>
 
@@ -213,7 +223,7 @@ onMounted(() => {
   50% { transform: translateX(-50%) translateY(6px); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .hero-orb {
     width: 360px;
     height: 360px;
@@ -226,5 +236,23 @@ onMounted(() => {
 @media (max-width: 600px) {
   .hero-orb { display: none; }
   .hero { justify-content: flex-start; padding-top: calc(var(--nav-height) + var(--space-16)); }
+}
+
+/* Dark mode hero overrides */
+[data-theme="dark"] .layer-1 {
+  background: radial-gradient(ellipse at 40% 40%, #2e2820 0%, #c4532a 40%, #5a6f4e 70%, #0e0c0a 100%);
+}
+
+[data-theme="dark"] .layer-2 {
+  background: radial-gradient(ellipse at 60% 30%, rgba(46,40,32,0.8) 0%, rgba(90,111,78,0.6) 50%, rgba(196,83,42,0.4) 100%);
+}
+
+[data-theme="dark"] .layer-3 {
+  background: radial-gradient(circle, rgba(46,40,32,0.9) 0%, rgba(37,32,24,0.5) 60%, transparent 100%);
+}
+
+[data-theme="dark"] .orb-core {
+  background: radial-gradient(circle, var(--chalk) 0%, rgba(46,40,32,0.6) 100%);
+  box-shadow: 0 0 60px rgba(212,99,58,0.3), 0 0 120px rgba(196,83,42,0.15);
 }
 </style>

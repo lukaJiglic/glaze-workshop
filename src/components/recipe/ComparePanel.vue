@@ -52,6 +52,36 @@ const scoreLabels: { key: string; label: string }[] = [
   { key: 'textureLevel', label: 'Texture' },
 ]
 
+// Radar chart geometry
+const radarCenter = 50
+const radarRadius = 38
+const radarAxes = scoreLabels.length
+
+function radarPoint(axisIdx: number, value: number): { x: number; y: number } {
+  const angle = (Math.PI * 2 * axisIdx) / radarAxes - Math.PI / 2
+  const r = (value / 5) * radarRadius
+  return { x: radarCenter + r * Math.cos(angle), y: radarCenter + r * Math.sin(angle) }
+}
+
+function radarPolygon(scores: Record<string, number>): string {
+  return scoreLabels
+    .map((s, i) => {
+      const pt = radarPoint(i, (scores as any)[s.key] ?? 0)
+      return `${pt.x},${pt.y}`
+    })
+    .join(' ')
+}
+
+function radarAxisEnd(idx: number): { x: number; y: number } {
+  return radarPoint(idx, 5)
+}
+
+function radarLabelPos(idx: number): { x: number; y: number; anchor: string } {
+  const pt = radarPoint(idx, 6.2)
+  const anchor = pt.x < 40 ? 'end' : pt.x > 60 ? 'start' : 'middle'
+  return { ...pt, anchor }
+}
+
 function scoreDots(val: number) {
   return '●'.repeat(val) + '○'.repeat(5 - val)
 }
@@ -148,11 +178,45 @@ function remove(id: string) {
               <p v-else class="compare-no-data">No chemistry data</p>
             </div>
 
-            <!-- Section: Scores (if any column has scores) -->
+            <!-- Section: Scores with radar chart -->
             <template v-if="columns.some(c => c.scores)">
               <div class="compare-section-label">Character</div>
               <div v-for="col in columns" :key="'scores-' + col.recipe.id" class="compare-cell">
                 <div v-if="col.scores" class="compare-scores">
+                  <!-- Radar chart -->
+                  <svg viewBox="0 0 100 100" class="radar-chart">
+                    <!-- Grid rings -->
+                    <polygon v-for="ring in [1, 2, 3, 4, 5]" :key="ring"
+                      :points="scoreLabels.map((_, i) => { const p = radarPoint(i, ring); return `${p.x},${p.y}` }).join(' ')"
+                      fill="none" stroke="var(--ink-10)" stroke-width="0.5"
+                    />
+                    <!-- Axes -->
+                    <line v-for="(_, i) in scoreLabels" :key="'ax-'+i"
+                      :x1="radarCenter" :y1="radarCenter"
+                      :x2="radarAxisEnd(i).x" :y2="radarAxisEnd(i).y"
+                      stroke="var(--ink-10)" stroke-width="0.5"
+                    />
+                    <!-- Data polygon -->
+                    <polygon
+                      :points="radarPolygon(col.scores)"
+                      fill="rgba(196, 83, 42, 0.15)"
+                      stroke="var(--clay)"
+                      stroke-width="1.5"
+                    />
+                    <!-- Data dots -->
+                    <circle v-for="(s, i) in scoreLabels" :key="'dot-'+i"
+                      :cx="radarPoint(i, (col.scores as any)[s.key] ?? 0).x"
+                      :cy="radarPoint(i, (col.scores as any)[s.key] ?? 0).y"
+                      r="2" fill="var(--clay)"
+                    />
+                    <!-- Labels -->
+                    <text v-for="(s, i) in scoreLabels" :key="'lbl-'+i"
+                      :x="radarLabelPos(i).x" :y="radarLabelPos(i).y"
+                      :text-anchor="radarLabelPos(i).anchor"
+                      class="radar-label"
+                    >{{ s.label }}</text>
+                  </svg>
+                  <!-- Score dots below -->
                   <div v-for="s in scoreLabels" :key="s.key" class="compare-score-row">
                     <span class="score-row-label">{{ s.label }}</span>
                     <span class="score-row-dots">{{ scoreDots((col.scores as any)[s.key] ?? 0) }}</span>
@@ -206,14 +270,14 @@ function remove(id: string) {
   justify-content: space-between;
   padding: var(--space-5) var(--space-6);
   border-bottom: 1px solid var(--ink-10);
-  background: var(--carbon);
+  background: var(--band);
 }
 
 .compare-title {
   font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .compare-close {
@@ -225,7 +289,7 @@ function remove(id: string) {
   padding: var(--space-1);
   transition: color var(--transition-fast);
 }
-.compare-close:hover { color: var(--cream); }
+.compare-close:hover { color: var(--on-band); }
 
 /* Grid layout */
 .compare-grid {
@@ -287,7 +351,7 @@ function remove(id: string) {
   width: 20px;
   height: 20px;
   border-radius: var(--radius-full);
-  background: rgba(245, 240, 232, 0.85);
+  background: var(--cream-85);
   border: none;
   cursor: pointer;
   font-size: 10px;
@@ -418,6 +482,21 @@ function remove(id: string) {
 .compare-tableware {
   font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 600;
+}
+
+/* Radar chart */
+.radar-chart {
+  width: 100%;
+  max-width: 140px;
+  margin: 0 auto var(--space-2);
+  display: block;
+}
+
+.radar-label {
+  font-family: var(--font-mono);
+  font-size: 4.5px;
+  fill: var(--stone);
   font-weight: 600;
 }
 

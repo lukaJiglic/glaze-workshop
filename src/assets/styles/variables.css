@@ -25,6 +25,46 @@
   --ink-10: rgba(44, 36, 22, 0.1);
   --ink-20: rgba(44, 36, 22, 0.2);
 
+  /* Danger / destructive actions */
+  --danger: #b91c1c;
+  --danger-dark: #991b1b;
+  --danger-light: #fef2f2;
+  --danger-10: rgba(185, 28, 28, 0.08);
+
+  /* Oxide group tints */
+  --oxide-alkali: rgba(196, 83, 42, 0.65);
+  --oxide-earth: rgba(122, 143, 110, 0.75);
+  --oxide-stabiliser: rgba(196, 154, 58, 0.70);
+  --oxide-glass: rgba(139, 115, 85, 0.55);
+  --oxide-colorant: rgba(44, 36, 22, 0.30);
+
+  /* Additional tints */
+  --clay-06: rgba(196, 83, 42, 0.06);
+  --clay-08: rgba(196, 83, 42, 0.08);
+  --clay-12: rgba(196, 83, 42, 0.12);
+  --clay-25: rgba(196, 83, 42, 0.25);
+  --clay-30: rgba(196, 83, 42, 0.30);
+  --sage-06: rgba(122, 143, 110, 0.06);
+  --sage-08: rgba(122, 143, 110, 0.08);
+  --sage-10: rgba(122, 143, 110, 0.10);
+  --sage-15: rgba(122, 143, 110, 0.15);
+  --sage-40: rgba(122, 143, 110, 0.40);
+  --stone-12: rgba(139, 115, 85, 0.12);
+  --stone-30: rgba(139, 115, 85, 0.30);
+  --ink-04: rgba(44, 36, 22, 0.04);
+  --ink-25: rgba(44, 36, 22, 0.25);
+  --ink-30: rgba(44, 36, 22, 0.30);
+
+  /* Dark band + text-on-band (used for header sections) */
+  --band: #1a1410;
+  --on-band: #f5f0e8;
+
+  /* Semi-transparent overlays */
+  --cream-85: rgba(245, 240, 232, 0.85);
+  --cream-90: rgba(245, 240, 232, 0.9);
+  --cream-92: rgba(245, 240, 232, 0.92);
+  --cream-97: rgba(245, 240, 232, 0.97);
+
   /* Typography scale */
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Lora', Georgia, serif;
@@ -73,13 +113,23 @@
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 400ms ease;
-  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Layout */
   --nav-height: 64px;
   --sidebar-width: 280px;
   --content-max: 1280px;
   --drawer-width: 480px;
+
+  /*
+   * Breakpoints — CSS custom props can't be used in @media queries,
+   * so these are documented here as the canonical reference.
+   * Use these exact values in all @media rules:
+   *
+   *   --bp-mobile:   600px   phone portrait
+   *   --bp-tablet:   768px   tablet / landscape phone
+   *   --bp-desktop:  960px   small desktop / tablet landscape
+   *   --bp-wide:    1080px   wide desktop (sidebar layouts)
+   */
 
   /* Z-index */
   --z-base: 1;
@@ -88,4 +138,82 @@
   --z-drawer: 200;
   --z-modal: 300;
   --z-toast: 400;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DARK MODE — warm studio palette, not cold blue-grey
+   ═══════════════════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  /* Core palette — warm charcoal tones */
+  --cream: #1c1814;
+  --ink: #e0d8cc;
+  --clay: #d4633a;
+  --sage: #8da47e;
+  --stone: #9a8b78;
+  --parchment: #252018;
+  --chalk: #2e2820;
+  --carbon: #f0ebe3;
+
+  /* Extended tones */
+  --clay-light: #e07850;
+  --clay-dark: #b84e28;
+  --sage-light: #a8c09a;
+  --sage-dark: #6a8460;
+  --stone-light: #baa88e;
+  --stone-dark: #7a6850;
+  --cream-dark: #141210;
+
+  /* Transparency — inverted for light-on-dark */
+  --clay-10: rgba(212, 99, 58, 0.12);
+  --clay-20: rgba(212, 99, 58, 0.22);
+  --ink-05: rgba(224, 216, 204, 0.05);
+  --ink-10: rgba(224, 216, 204, 0.1);
+  --ink-20: rgba(224, 216, 204, 0.18);
+
+  /* Semi-transparent overlays */
+  --cream-85: rgba(28, 24, 20, 0.85);
+  --cream-90: rgba(28, 24, 20, 0.9);
+  --cream-92: rgba(28, 24, 20, 0.92);
+  --cream-97: rgba(28, 24, 20, 0.97);
+
+  /* Danger — stays red in dark mode */
+  --danger: #d44040;
+  --danger-dark: #b82020;
+  --danger-light: #3a1c1c;
+  --danger-10: rgba(212, 64, 64, 0.10);
+
+  /* Oxide group tints */
+  --oxide-alkali: rgba(212, 99, 58, 0.65);
+  --oxide-earth: rgba(141, 164, 126, 0.75);
+  --oxide-stabiliser: rgba(212, 170, 72, 0.70);
+  --oxide-glass: rgba(154, 139, 120, 0.55);
+  --oxide-colorant: rgba(224, 216, 204, 0.30);
+
+  /* Additional tints — adjusted for dark backgrounds */
+  --clay-06: rgba(212, 99, 58, 0.06);
+  --clay-08: rgba(212, 99, 58, 0.08);
+  --clay-12: rgba(212, 99, 58, 0.12);
+  --clay-25: rgba(212, 99, 58, 0.25);
+  --clay-30: rgba(212, 99, 58, 0.30);
+  --sage-06: rgba(141, 164, 126, 0.06);
+  --sage-08: rgba(141, 164, 126, 0.08);
+  --sage-10: rgba(141, 164, 126, 0.10);
+  --sage-15: rgba(141, 164, 126, 0.15);
+  --sage-40: rgba(141, 164, 126, 0.40);
+  --stone-12: rgba(154, 139, 120, 0.12);
+  --stone-30: rgba(154, 139, 120, 0.30);
+  --ink-04: rgba(224, 216, 204, 0.04);
+  --ink-25: rgba(224, 216, 204, 0.25);
+  --ink-30: rgba(224, 216, 204, 0.30);
+
+  /* Shadows — deeper, clay-tinted */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-clay: 0 4px 20px rgba(212, 99, 58, 0.15);
+  --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  /* Dark band stays dark in dark mode — just a slightly elevated shade */
+  --band: #252018;
+  --on-band: #d4ccbc;
 }

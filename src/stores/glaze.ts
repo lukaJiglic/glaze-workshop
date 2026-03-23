@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Recipe, ColorProfile, RecipeMapping, VisualMetadata, GlazeFamily, Taxonomy } from '@/types'
+import type {
+  Recipe, ColorProfile, RecipeMapping, VisualMetadata, GlazeFamily, Taxonomy,
+  ExpandedMaterial, UMFBenchmarkProfile, UMFDiagnostic, ColourDevelopmentGuide,
+  MaterialSwitchingPlaybook, FiringProgram, BodyDefinition, FamilyBodyResponse,
+  StepProcedure,
+} from '@/types'
 import { materialAnalyses } from '@/data/material-analyses'
 import { sources } from '@/data/sources'
 import { cautions } from '@/data/cautions'
@@ -24,6 +29,28 @@ export const useGlazeStore = defineStore('glaze', () => {
   const recipeMappings = ref<RecipeMapping[]>([])
   const visualMetadata = ref<VisualMetadata | null>(null)
   const families = ref<GlazeFamily[]>([])
+
+  // ─── Expansion data (eagerly loaded) ────────────────────────────────────────
+  const expandedMaterials = ref<ExpandedMaterial[]>([])
+  const umfBenchmarks = ref<UMFBenchmarkProfile[]>([])
+  const umfDiagnostics = ref<UMFDiagnostic[]>([])
+
+  // ─── Lazy expansion data (loaded on demand) ────────────────────────────────
+  const colourGuides = ref<ColourDevelopmentGuide[]>([])
+  const switchingPlaybooks = ref<MaterialSwitchingPlaybook[]>([])
+  const firingPrograms = ref<FiringProgram[]>([])
+  const bodyDefinitions = ref<BodyDefinition[]>([])
+  const familyResponses = ref<FamilyBodyResponse[]>([])
+  const stepProcedures = ref<StepProcedure[]>([])
+
+  // Track in-flight lazy load promises to prevent duplicate requests
+  const _lazyPromises: Record<string, Promise<void> | null> = {
+    colourGuides: null,
+    switchingPlaybooks: null,
+    firingPrograms: null,
+    bodyResponse: null,
+    stepProcedures: null,
+  }
 
   // Derived
   const recipeById = computed(() => {
@@ -59,6 +86,94 @@ export const useGlazeStore = defineStore('glaze', () => {
       return visualMetadata.value?.familyDefaults.find(f => f.familyId === familyId)?.scores
     }
     return null
+  }
+
+  // ─── Expansion computed lookups ────────────────────────────────────────────
+  const expandedMaterialById = computed(() => {
+    const map = new Map<string, ExpandedMaterial>()
+    for (const m of expandedMaterials.value) map.set(m.id, m)
+    return map
+  })
+
+  const benchmarksByFiringRange = computed(() => {
+    const map = new Map<string, UMFBenchmarkProfile[]>()
+    for (const b of umfBenchmarks.value) {
+      const arr = map.get(b.firingRangeId) ?? []
+      arr.push(b)
+      map.set(b.firingRangeId, arr)
+    }
+    return map
+  })
+
+  const playbooksByMaterialId = computed(() => {
+    const map = new Map<string, MaterialSwitchingPlaybook[]>()
+    for (const p of switchingPlaybooks.value) {
+      for (const mid of p.fromMaterialIds) {
+        const arr = map.get(mid) ?? []
+        arr.push(p)
+        map.set(mid, arr)
+      }
+    }
+    return map
+  })
+
+  // ─── Lazy loaders — fetch on demand, cache after first load ────────────────
+  function loadColourGuides() {
+    if (!_lazyPromises.colourGuides) {
+      _lazyPromises.colourGuides = loadJson<{ families: ColourDevelopmentGuide[] }>('colour-development-guides.json')
+        .then(data => { colourGuides.value = data.families })
+        .catch(() => { /* silent — data is supplementary */ })
+    }
+    return _lazyPromises.colourGuides
+  }
+
+  function loadSwitchingPlaybooks() {
+    if (!_lazyPromises.switchingPlaybooks) {
+      _lazyPromises.switchingPlaybooks = loadJson<{ playbooks: MaterialSwitchingPlaybook[] }>('material-switching-playbooks.json')
+        .then(data => { switchingPlaybooks.value = data.playbooks })
+        .catch(() => { /* silent */ })
+    }
+    return _lazyPromises.switchingPlaybooks
+  }
+
+  function loadFiringPrograms() {
+    if (!_lazyPromises.firingPrograms) {
+      _lazyPromises.firingPrograms = loadJson<{ programs: FiringProgram[] }>('firing-program-library.json')
+        .then(data => { firingPrograms.value = data.programs })
+        .catch(() => { /* silent */ })
+    }
+    return _lazyPromises.firingPrograms
+  }
+
+  function loadBodyResponse() {
+    if (!_lazyPromises.bodyResponse) {
+      _lazyPromises.bodyResponse = loadJson<{ bodies: BodyDefinition[]; familyResponses: FamilyBodyResponse[] }>('body-response-matrix.json')
+        .then(data => {
+          bodyDefinitions.value = data.bodies
+          familyResponses.value = data.familyResponses
+        })
+        .catch(() => { /* silent */ })
+    }
+    return _lazyPromises.bodyResponse
+  }
+
+  function loadStepProcedures() {
+    if (!_lazyPromises.stepProcedures) {
+      _lazyPromises.stepProcedures = loadJson<{ procedures: StepProcedure[] }>('step-by-step-instructions.json')
+        .then(data => { stepProcedures.value = data.procedures })
+        .catch(() => { /* silent */ })
+    }
+    return _lazyPromises.stepProcedures
+  }
+
+  /** Load all expansion panel data in one call (colour guides, firing programs, body response, playbooks) */
+  async function loadExpansionPanelData() {
+    await Promise.all([
+      loadColourGuides(),
+      loadFiringPrograms(),
+      loadBodyResponse(),
+      loadSwitchingPlaybooks(),
+    ])
   }
 
   async function loadAll() {
@@ -114,10 +229,44 @@ export const useGlazeStore = defineStore('glaze', () => {
 
       isLoaded.value = true
 
+      // Load expansion data (non-blocking — UI renders before this finishes)
+      // Note: colour guides, firing programs, body response, playbooks, and step
+      // procedures are now fully lazy — loaded on demand by components that need them.
+      Promise.all([
+        loadJson<{ recipes: Recipe[] }>('recipes-expanded.json').catch(() => ({ recipes: [] })),
+        loadJson<{ materials: ExpandedMaterial[] }>('materials-expanded.json').catch(() => ({ materials: [] })),
+        loadJson<{ profiles: UMFBenchmarkProfile[]; diagnostics: UMFDiagnostic[] }>('umf-benchmarks-expanded.json').catch(() => ({ profiles: [], diagnostics: [] })),
+      ]).then(([expRecipes, expMats, umfBench]) => {
+        recipes.value = [...recipes.value, ...expRecipes.recipes]
+        expandedMaterials.value = expMats.materials
+        umfBenchmarks.value = umfBench.profiles
+        umfDiagnostics.value = umfBench.diagnostics ?? []
+      }).catch((e) => {
+        console.error('[GlazeStore] Expansion data load error:', e)
+      })
+
       // Dev-mode data integrity warnings
       if ((import.meta as any).env?.DEV) {
         const validFiringRanges = new Set(
           tax.taxonomies.firingRanges?.map((fr) => fr.id) ?? []
+        )
+        const validAtmospheres = new Set(
+          tax.taxonomies.atmospheres?.map((a) => a.id) ?? []
+        )
+        const validStyles = new Set(
+          tax.taxonomies.styles?.map((s) => s.id) ?? []
+        )
+        const validColours = new Set(
+          tax.taxonomies.colours?.map((c) => c.id) ?? []
+        )
+        const validSurfaces = new Set(
+          tax.taxonomies.surfaces?.map((s) => s.id) ?? []
+        )
+        const validKilns = new Set(
+          tax.taxonomies.kilns?.map((k) => k.id) ?? []
+        )
+        const validClays = new Set(
+          tax.taxonomies.clays?.map((c) => c.id) ?? []
         )
         for (const recipe of recipes.value) {
           for (const ing of recipe.ingredients ?? []) {
@@ -137,6 +286,36 @@ export const useGlazeStore = defineStore('glaze', () => {
           }
           if (recipe.firingRangeId && !validFiringRanges.has(recipe.firingRangeId)) {
             console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown firingRangeId "${recipe.firingRangeId}"`)
+          }
+          for (const aid of recipe.atmosphereIds ?? []) {
+            if (validAtmospheres.size && !validAtmospheres.has(aid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown atmosphereId "${aid}"`)
+            }
+          }
+          for (const sid of recipe.styleIds ?? []) {
+            if (validStyles.size && !validStyles.has(sid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown styleId "${sid}"`)
+            }
+          }
+          for (const cid of recipe.colourIds ?? []) {
+            if (validColours.size && !validColours.has(cid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown colourId "${cid}"`)
+            }
+          }
+          for (const sid of recipe.surfaceIds ?? []) {
+            if (validSurfaces.size && !validSurfaces.has(sid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown surfaceId "${sid}"`)
+            }
+          }
+          for (const kid of recipe.kilnIds ?? []) {
+            if (validKilns.size && !validKilns.has(kid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown kilnId "${kid}"`)
+            }
+          }
+          for (const cid of recipe.clayIds ?? []) {
+            if (validClays.size && !validClays.has(cid)) {
+              console.warn(`[DataIntegrity] Recipe "${recipe.id}" references unknown clayId "${cid}"`)
+            }
           }
         }
       }
@@ -164,5 +343,26 @@ export const useGlazeStore = defineStore('glaze', () => {
     visualScoresByFamily,
     getScores,
     loadAll,
+    // Expansion data
+    expandedMaterials,
+    umfBenchmarks,
+    umfDiagnostics,
+    colourGuides,
+    switchingPlaybooks,
+    firingPrograms,
+    bodyDefinitions,
+    familyResponses,
+    stepProcedures,
+    // Expansion lookups
+    expandedMaterialById,
+    benchmarksByFiringRange,
+    playbooksByMaterialId,
+    // Lazy loaders
+    loadColourGuides,
+    loadFiringPrograms,
+    loadBodyResponse,
+    loadSwitchingPlaybooks,
+    loadStepProcedures,
+    loadExpansionPanelData,
   }
 })

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useGlazeStore } from '@/stores/glaze'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+let scrollTriggerInstance: ScrollTrigger | null = null
+let enterTween: gsap.core.Tween | null = null
 
 const store = useGlazeStore()
 const gridEl = ref<HTMLElement | null>(null)
@@ -34,14 +36,19 @@ onMounted(() => {
   if (!gridEl.value) return
   const cards = Array.from(gridEl.value.querySelectorAll('.family-card'))
   gsap.set(cards, { opacity: 0, y: 32 })
-  ScrollTrigger.create({
+  scrollTriggerInstance = ScrollTrigger.create({
     trigger: gridEl.value,
     start: 'top 80%',
     onEnter: () => {
-      gsap.to(cards, { opacity: 1, y: 0, stagger: 0.07, duration: 0.55, ease: 'power2.out' })
+      enterTween = gsap.to(cards, { opacity: 1, y: 0, stagger: 0.07, duration: 0.55, ease: 'power2.out' })
     },
     once: true,
   })
+})
+
+onUnmounted(() => {
+  scrollTriggerInstance?.kill()
+  enterTween?.kill()
 })
 </script>
 

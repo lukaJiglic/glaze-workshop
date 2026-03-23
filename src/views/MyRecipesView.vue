@@ -2,20 +2,40 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWorkshopStore } from '@/stores/workshop'
+import { useGlazeStore } from '@/stores/glaze'
+import TagBadge from '@/components/ui/TagBadge.vue'
 import type { CustomRecipe } from '@/types'
 
 const router = useRouter()
 const store = useWorkshopStore()
+const glazeStore = useGlazeStore()
 
 const hasRecipes = computed(() => store.customRecipes.length > 0)
 const recipeCount = computed(() => store.customRecipes.length)
 
-// Sort by most recently updated
-const sortedRecipes = computed(() =>
-  [...store.customRecipes].sort(
+// Tag filter
+const selectedTag = ref<string | null>(null)
+
+const allTags = computed(() => {
+  const tags = new Set<string>()
+  for (const r of store.customRecipes) {
+    for (const t of (r.tags ?? [])) tags.add(t)
+  }
+  return Array.from(tags).sort()
+})
+
+function toggleTagFilter(tag: string) {
+  selectedTag.value = selectedTag.value === tag ? null : tag
+}
+
+// Sort by most recently updated, then filter by selected tag
+const sortedRecipes = computed(() => {
+  const sorted = [...store.customRecipes].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   )
-)
+  if (!selectedTag.value) return sorted
+  return sorted.filter(r => r.tags?.includes(selectedTag.value!))
+})
 
 // Delete confirmation
 const pendingDeleteId = ref<string | null>(null)
@@ -33,6 +53,28 @@ function executeDelete() {
     store.deleteCustomRecipe(pendingDeleteId.value)
     pendingDeleteId.value = null
   }
+}
+
+// Duplication modal
+const pendingDupRecipe = ref<CustomRecipe | null>(null)
+const dupName = ref('')
+const dupCone = ref('')
+
+function openDuplicateModal(recipe: CustomRecipe) {
+  pendingDupRecipe.value = recipe
+  dupName.value = `${recipe.name} — Copy`
+  dupCone.value = recipe.cone
+}
+
+function cancelDuplicate() {
+  pendingDupRecipe.value = null
+}
+
+function executeDuplicate() {
+  if (!pendingDupRecipe.value) return
+  const copy = store.duplicateCustomRecipe(pendingDupRecipe.value, dupName.value.trim() || undefined, dupCone.value.trim() || undefined)
+  pendingDupRecipe.value = null
+  router.push(`/my-recipes/${copy.id}`)
 }
 
 function openInCalculator(custom: CustomRecipe) {
@@ -79,19 +121,47 @@ function triggerImport() {
   importFileRef.value?.click()
 }
 
+const importError = ref<string | null>(null)
+
 function handleImportFile(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
+  importError.value = null
   const reader = new FileReader()
   reader.onload = () => {
-    const result = store.importRecipeJSON(reader.result as string)
-    if (result) {
-      router.push(`/my-recipes/${result.id}`)
+    try {
+      const result = store.importRecipeJSON(reader.result as string)
+      if (result) {
+        router.push(`/my-recipes/${result.id}`)
+      } else {
+        importError.value = 'Invalid recipe file — missing name or ingredients.'
+      }
+    } catch {
+      importError.value = 'Could not parse file — expected valid JSON.'
     }
+  }
+  reader.onerror = () => {
+    importError.value = 'Failed to read file.'
   }
   reader.readAsText(file)
   // Reset input so same file can be imported again
   if (importFileRef.value) importFileRef.value.value = ''
+}
+
+function getSwatchColor(recipe: CustomRecipe): string {
+  if (recipe.swatchColor) return recipe.swatchColor
+  // Try to derive from colour profile
+  const profileId = glazeStore.profileForRecipe.get(recipe.id)
+  if (profileId) {
+    const profile = glazeStore.colorProfileById.get(profileId)
+    if (profile?.swatchHex) return profile.swatchHex
+  }
+  return '#ede6d6'
+}
+
+function firingLabel(id: string): string {
+  if (!id) return ''
+  return id.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
 function formatDate(iso: string): string {
@@ -121,6 +191,7 @@ function formatDate(iso: string): string {
           style="display: none"
           @change="handleImportFile"
         />
+        <p v-if="importError" class="import-error">{{ importError }}</p>
       </div>
     </div>
 
@@ -170,65 +241,145 @@ function formatDate(iso: string): string {
         </button>
       </div>
 
-      <!-- Recipe grid -->
-      <div v-else class="recipe-grid">
+      <!-- Tag filter + Recipe grid -->
+      <template v-else>
+        <div v-if="allTags.length > 0" class="tag-filter-bar">
+          <span class="tag-filter-label">Filter by tag:</span>
+          <button
+            v-for="tag in allTags"
+            :key="tag"
+            class="tag-filter-chip"
+            :class="{ active: selectedTag === tag }"
+            @click="toggleTagFilter(tag)"
+          >{{ tag }}</button>
+          <button
+            v-if="selectedTag"
+            class="tag-filter-clear"
+            @click="selectedTag = null"
+          >Clear ×</button>
+        </div>
+
+        <!-- Recipe grid -->
+        <div class="recipe-grid">
         <div
           v-for="recipe in sortedRecipes"
           :key="recipe.id"
           v-reveal
           class="recipe-card"
         >
-          <div class="card-header">
-            <h3 class="card-name">{{ recipe.name }}</h3>
-            <button
-              class="card-fav-btn"
-              :class="{ active: store.isFavorite(recipe.id) }"
-              @click.stop="store.toggleFavorite(recipe.id)"
-              :aria-label="store.isFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'"
-            >{{ store.isFavorite(recipe.id) ? '♥' : '♡' }}</button>
-            <span class="card-cone">Cone {{ recipe.cone || '?' }}</span>
+          <!-- Swatch strip -->
+          <div class="card-swatch" :style="{ background: getSwatchColor(recipe) }">
+            <div class="card-swatch-sheen" />
           </div>
 
-          <div class="card-meta">
-            <span class="meta-item">
-              <span class="meta-label">Ingredients</span>
-              <span class="meta-value">{{ recipe.ingredients.length }}</span>
-            </span>
-            <span class="meta-divider"></span>
-            <span class="meta-item">
-              <span class="meta-label">Updated</span>
-              <span class="meta-value">{{ formatDate(recipe.updatedAt) }}</span>
-            </span>
-          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <h3 class="card-name">{{ recipe.name }}</h3>
+              <button
+                class="card-fav-btn"
+                :class="{ active: store.isFavorite(recipe.id) }"
+                @click.stop="store.toggleFavorite(recipe.id)"
+                :aria-label="store.isFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'"
+              >{{ store.isFavorite(recipe.id) ? '♥' : '♡' }}</button>
+            </div>
 
-          <div class="card-actions">
-            <RouterLink
-              :to="`/my-recipes/${recipe.id}`"
-              class="card-btn card-btn-edit"
-            >
-              Edit
-            </RouterLink>
-            <button
-              class="card-btn card-btn-calc"
-              @click="openInCalculator(recipe)"
-            >
-              Open in Calculator
-            </button>
-            <button
-              class="card-btn card-btn-export"
-              @click="exportRecipe(recipe.id)"
-            >
-              Export
-            </button>
-            <button
-              class="card-btn card-btn-delete"
-              @click="confirmDelete(recipe.id)"
-            >
-              Delete
-            </button>
+            <!-- Tags row -->
+            <div class="card-tags">
+              <TagBadge :label="'Cone ' + (recipe.cone || '?')" variant="cone" />
+              <TagBadge
+                v-for="atm in recipe.atmosphereIds"
+                :key="atm"
+                :label="atm"
+                variant="atmosphere"
+              />
+              <TagBadge
+                v-for="s in recipe.surfaceIds.slice(0, 2)"
+                :key="s"
+                :label="s.replace(/-/g, ' ')"
+                variant="default"
+              />
+              <span
+                v-if="recipe.tablewareStatus"
+                class="tw-badge"
+                :class="recipe.tablewareStatus"
+              >{{ recipe.tablewareStatus.replace(/-/g, ' ') }}</span>
+            </div>
+
+            <div class="card-meta">
+              <span class="meta-item">
+                <span class="meta-label">Ingredients</span>
+                <span class="meta-value">{{ recipe.ingredients.length }}</span>
+              </span>
+              <span class="meta-divider"></span>
+              <span class="meta-item" v-if="recipe.firingRangeId">
+                <span class="meta-label">Firing</span>
+                <span class="meta-value">{{ firingLabel(recipe.firingRangeId) }}</span>
+              </span>
+              <span class="meta-divider" v-if="recipe.firingRangeId"></span>
+              <span class="meta-item">
+                <span class="meta-label">Updated</span>
+                <span class="meta-value">{{ formatDate(recipe.updatedAt) }}</span>
+              </span>
+            </div>
+
+            <!-- Colour pills -->
+            <div v-if="recipe.colourIds.length" class="card-colours">
+              <span
+                v-for="c in recipe.colourIds.slice(0, 3)"
+                :key="c"
+                class="colour-pill"
+              >{{ c.replace(/-/g, ' ') }}</span>
+              <span v-if="recipe.colourIds.length > 3" class="colour-pill colour-more">+{{ recipe.colourIds.length - 3 }}</span>
+            </div>
+
+            <!-- User tags -->
+            <div v-if="recipe.tags?.length" class="card-user-tags">
+              <span
+                v-for="tag in recipe.tags"
+                :key="tag"
+                class="card-user-tag"
+                :class="{ 'tag-active-filter': selectedTag === tag }"
+                @click="toggleTagFilter(tag)"
+              >{{ tag }}</span>
+            </div>
+
+            <div class="card-actions">
+              <RouterLink
+                :to="`/my-recipes/${recipe.id}`"
+                class="card-btn card-btn-edit"
+              >
+                Edit
+              </RouterLink>
+              <button
+                class="card-btn card-btn-calc"
+                @click="openInCalculator(recipe)"
+              >
+                Calculator
+              </button>
+              <button
+                class="card-btn card-btn-dup"
+                @click="openDuplicateModal(recipe)"
+                title="Duplicate recipe"
+              >
+                Duplicate
+              </button>
+              <button
+                class="card-btn card-btn-export"
+                @click="exportRecipe(recipe.id)"
+              >
+                Export
+              </button>
+              <button
+                class="card-btn card-btn-delete"
+                @click="confirmDelete(recipe.id)"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+        </div>
+      </template>
     </div>
 
     <!-- Floating add button -->
@@ -263,6 +414,40 @@ function formatDate(iso: string): string {
         </div>
       </Transition>
     </Teleport>
+
+    <!-- Duplicate modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="pendingDupRecipe" class="confirm-overlay" @click.self="cancelDuplicate">
+          <div class="confirm-dialog dup-dialog">
+            <h3 class="confirm-title">Duplicate Recipe</h3>
+            <p class="confirm-text">Customise the copy before creating it.</p>
+            <div class="dup-fields">
+              <label class="dup-label">Recipe Name</label>
+              <input
+                v-model="dupName"
+                class="dup-input"
+                type="text"
+                placeholder="New recipe name…"
+                @keydown.enter="executeDuplicate"
+              />
+              <label class="dup-label">Cone</label>
+              <input
+                v-model="dupCone"
+                class="dup-input dup-input-sm"
+                type="text"
+                placeholder='e.g. "6" or "9-10"'
+                @keydown.enter="executeDuplicate"
+              />
+            </div>
+            <div class="confirm-actions">
+              <button class="confirm-btn confirm-cancel" @click="cancelDuplicate">Cancel</button>
+              <button class="confirm-btn confirm-create" @click="executeDuplicate">Create Copy</button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -274,7 +459,7 @@ function formatDate(iso: string): string {
 
 /* ---- Header ---- */
 .my-recipes-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-8)) var(--space-8) var(--space-8);
 }
 
@@ -290,7 +475,7 @@ function formatDate(iso: string): string {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .page-sub {
@@ -304,7 +489,7 @@ function formatDate(iso: string): string {
   align-self: flex-start;
   margin-top: var(--space-2);
   padding: var(--space-1) var(--space-3);
-  border: 1px solid rgba(245, 240, 232, 0.3);
+  border: 1px solid var(--ink-20);
   border-radius: var(--radius-md);
   background: transparent;
   font-family: var(--font-mono);
@@ -315,8 +500,15 @@ function formatDate(iso: string): string {
 }
 
 .import-btn:hover {
-  border-color: var(--cream);
-  color: var(--cream);
+  border-color: var(--on-band);
+  color: var(--on-band);
+}
+
+.import-error {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--danger);
+  margin-top: var(--space-2);
 }
 
 /* ---- Content area ---- */
@@ -389,8 +581,8 @@ function formatDate(iso: string): string {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: 700;
@@ -442,8 +634,8 @@ function formatDate(iso: string): string {
   font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: 0.04em;
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-lg);
   cursor: pointer;
@@ -453,6 +645,69 @@ function formatDate(iso: string): string {
 .btn-create:hover {
   background: var(--clay);
   transform: translateY(-1px);
+}
+
+/* ---- Tag filter bar ---- */
+.tag-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-lg);
+}
+
+.tag-filter-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--stone);
+  margin-right: var(--space-1);
+}
+
+.tag-filter-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--ink-10);
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tag-filter-chip:hover {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.tag-filter-chip.active {
+  background: var(--band);
+  border-color: var(--carbon);
+  color: var(--on-band);
+}
+
+.tag-filter-clear {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--ink-10);
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  margin-left: var(--space-1);
+  transition: all var(--transition-fast);
+}
+
+.tag-filter-clear:hover {
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 /* ---- Recipe grid ---- */
@@ -467,10 +722,9 @@ function formatDate(iso: string): string {
   background: var(--chalk);
   border: 1px solid var(--ink-10);
   border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
   transition:
     box-shadow var(--transition-fast),
     transform var(--transition-fast),
@@ -481,6 +735,24 @@ function formatDate(iso: string): string {
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
   border-color: var(--clay-10);
+}
+
+.card-swatch {
+  height: 48px;
+  position: relative;
+}
+
+.card-swatch-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+
+.card-body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .card-header {
@@ -521,17 +793,84 @@ function formatDate(iso: string): string {
   transform: scale(1.15);
 }
 
-.card-cone {
-  flex-shrink: 0;
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.tw-badge {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: 9px;
   font-weight: 700;
-  color: var(--clay);
-  background: var(--parchment);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--clay-10);
-  white-space: nowrap;
+  background: var(--ink-05);
+  color: var(--stone);
+}
+
+.tw-badge.functional {
+  background: var(--sage-15);
+  color: var(--sage-dark);
+}
+
+.tw-badge.test-only {
+  background: var(--clay-10);
+  color: var(--clay);
+}
+
+.card-colours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.colour-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: capitalize;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--parchment);
+  color: var(--stone);
+  border: 1px solid var(--ink-05);
+}
+
+.colour-more {
+  color: var(--clay);
+  border-color: var(--clay-10);
+}
+
+/* ---- User tags on cards ---- */
+.card-user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.card-user-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--band);
+  color: var(--on-band);
+  cursor: pointer;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+  letter-spacing: 0.02em;
+}
+
+.card-user-tag:hover {
+  opacity: 0.8;
+}
+
+.card-user-tag.tag-active-filter {
+  background: var(--clay);
+  color: white;
 }
 
 .card-meta {
@@ -595,8 +934,8 @@ function formatDate(iso: string): string {
 }
 
 .card-btn-edit {
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
 }
 
 .card-btn-edit:hover {
@@ -625,6 +964,16 @@ function formatDate(iso: string): string {
   color: var(--sage-dark);
 }
 
+.card-btn-dup {
+  background: transparent;
+  color: var(--stone);
+}
+
+.card-btn-dup:hover {
+  color: var(--ink);
+  background: var(--ink-05);
+}
+
 .card-btn-delete {
   background: transparent;
   color: var(--stone);
@@ -632,8 +981,8 @@ function formatDate(iso: string): string {
 }
 
 .card-btn-delete:hover {
-  color: #b91c1c;
-  background: #fef2f2;
+  color: var(--danger);
+  background: var(--danger-light);
 }
 
 /* ---- Floating action button ---- */
@@ -645,8 +994,8 @@ function formatDate(iso: string): string {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-full);
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -674,8 +1023,8 @@ function formatDate(iso: string): string {
 .confirm-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.45);
+  z-index: var(--z-modal);
+  background: var(--ink-40, rgba(44, 36, 32, 0.45));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -735,13 +1084,65 @@ function formatDate(iso: string): string {
 }
 
 .confirm-delete {
-  background: #b91c1c;
+  background: var(--danger);
   color: #fff;
   border: none;
 }
 
 .confirm-delete:hover {
-  background: #991b1b;
+  background: var(--danger-dark);
+}
+
+.confirm-create {
+  background: var(--clay);
+  color: #fff;
+  border: none;
+}
+
+.confirm-create:hover {
+  background: var(--clay-dark);
+}
+
+/* Duplicate modal extras */
+.dup-dialog {
+  max-width: 440px;
+}
+
+.dup-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.dup-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  white-space: nowrap;
+}
+
+.dup-input {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  background: var(--parchment);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  outline: none;
+  width: 100%;
+}
+
+.dup-input:focus {
+  border-color: var(--clay);
+}
+
+.dup-input-sm {
+  max-width: 120px;
 }
 
 /* Modal transition */

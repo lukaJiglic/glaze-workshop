@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { gsap } from 'gsap'
 import { useGlazeStore } from '@/stores/glaze'
@@ -10,7 +10,8 @@ import FilterSidebar from '@/components/recipe/FilterSidebar.vue'
 import FilterChip from '@/components/recipe/FilterChip.vue'
 import RecipeCard from '@/components/recipe/RecipeCard.vue'
 import ComparePanel from '@/components/recipe/ComparePanel.vue'
-import type { FilterState } from '@/types'
+import { computeUMF } from '@/composables/useGlazeChemistry'
+import type { FilterState, UMFResult } from '@/types'
 
 const store = useGlazeStore()
 const workshopStore = useWorkshopStore()
@@ -29,6 +30,7 @@ const {
   selectedKilns,
   selectedTechniques,
   selectedClays,
+  selectedIngredients,
   filteredRecipes,
   activeFilterCount,
   toggleFilter,
@@ -38,6 +40,8 @@ const {
   saveCurrentFilters,
   loadFilterSet,
   deleteFilterSet,
+  facetCounts,
+  chemistryRanges,
 } = useGlazeFilter(() => searchResults.value)
 
 // Read URL query param to pre-fill search (e.g. from ingredient filter link)
@@ -58,6 +62,8 @@ const filters = computed<FilterState>(() => ({
   selectedKilns: selectedKilns.value,
   selectedTechniques: selectedTechniques.value,
   selectedClays: selectedClays.value,
+  selectedIngredients: selectedIngredients.value,
+  chemistryRanges: chemistryRanges.value,
 }))
 
 // Active chips for display
@@ -72,6 +78,7 @@ const activeChips = computed(() => [
   ...selectedKilns.value.map(v => ({ type: 'kilns' as const, value: v, label: v.replace(/-/g, ' ') })),
   ...selectedTechniques.value.map(v => ({ type: 'techniques' as const, value: v, label: v.replace(/-/g, ' ') })),
   ...selectedClays.value.map(v => ({ type: 'clays' as const, value: v, label: v.replace(/-/g, ' ') })),
+  ...selectedIngredients.value.map(v => ({ type: 'ingredients' as const, value: v, label: v.replace(/-/g, ' ') })),
 ])
 
 // ─── Save filter set ─────────────────────────────────────────────────────────
@@ -86,9 +93,39 @@ function handleSaveFilter() {
 }
 
 // ─── Sort ────────────────────────────────────────────────────────────────────
-type SortKey = 'default' | 'name-asc' | 'name-desc' | 'cone-asc' | 'favorites'
+// ─── Grouping ───────────────────────────────────────────────────────────────
+type GroupBy = 'none' | 'firing-range' | 'surface' | 'color'
+const groupBy = ref<GroupBy>('none')
+
+const groupOptions: { key: GroupBy; label: string }[] = [
+  { key: 'none', label: 'None' },
+  { key: 'firing-range', label: 'Firing Range' },
+  { key: 'surface', label: 'Surface' },
+  { key: 'color', label: 'Color' },
+]
+
+type SortKey = 'default' | 'name-asc' | 'name-desc' | 'cone-asc' | 'favorites' | 'ingredients-asc' | 'ingredients-desc' | 'si-al-asc' | 'si-al-desc' | 'expansion-asc' | 'expansion-desc' | 'flux-asc' | 'flux-desc' | 'colorant-desc'
 
 const sortBy = ref<SortKey>('default')
+
+// Cache chemistry computations for sort
+const chemistryCache = computed(() => {
+  const map = new Map<string, UMFResult>()
+  for (const r of store.recipes) {
+    map.set(r.id, computeUMF(r.ingredients, r.firingRangeId))
+  }
+  return map
+})
+
+function getChemVal(id: string, key: 'siToAl' | 'expansionIndex' | 'fluxSum' | 'colorantPct'): number {
+  const umf = chemistryCache.value.get(id)
+  if (!umf || !umf.isValid) return -Infinity
+  if (key === 'siToAl') return umf.siToAl ?? -Infinity
+  if (key === 'expansionIndex') return umf.expansionIndex
+  if (key === 'fluxSum') return umf.fluxSum
+  // Total colorant % from raw ingredients
+  return umf.colorants.reduce((s, e) => s + e.moles, 0)
+}
 
 const firingRangeOrder: Record<string, number> = {
   'low-fire': 1,
@@ -122,6 +159,15 @@ const sortedRecipes = computed(() => {
       return aFav - bFav
     })
   }
+  if (sortBy.value === 'ingredients-asc') return base.sort((a, b) => a.ingredients.length - b.ingredients.length)
+  if (sortBy.value === 'ingredients-desc') return base.sort((a, b) => b.ingredients.length - a.ingredients.length)
+  if (sortBy.value === 'si-al-asc') return base.sort((a, b) => getChemVal(a.id, 'siToAl') - getChemVal(b.id, 'siToAl'))
+  if (sortBy.value === 'si-al-desc') return base.sort((a, b) => getChemVal(b.id, 'siToAl') - getChemVal(a.id, 'siToAl'))
+  if (sortBy.value === 'expansion-asc') return base.sort((a, b) => getChemVal(a.id, 'expansionIndex') - getChemVal(b.id, 'expansionIndex'))
+  if (sortBy.value === 'expansion-desc') return base.sort((a, b) => getChemVal(b.id, 'expansionIndex') - getChemVal(a.id, 'expansionIndex'))
+  if (sortBy.value === 'flux-asc') return base.sort((a, b) => getChemVal(a.id, 'fluxSum') - getChemVal(b.id, 'fluxSum'))
+  if (sortBy.value === 'flux-desc') return base.sort((a, b) => getChemVal(b.id, 'fluxSum') - getChemVal(a.id, 'fluxSum'))
+  if (sortBy.value === 'colorant-desc') return base.sort((a, b) => getChemVal(b.id, 'colorantPct') - getChemVal(a.id, 'colorantPct'))
   return base
 })
 
@@ -130,8 +176,43 @@ const sortOptions: { key: SortKey; label: string }[] = [
   { key: 'name-asc', label: 'A → Z' },
   { key: 'name-desc', label: 'Z → A' },
   { key: 'cone-asc', label: 'Cone ↑' },
+  { key: 'ingredients-asc', label: 'Fewest Ingredients' },
+  { key: 'ingredients-desc', label: 'Most Ingredients' },
   { key: 'favorites', label: '♥ First' },
+  { key: 'si-al-desc', label: 'Si:Al ↓' },
+  { key: 'si-al-asc', label: 'Si:Al ↑' },
+  { key: 'expansion-desc', label: 'Expansion ↓' },
+  { key: 'flux-desc', label: 'Flux ↓' },
+  { key: 'colorant-desc', label: 'Colorant ↓' },
 ]
+
+// ─── Keyboard navigation ─────────────────────────────────────────────────────
+const searchEl = ref<HTMLInputElement | null>(null)
+
+function handleGlobalKey(e: KeyboardEvent) {
+  const tag = (e.target as HTMLElement).tagName
+  const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'
+
+  if (e.key === '/' && !inInput) {
+    e.preventDefault()
+    searchEl.value?.focus()
+    return
+  }
+
+  if (!workshopStore.activeRecipe) return
+
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault()
+    const idx = sortedRecipes.value.findIndex(r => r.id === workshopStore.activeRecipe!.id)
+    if (idx === -1) return
+    const next = e.key === 'ArrowRight' ? idx + 1 : idx - 1
+    const target = sortedRecipes.value[next]
+    if (target) workshopStore.openRecipe(target)
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleGlobalKey))
+onUnmounted(() => window.removeEventListener('keydown', handleGlobalKey))
 
 // ─── Sidebar & grid ──────────────────────────────────────────────────────────
 const sidebarOpen = ref(false)
@@ -148,7 +229,81 @@ watch(sortedRecipes, async () => {
   )
 }, { immediate: false })
 
-const displayedRecipes = computed(() => sortedRecipes.value.slice(0, 120))
+const PAGE_SIZE = 40
+const displayLimit = ref(PAGE_SIZE)
+const sentinelEl = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+// Reset display limit when filters/sort change
+watch(sortedRecipes, () => { displayLimit.value = PAGE_SIZE })
+
+const displayedRecipes = computed(() => sortedRecipes.value.slice(0, displayLimit.value))
+const hasMore = computed(() => displayLimit.value < sortedRecipes.value.length)
+
+function loadMore() {
+  if (hasMore.value) {
+    displayLimit.value = Math.min(displayLimit.value + PAGE_SIZE, sortedRecipes.value.length)
+  }
+}
+
+onMounted(() => {
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0]?.isIntersecting) loadMore()
+  }, { rootMargin: '200px' })
+})
+
+watch(sentinelEl, (el, oldEl) => {
+  if (oldEl) observer?.unobserve(oldEl)
+  if (el) observer?.observe(el)
+}, { immediate: true })
+
+onUnmounted(() => observer?.disconnect())
+
+interface RecipeGroup {
+  key: string
+  label: string
+  recipes: typeof displayedRecipes.value
+}
+
+const collapsedGroups = ref(new Set<string>())
+
+function toggleGroupCollapse(key: string) {
+  const s = new Set(collapsedGroups.value)
+  if (s.has(key)) s.delete(key); else s.add(key)
+  collapsedGroups.value = s
+}
+
+const groupedRecipes = computed<RecipeGroup[]>(() => {
+  if (groupBy.value === 'none') return [{ key: '__all', label: '', recipes: displayedRecipes.value }]
+
+  const groups = new Map<string, typeof displayedRecipes.value>()
+
+  for (const r of displayedRecipes.value) {
+    let keys: string[] = []
+    if (groupBy.value === 'firing-range') {
+      keys = [r.firingRangeId]
+    } else if (groupBy.value === 'surface') {
+      keys = r.surfaceIds.length ? r.surfaceIds : ['other']
+    } else if (groupBy.value === 'color') {
+      keys = r.colourIds.length ? r.colourIds : ['other']
+    }
+    for (const k of keys) {
+      const arr = groups.get(k) ?? []
+      arr.push(r)
+      groups.set(k, arr)
+    }
+  }
+
+  const sorted = Array.from(groups.entries())
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([key, recipes]) => ({
+      key,
+      label: key.replace(/-/g, ' '),
+      recipes,
+    }))
+
+  return sorted
+})
 
 // ─── Compare bar ──────────────────────────────────────────────────────────────
 const compareCount = computed(() => workshopStore.compareIds.length)
@@ -177,7 +332,18 @@ function openCompare() {
       </div>
     </div>
 
-    <div class="workshop-layout">
+    <!-- Error state -->
+    <div v-if="store.error" class="workshop-error">
+      <p class="error-message">{{ store.error }}</p>
+      <button class="btn btn-primary" @click="store.loadAll()">Retry</button>
+    </div>
+
+    <!-- Loading state -->
+    <div v-else-if="store.isLoading" class="workshop-loading">
+      <p class="loading-text">Loading recipes...</p>
+    </div>
+
+    <div v-else class="workshop-layout">
       <!-- Mobile sidebar toggle -->
       <button class="sidebar-toggle" @click="sidebarOpen = !sidebarOpen">
         <span>Filter</span>
@@ -185,16 +351,16 @@ function openCompare() {
       </button>
 
       <!-- Sidebar -->
-      <Transition name="slide-sidebar">
-        <FilterSidebar
-          v-show="sidebarOpen || true"
-          :filters="filters"
-          :active-count="activeFilterCount"
-          @toggle="toggleFilter"
-          @clear-all="clearAll"
-          class="desktop-sidebar"
-        />
-      </Transition>
+      <FilterSidebar
+        :filters="filters"
+        :active-count="activeFilterCount"
+        :facet-counts="facetCounts"
+        @toggle="toggleFilter"
+        @clear-all="clearAll"
+        @update:chemistry-ranges="chemistryRanges = $event"
+        class="desktop-sidebar"
+        :data-open="sidebarOpen"
+      />
 
       <!-- Main content -->
       <div class="workshop-main">
@@ -203,6 +369,7 @@ function openCompare() {
           <div class="search-input-wrap">
             <span class="search-icon">🔍</span>
             <input
+              ref="searchEl"
               v-model="query"
               type="search"
               class="search-input"
@@ -210,6 +377,7 @@ function openCompare() {
               autocomplete="off"
             />
             <button v-if="query" class="search-clear" @click="clearSearch">×</button>
+            <span v-else class="search-shortcut">/</span>
           </div>
         </div>
 
@@ -252,13 +420,29 @@ function openCompare() {
           <button class="clear-all-chips" @click="clearAll">Clear all</button>
         </div>
 
-        <!-- Results meta + sort -->
+        <!-- Results meta + sort + group -->
         <div class="results-row">
-          <span class="results-count">
-            {{ filteredRecipes.length }} recipe{{ filteredRecipes.length !== 1 ? 's' : '' }}
-            <template v-if="isSearching">matching "{{ query }}"</template>
-          </span>
+          <div class="results-count-row">
+            <span class="results-count">
+              {{ filteredRecipes.length }} recipe{{ filteredRecipes.length !== 1 ? 's' : '' }}
+              <template v-if="isSearching">matching "{{ query }}"</template>
+            </span>
+            <button
+              class="export-csv-btn"
+              @click="workshopStore.exportRecipesAsCSV(filteredRecipes)"
+              title="Export filtered recipes as CSV"
+            >Export CSV</button>
+          </div>
           <div class="sort-controls">
+            <span class="sort-label">Group:</span>
+            <button
+              v-for="opt in groupOptions"
+              :key="opt.key"
+              class="sort-btn"
+              :class="{ active: groupBy === opt.key }"
+              @click="groupBy = opt.key"
+            >{{ opt.label }}</button>
+            <span class="sort-sep"></span>
             <span class="sort-label">Sort:</span>
             <button
               v-for="opt in sortOptions"
@@ -270,20 +454,32 @@ function openCompare() {
           </div>
         </div>
 
-        <!-- Recipe grid -->
-        <TransitionGroup
-          ref="gridEl"
-          tag="div"
-          class="recipe-grid"
-          name="card"
-          appear
-        >
-          <RecipeCard
-            v-for="recipe in displayedRecipes"
-            :key="recipe.id"
-            :recipe="recipe"
-          />
-        </TransitionGroup>
+        <!-- Recipe grid (grouped or flat) -->
+        <div v-for="group in groupedRecipes" :key="group.key">
+          <button
+            v-if="group.label"
+            class="group-header"
+            @click="toggleGroupCollapse(group.key)"
+          >
+            <span class="group-toggle">{{ collapsedGroups.has(group.key) ? '+' : '−' }}</span>
+            <span class="group-label">{{ group.label }}</span>
+            <span class="group-count">{{ group.recipes.length }}</span>
+          </button>
+          <TransitionGroup
+            v-if="!collapsedGroups.has(group.key)"
+            ref="gridEl"
+            tag="div"
+            class="recipe-grid"
+            name="card"
+            appear
+          >
+            <RecipeCard
+              v-for="recipe in group.recipes"
+              :key="recipe.id"
+              :recipe="recipe"
+            />
+          </TransitionGroup>
+        </div>
 
         <!-- Empty state -->
         <div v-if="filteredRecipes.length === 0" class="empty-state">
@@ -293,9 +489,9 @@ function openCompare() {
           <button class="btn btn-secondary" @click="clearAll(); clearSearch()">Reset all</button>
         </div>
 
-        <!-- Load more hint -->
-        <div v-if="filteredRecipes.length > 120" class="load-more-hint">
-          <p>Showing first 120 of {{ filteredRecipes.length }}. Refine your filters to see more.</p>
+        <!-- Load more sentinel -->
+        <div v-if="hasMore" ref="sentinelEl" class="load-more-hint">
+          <p>Showing {{ displayedRecipes.length }} of {{ sortedRecipes.length }} recipes — scroll for more</p>
         </div>
       </div>
     </div>
@@ -332,7 +528,7 @@ function openCompare() {
 }
 
 .workshop-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-8)) var(--space-8) var(--space-8);
 }
 
@@ -344,11 +540,35 @@ function openCompare() {
   gap: var(--space-1);
 }
 
+.workshop-error,
+.workshop-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--space-8);
+  text-align: center;
+}
+
+.error-message {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--danger);
+}
+
+.loading-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--stone);
+}
+
 .page-title {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .page-sub {
@@ -373,8 +593,8 @@ function openCompare() {
   bottom: var(--space-6);
   right: var(--space-6);
   z-index: var(--z-above);
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-full);
   font-family: var(--font-mono);
@@ -448,6 +668,18 @@ function openCompare() {
 }
 
 .search-clear:hover { color: var(--clay); }
+
+.search-shortcut {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--stone);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+  pointer-events: none;
+  opacity: 0.7;
+}
 
 /* Saved filter sets */
 .saved-filters-bar {
@@ -529,8 +761,8 @@ function openCompare() {
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   border: none;
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   font-family: var(--font-mono);
   font-size: 11px;
   cursor: pointer;
@@ -576,10 +808,34 @@ function openCompare() {
   margin-bottom: var(--space-5);
 }
 
+.results-count-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .results-count {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   color: var(--stone);
+}
+
+.export-csv-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.03em;
+}
+
+.export-csv-btn:hover {
+  color: var(--clay);
+  border-color: var(--clay);
 }
 
 .sort-controls {
@@ -614,9 +870,65 @@ function openCompare() {
 .sort-btn:hover { color: var(--ink); border-color: var(--ink-20); }
 
 .sort-btn.active {
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   border-color: var(--carbon);
+}
+
+.sort-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--ink-10);
+  margin: 0 var(--space-1);
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-2);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+  border-bottom: 2px solid var(--ink-10);
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.group-header:first-child {
+  margin-top: 0;
+}
+
+.group-header:hover {
+  border-bottom-color: var(--clay);
+}
+
+.group-toggle {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--stone);
+  width: 20px;
+  text-align: center;
+}
+
+.group-label {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--carbon);
+  text-transform: capitalize;
+}
+
+.group-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--stone);
+  margin-left: auto;
 }
 
 .recipe-grid {
@@ -678,7 +990,7 @@ function openCompare() {
   left: 0;
   right: 0;
   z-index: var(--z-above, 100);
-  background: var(--carbon);
+  background: var(--band);
   border-top: 2px solid var(--clay);
   padding: var(--space-3) var(--space-6);
 }
@@ -703,7 +1015,7 @@ function openCompare() {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -726,7 +1038,7 @@ function openCompare() {
 
 .compare-bar-go {
   background: var(--clay);
-  color: var(--cream);
+  color: var(--on-band);
   border: none;
   border-radius: var(--radius-full);
   padding: var(--space-2) var(--space-5);
@@ -760,8 +1072,8 @@ function openCompare() {
 }
 
 .compare-bar-clear:hover {
-  border-color: var(--cream);
-  color: var(--cream);
+  border-color: var(--on-band);
+  color: var(--on-band);
 }
 
 /* Compare bar transition */
@@ -776,11 +1088,29 @@ function openCompare() {
 }
 
 @media (max-width: 768px) {
-  .desktop-sidebar { display: none; }
+  .desktop-sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: var(--z-drawer, 500);
+    width: 280px;
+    max-height: 100vh;
+    box-shadow: 4px 0 20px rgba(196, 83, 42, 0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding-top: calc(var(--nav-height) + var(--space-4));
+  }
+  .desktop-sidebar[data-open="true"] {
+    transform: translateX(0);
+  }
   .sidebar-toggle { display: flex; }
   .workshop-main { padding: var(--space-4); }
   .results-row { flex-direction: column; align-items: flex-start; }
+  .sort-controls { flex-wrap: wrap; }
   .compare-bar { padding: var(--space-3); }
   .compare-bar-names { max-width: 200px; }
+  .recipe-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--space-3); }
 }
 </style>

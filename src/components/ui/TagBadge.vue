@@ -29,17 +29,17 @@ defineProps<{
 }
 
 .cone {
-  background: rgba(196, 83, 42, 0.12);
+  background: var(--clay-12);
   color: var(--clay-dark);
 }
 
 .atmosphere {
-  background: rgba(122, 143, 110, 0.15);
+  background: var(--sage-15);
   color: var(--sage-dark);
 }
 
 .surface {
-  background: rgba(139, 115, 85, 0.12);
+  background: var(--stone-12);
   color: var(--stone-dark);
 }
 

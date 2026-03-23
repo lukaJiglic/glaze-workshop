@@ -95,6 +95,9 @@ export interface Taxonomy {
     surfaces: TaxonomyItem[]
     colours: TaxonomyItem[]
     styles: TaxonomyItem[]
+    kilns?: TaxonomyItem[]
+    clays?: TaxonomyItem[]
+    techniques?: TaxonomyItem[]
   }
 }
 
@@ -109,6 +112,19 @@ export interface FilterState {
   selectedKilns: string[]
   selectedTechniques: string[]
   selectedClays: string[]
+  selectedIngredients: string[]
+  chemistryRanges: ChemistryRangeFilter
+}
+
+export interface ChemistryRangeFilter {
+  siAlMin: number | null
+  siAlMax: number | null
+  expansionMin: number | null
+  expansionMax: number | null
+  knaOMin: number | null
+  knaOMax: number | null
+  fluxSumMin: number | null
+  fluxSumMax: number | null
 }
 
 export interface ScaledIngredient extends Ingredient {
@@ -149,6 +165,137 @@ export interface UMFResult {
   firingRangeId?: string         // passed through for target comparison
 }
 
+// ─── Studio Expansion types ─────────────────────────────────────────────────
+
+export interface ExpandedMaterial {
+  id: string
+  name: string
+  group: string
+  oxideIds: string[]
+  whatItAdds: string[]
+  bestUses: string[]
+  watchFor: string[]
+  switchingNotes: string[]
+  typicalUsePercent: string
+  sourceIds: string[]
+}
+
+export interface UMFBenchmarkProfile {
+  id: string
+  name: string
+  firingRangeId: string
+  coneRange: string
+  surfaceGoal: string
+  targetBands: Record<string, string>
+  chemistrySignals: string[]
+  bestReferenceRecipeIds: string[]
+  watchFor: string[]
+  sourceIds: string[]
+}
+
+export interface UMFDiagnostic {
+  id: string
+  issue: string
+  moveDirection: string[]
+  referenceProfileIds: string[]
+}
+
+export interface ColourDevelopmentGuide {
+  id: string
+  name: string
+  goal: string
+  bestHosts: string[]
+  colourants: string[]
+  bodyEffects: string[]
+  thicknessEffects: string[]
+  coolingEffects: string[]
+  atmosphereEffects?: string[]
+  commonMistakes: string[]
+  stepSequence: string[]
+  referenceRecipeIds: string[]
+  sourceIds: string[]
+}
+
+export interface MaterialSwitchingPlaybook {
+  id: string
+  fromMaterialIds: string[]
+  toMaterialIds: string[]
+  whenToUse: string[]
+  whyThisIsHard: string
+  firstMove: string
+  expectedChemistryShift: string[]
+  workflowShift: string[]
+  testSequence: string[]
+  stopIf: string[]
+  referenceRecipeIds: string[]
+  sourceIds: string[]
+}
+
+export interface FiringProgramStep {
+  rateFPerHour: number
+  targetF: number
+  holdMinutes: number
+}
+
+export interface FiringProgram {
+  id: string
+  name: string
+  kind: string
+  targetConeOrRange: string
+  bestFor: string[]
+  steps: FiringProgramStep[]
+  outcomeGoals: string[]
+  riskSignals: string[]
+  adjustments: string[]
+  sourceIds: string[]
+}
+
+export interface BodyDefinition {
+  id: string
+  label: string
+  traits: string[]
+}
+
+export interface BodyResponse {
+  bodyId: string
+  fitRisk: string
+  colorShift: string
+  surfaceShift: string
+  applicationTolerance: string
+  recommendedVariantIds: string[]
+  watchFor: string[]
+}
+
+export interface FamilyBodyResponse {
+  id: string
+  name: string
+  referenceRecipeIds: string[]
+  responses: BodyResponse[]
+}
+
+export interface StepProcedure {
+  id: string
+  name: string
+  goal: string
+  steps: string[]
+  checkpoints: string[]
+  commonMistakes: string[]
+  relatedRecipeIds?: string[]
+  relatedMaterialIds?: string[]
+  relatedPlaybookIds?: string[]
+  relatedWorkflowIds?: string[]
+  sourceIds: string[]
+}
+
+export interface FiringLogEntry {
+  id: string
+  date: string          // ISO date string (YYYY-MM-DD)
+  kiln: string
+  programName: string
+  cone: string
+  resultNotes: string
+}
+
 export interface CustomRecipe {
   id: string
   name: string
@@ -161,7 +308,13 @@ export interface CustomRecipe {
   notes: string[]
   cautionIds?: string[]
   styleIds?: string[]
+  kilnIds?: string[]
+  clayIds?: string[]
+  techniqueIds?: string[]
+  tablewareStatus?: string
   swatchColor?: string
+  tags?: string[]
+  firingLog?: FiringLogEntry[]
   createdAt: string
   updatedAt: string
 }

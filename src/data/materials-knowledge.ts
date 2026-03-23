@@ -485,6 +485,15 @@ export const substitutions = new Map<string, SubstitutionPair>([
     specifics: ['Best approach: remove GB entirely and rebuild the boron, CaO, MgO, and Na2O from separate materials using glaze chemistry software.'],
     options: [
       {
+        materialId: 'gillespie-borate',
+        label: 'Gillespie Borate',
+        ratio: '1:1 direct replacement',
+        difficulty: 'easy',
+        difficultyNote: 'Closest overall chemistry to Gerstley Borate. Higher MgO gives slightly smoother melt.',
+        chemicalShift: 'Higher MgO, lower Na2O — most consistent of the natural borates',
+        visualEffect: 'Very similar appearance. Slightly silkier surface due to higher magnesia.',
+      },
+      {
         materialId: 'colemanite',
         label: 'Colemanite',
         ratio: '1:1 rough approximation',

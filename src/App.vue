@@ -5,6 +5,7 @@ import { useWorkshopStore } from '@/stores/workshop'
 import AppNav from '@/components/layout/AppNav.vue'
 import PageTransition from '@/components/layout/PageTransition.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
+import ErrorBoundary from '@/components/ui/ErrorBoundary.vue'
 import RecipeDetail from '@/components/recipe/RecipeDetail.vue'
 
 const store = useGlazeStore()
@@ -41,7 +42,9 @@ watch(() => store.isLoaded, (loaded) => {
       <!-- Router views -->
       <RouterView v-slot="{ Component }">
         <PageTransition>
-          <component :is="Component" :key="$route.path" />
+          <ErrorBoundary>
+            <component :is="Component" :key="$route.path" />
+          </ErrorBoundary>
         </PageTransition>
       </RouterView>
     </main>

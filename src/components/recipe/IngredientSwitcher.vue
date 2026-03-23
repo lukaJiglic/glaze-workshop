@@ -244,7 +244,7 @@ function handleSwap(opt: SubstitutionOption) {
 
 .swap-btn {
   background: var(--clay);
-  color: var(--cream);
+  color: var(--on-band);
   border: none;
   border-radius: var(--radius-full);
   padding: var(--space-1) var(--space-3);

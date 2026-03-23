@@ -1,7 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useStorage } from '@vueuse/core'
-import type { Recipe, ScaledIngredient, CustomRecipe, Ingredient } from '@/types'
+import type { Recipe, ScaledIngredient, CustomRecipe, Ingredient, FiringLogEntry } from '@/types'
+
+const storageQuotaWarning = ref(false)
+
+/** Safe localStorage wrapper — silently handles quota errors */
+function safeStorage<T>(key: string, defaults: T) {
+  return useStorage<T>(key, defaults, localStorage, {
+    writeDefaults: false,
+    onError: (e) => {
+      if (e instanceof DOMException && (e.name === 'QuotaExceededError' || e.code === 22)) {
+        storageQuotaWarning.value = true
+        console.warn(`[Workshop] localStorage quota exceeded writing "${key}"`)
+      }
+    },
+  })
+}
 
 export const useWorkshopStore = defineStore('workshop', () => {
   // Active recipe for detail drawer
@@ -27,10 +42,10 @@ export const useWorkshopStore = defineStore('workshop', () => {
   }
 
   // Favorites — persisted to localStorage
-  const favoriteIds = useStorage<string[]>('glaze-favorites', [])
+  const favoriteIds = safeStorage<string[]>('glaze-favorites', [])
 
   // Recently viewed — persisted to localStorage
-  const recentlyViewed = useStorage<string[]>('glaze-recently-viewed', [])
+  const recentlyViewed = safeStorage<string[]>('glaze-recently-viewed', [])
 
   const isFavorite = computed(() => (id: string) => favoriteIds.value.includes(id))
 
@@ -59,7 +74,7 @@ export const useWorkshopStore = defineStore('workshop', () => {
   }
 
   // Per-recipe user notes — persisted to localStorage
-  const userNotes = useStorage<Record<string, string[]>>('glaze-user-notes', {})
+  const userNotes = safeStorage<Record<string, string[]>>('glaze-user-notes', {})
 
   function addUserNote(recipeId: string, note: string) {
     const existing = userNotes.value[recipeId] ?? []
@@ -86,9 +101,9 @@ export const useWorkshopStore = defineStore('workshop', () => {
   }
 
   // Calculator state — persisted to localStorage
-  const calculatorRecipeId = useStorage<string | null>('glaze-calculator-recipe-id', null)
+  const calculatorRecipeId = safeStorage<string | null>('glaze-calculator-recipe-id', null)
   const calculatorRecipe = ref<Recipe | null>(null)
-  const batchWeight = useStorage<number>('glaze-calculator-batch-weight', 1000)
+  const batchWeight = safeStorage<number>('glaze-calculator-batch-weight', 1000)
 
   const scaledIngredients = computed<ScaledIngredient[]>(() => {
     const src = calculatorRecipe.value ?? activeRecipe.value
@@ -123,19 +138,70 @@ export const useWorkshopStore = defineStore('workshop', () => {
   }
 
   // --- Custom recipes --- persisted to localStorage
-  const customRecipes = useStorage<CustomRecipe[]>('glaze-custom-recipes', [])
+  const customRecipes = safeStorage<CustomRecipe[]>('glaze-custom-recipes', [])
+
+  // --- Recipe version history --- persisted to localStorage (max 5 per recipe)
+  const recipeVersionHistory = safeStorage<Record<string, CustomRecipe[]>>('glaze-recipe-versions', {})
 
   function saveCustomRecipe(recipe: CustomRecipe) {
     const idx = customRecipes.value.findIndex(r => r.id === recipe.id)
     if (idx >= 0) {
+      // Push current version to history before overwriting
+      const current = customRecipes.value[idx]
+      const existingHistory = recipeVersionHistory.value[recipe.id] ?? []
+      recipeVersionHistory.value = {
+        ...recipeVersionHistory.value,
+        [recipe.id]: [current, ...existingHistory].slice(0, 5),
+      }
       customRecipes.value = customRecipes.value.map((r, i) => i === idx ? { ...recipe, updatedAt: new Date().toISOString() } : r)
     } else {
       customRecipes.value = [...customRecipes.value, { ...recipe, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }]
     }
   }
 
+  function getVersionHistory(id: string): CustomRecipe[] {
+    return recipeVersionHistory.value[id] ?? []
+  }
+
+  function restoreVersion(version: CustomRecipe): void {
+    saveCustomRecipe({ ...version })
+  }
+
   function deleteCustomRecipe(id: string) {
     customRecipes.value = customRecipes.value.filter(r => r.id !== id)
+  }
+
+  function duplicateCustomRecipe(source: CustomRecipe, nameOverride?: string, coneOverride?: string): CustomRecipe {
+    const now = new Date().toISOString()
+    const copy: CustomRecipe = {
+      ...JSON.parse(JSON.stringify(source)),
+      id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      name: nameOverride ?? `${source.name} (Copy)`,
+      cone: coneOverride ?? source.cone,
+      firingLog: [],
+      createdAt: now,
+      updatedAt: now,
+    }
+    customRecipes.value = [...customRecipes.value, copy]
+    return copy
+  }
+
+  // ─── Firing log ────────────────────────────────────────────────────────────
+  function addFiringLogEntry(recipeId: string, entry: Omit<FiringLogEntry, 'id'>): void {
+    const idx = customRecipes.value.findIndex(r => r.id === recipeId)
+    if (idx < 0) return
+    const newEntry: FiringLogEntry = { ...entry, id: `log-${Date.now()}` }
+    const updated = { ...customRecipes.value[idx] }
+    updated.firingLog = [newEntry, ...(updated.firingLog ?? [])]
+    customRecipes.value = customRecipes.value.map((r, i) => i === idx ? updated : r)
+  }
+
+  function removeFiringLogEntry(recipeId: string, entryId: string): void {
+    const idx = customRecipes.value.findIndex(r => r.id === recipeId)
+    if (idx < 0) return
+    const updated = { ...customRecipes.value[idx] }
+    updated.firingLog = (updated.firingLog ?? []).filter(e => e.id !== entryId)
+    customRecipes.value = customRecipes.value.map((r, i) => i === idx ? updated : r)
   }
 
   function duplicateRecipeAsCustom(source: Recipe): CustomRecipe {
@@ -147,6 +213,12 @@ export const useWorkshopStore = defineStore('workshop', () => {
       atmosphereIds: [...source.atmosphereIds],
       surfaceIds: [...source.surfaceIds],
       colourIds: [...source.colourIds],
+      kilnIds: [...(source.kilnIds ?? [])],
+      clayIds: [...(source.clayIds ?? [])],
+      techniqueIds: [...(source.techniqueIds ?? [])],
+      styleIds: [...(source.styleIds ?? [])],
+      tablewareStatus: source.tablewareStatus ?? 'test-only',
+      cautionIds: [...(source.cautionIds ?? [])],
       ingredients: source.ingredients.map(i => ({ ...i })),
       notes: ['Derived from: ' + source.name],
       createdAt: new Date().toISOString(),
@@ -164,14 +236,14 @@ export const useWorkshopStore = defineStore('workshop', () => {
       firingRangeId: custom.firingRangeId,
       cone: custom.cone,
       atmosphereIds: custom.atmosphereIds,
-      kilnIds: [],
-      clayIds: [],
-      techniqueIds: [],
+      kilnIds: custom.kilnIds ?? [],
+      clayIds: custom.clayIds ?? [],
+      techniqueIds: custom.techniqueIds ?? [],
       styleIds: custom.styleIds ?? [],
       colourIds: custom.colourIds,
       surfaceIds: custom.surfaceIds,
       ingredients: custom.ingredients,
-      tablewareStatus: 'test-only',
+      tablewareStatus: custom.tablewareStatus ?? 'test-only',
       cautionIds: custom.cautionIds ?? [],
       notes: custom.notes,
       sourceIds: [],
@@ -179,7 +251,7 @@ export const useWorkshopStore = defineStore('workshop', () => {
   }
 
   // Batch history — persisted to localStorage
-  const batchHistory = useStorage<Array<{ recipeId: string; recipeName: string; weight: number; date: string }>>('glaze-batch-history', [])
+  const batchHistory = safeStorage<Array<{ recipeId: string; recipeName: string; weight: number; date: string }>>('glaze-batch-history', [])
 
   function recordBatchScale(recipeId: string, recipeName: string, weight: number) {
     batchHistory.value = [
@@ -208,6 +280,12 @@ export const useWorkshopStore = defineStore('workshop', () => {
         atmosphereIds: parsed.atmosphereIds ?? [],
         surfaceIds: parsed.surfaceIds ?? [],
         colourIds: parsed.colourIds ?? [],
+        kilnIds: parsed.kilnIds ?? [],
+        clayIds: parsed.clayIds ?? [],
+        techniqueIds: parsed.techniqueIds ?? [],
+        styleIds: parsed.styleIds ?? [],
+        tablewareStatus: parsed.tablewareStatus ?? 'test-only',
+        cautionIds: parsed.cautionIds ?? [],
         ingredients: parsed.ingredients.map((i: Ingredient) => ({
           materialId: i.materialId ?? '',
           sourceLabel: i.sourceLabel ?? '',
@@ -237,6 +315,12 @@ export const useWorkshopStore = defineStore('workshop', () => {
       atmosphereIds: [...src.atmosphereIds],
       surfaceIds: [...src.surfaceIds],
       colourIds: [...src.colourIds],
+      kilnIds: [...(src.kilnIds ?? [])],
+      clayIds: [...(src.clayIds ?? [])],
+      techniqueIds: [...(src.techniqueIds ?? [])],
+      styleIds: [...(src.styleIds ?? [])],
+      tablewareStatus: src.tablewareStatus ?? 'test-only',
+      cautionIds: [...(src.cautionIds ?? [])],
       ingredients: src.ingredients.map(i => ({ ...i })),
       notes: [
         `Scaled from: ${src.name}`,
@@ -250,9 +334,44 @@ export const useWorkshopStore = defineStore('workshop', () => {
     return custom
   }
 
+  // ── CSV Export ──────────────────────────────────────────────────────────
+  function exportRecipesCSV(recipes: Recipe[]): string {
+    const rows: string[][] = []
+    rows.push(['Name', 'Cone', 'Firing Range', 'Atmospheres', 'Surfaces', 'Tableware Status', 'Ingredients', 'Material Count'])
+    for (const r of recipes) {
+      rows.push([
+        r.name,
+        r.cone,
+        r.firingRangeId,
+        r.atmosphereIds.join('; '),
+        r.surfaceIds.join('; '),
+        r.tablewareStatus,
+        r.ingredients.map(i => `${i.sourceLabel} ${i.amount}%`).join('; '),
+        String(r.ingredients.length),
+      ])
+    }
+    return rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',')).join('\n')
+  }
+
+  function downloadCSV(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function exportRecipesAsCSV(recipes: Recipe[]) {
+    const csv = exportRecipesCSV(recipes)
+    downloadCSV(csv, 'glaze-recipes.csv')
+  }
+
   return {
     activeRecipe,
     isDrawerOpen,
+    storageQuotaWarning,
     favoriteIds,
     recentlyViewed,
     isFavorite,
@@ -276,7 +395,13 @@ export const useWorkshopStore = defineStore('workshop', () => {
     saveCustomRecipe,
     deleteCustomRecipe,
     duplicateRecipeAsCustom,
+    duplicateCustomRecipe,
+    addFiringLogEntry,
+    removeFiringLogEntry,
     customToRecipe,
+    recipeVersionHistory,
+    getVersionHistory,
+    restoreVersion,
     batchHistory,
     recordBatchScale,
     compareIds,
@@ -286,5 +411,6 @@ export const useWorkshopStore = defineStore('workshop', () => {
     exportRecipeJSON,
     importRecipeJSON,
     saveScaledAsCustom,
+    exportRecipesAsCSV,
   }
 })

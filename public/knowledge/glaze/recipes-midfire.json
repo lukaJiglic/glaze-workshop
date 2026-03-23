@@ -273,7 +273,7 @@
       "kilnIds": ["electric-kiln"],
       "clayIds": ["stoneware", "porcelain", "white-stoneware"],
       "techniqueIds": [],
-      "styleIds": ["glossy", "variegated"],
+      "styleIds": ["clear-gloss", "variegated"],
       "colourIds": ["red", "brown", "variegated"],
       "surfaceIds": ["glossy", "variegated"],
       "ingredients": [

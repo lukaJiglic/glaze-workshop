@@ -280,7 +280,7 @@
       "kilnIds": ["gas-kiln", "wood-kiln", "electric-kiln"],
       "clayIds": ["stoneware", "porcelain"],
       "techniqueIds": [],
-      "styleIds": ["glossy"],
+      "styleIds": ["clear-gloss"],
       "colourIds": ["clear"],
       "surfaceIds": ["glossy", "transparent"],
       "ingredients": [
@@ -304,8 +304,8 @@
       "clayIds": ["stoneware", "porcelain"],
       "techniqueIds": [],
       "styleIds": ["shino", "variegated"],
-      "colourIds": ["white", "amber", "orange"],
-      "surfaceIds": ["semi-transparent", "variegated", "texture"],
+      "colourIds": ["white", "amber"],
+      "surfaceIds": ["semi-transparent", "variegated"],
       "ingredients": [
         { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 40.91 },
         { "materialId": "epk-kaolin", "sourceLabel": "EPK", "amount": 18.18 },

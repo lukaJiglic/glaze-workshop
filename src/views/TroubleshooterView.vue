@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGlazeStore } from '@/stores/glaze'
 import { gsap } from 'gsap'
+import StepProcedureCard from '@/components/ui/StepProcedureCard.vue'
 
 const router = useRouter()
 const glazeStore = useGlazeStore()
@@ -126,6 +127,7 @@ const avoidRecipes = computed(() => {
 })
 
 onMounted(() => {
+  glazeStore.loadStepProcedures()
   if (headerEl.value) {
     gsap.fromTo(headerEl.value, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
   }
@@ -156,9 +158,10 @@ onMounted(() => {
           class="defect-card"
           :class="{ active: activeDefect === defect.id }"
           @click="selectDefect(defect.id)"
+          :aria-label="`Diagnose ${defect.name}`"
           v-reveal.scale
         >
-          <span class="defect-icon">{{ defect.icon }}</span>
+          <span class="defect-icon" aria-hidden="true">{{ defect.icon }}</span>
           <h3 class="defect-name">{{ defect.name }}</h3>
           <p class="defect-symptom">{{ defect.symptom }}</p>
         </button>
@@ -246,6 +249,19 @@ onMounted(() => {
         </div>
       </Transition>
 
+      <!-- Studio Procedures -->
+      <div v-if="glazeStore.stepProcedures.length" class="procedures-section" v-reveal>
+        <h2 class="section-heading">Studio Procedures</h2>
+        <p class="procedures-intro">Step-by-step instructions for common glaze testing tasks. Follow these to keep your tests comparable and your results meaningful.</p>
+        <div class="procedures-grid">
+          <StepProcedureCard
+            v-for="proc in glazeStore.stepProcedures"
+            :key="proc.id"
+            :procedure="proc"
+          />
+        </div>
+      </div>
+
       <!-- General tips section -->
       <div class="general-section" v-reveal>
         <h2 class="section-heading">General Tips</h2>
@@ -287,7 +303,7 @@ onMounted(() => {
 }
 
 .trouble-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-8)) var(--space-8) var(--space-8);
 }
 
@@ -303,7 +319,7 @@ onMounted(() => {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .page-sub {
@@ -577,7 +593,7 @@ onMounted(() => {
 
 .avoid-chip:hover {
   border-color: var(--sage);
-  background: rgba(122, 143, 110, 0.1);
+  background: var(--sage-10);
   color: var(--sage);
 }
 
@@ -618,6 +634,27 @@ onMounted(() => {
   font-size: var(--text-sm);
   color: var(--stone);
   line-height: 1.55;
+}
+
+/* Studio Procedures */
+.procedures-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.procedures-intro {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--stone);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.procedures-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 /* Transitions */

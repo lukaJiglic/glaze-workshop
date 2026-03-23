@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "title": "Step-by-step glaze work instructions",
+    "createdAt": "2026-03-15",
+    "note": "These procedures are practical studio instructions for testing and expanding glaze knowledge. They are written to slow down guesswork and make every batch more comparable."
+  },
+  "procedures": [
+    {
+      "id": "build-1000g-test-batch",
+      "name": "Build a 1000 g test batch from a 100-part recipe",
+      "goal": "Turn a recipe into a comparable test batch without introducing avoidable process noise.",
+      "steps": [
+        "Choose one recipe and one body for the batch. Do not mix several goals into the same test.",
+        "Convert the recipe to a 1000 gram dry batch so each percentage equals 10 grams.",
+        "Weigh each material cleanly into a dry bucket, starting with the major materials and ending with small colorants or opacifiers.",
+        "Dry blend first so a later wet lump is not mistaken for a bad recipe.",
+        "Add water gradually instead of all at once, then mix thoroughly.",
+        "Sieve the glaze through an appropriate mesh and remix after sieving.",
+        "Label the bucket with recipe id, body, date, and intended firing."
+      ],
+      "checkpoints": [
+        "all weights match the written batch sheet",
+        "the glaze is uniform after sieving",
+        "the batch label is complete before any tile is dipped"
+      ],
+      "commonMistakes": [
+        "changing the batch size and the recipe at the same time",
+        "adding the water too fast and then blaming the recipe for slurry problems",
+        "forgetting to label the batch until after several similar tests exist"
+      ],
+      "relatedRecipeIds": ["g2926b", "g2934", "ga6-a"],
+      "sourceIds": ["insight-glazes", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "set-bucket-consistency",
+      "name": "Set bucket consistency before testing",
+      "goal": "Make application behaviour consistent enough that thickness differences are intentional rather than accidental.",
+      "steps": [
+        "Mix the glaze thoroughly after it has rested so the solids are fully back in suspension.",
+        "Check whether the glaze feels watery, creamy, or overly gelled before changing anything.",
+        "Adjust water in small increments only if the glaze is clearly too thick to apply evenly.",
+        "If the glaze settles hard or applies streaky, fix the process issue before changing chemistry.",
+        "Use flocculation or suspension aids only in small recorded amounts.",
+        "Apply a quick test dip on a scrap tile and let it dry so you can judge coat quality."
+      ],
+      "checkpoints": [
+        "the glaze applies in a repeatable coat instead of a random flood",
+        "the dry layer does not dust off immediately or crack badly on drying",
+        "any process aid added to the bucket is recorded"
+      ],
+      "commonMistakes": [
+        "using a chemistry edit to solve a slurry problem",
+        "adding a process aid without writing down how much",
+        "judging consistency from one stir instead of from real application"
+      ],
+      "relatedMaterialIds": ["epsom-salt", "bentonite", "cmc-gum", "veegum-t"],
+      "sourceIds": ["digitalfire-rheology", "digitalfire-viscosity", "digitalfire-crawling"]
+    },
+    {
+      "id": "run-thickness-ladder",
+      "name": "Run a thickness ladder",
+      "goal": "Find the first stable useful thickness zone instead of choosing a glaze from one arbitrary coat.",
+      "steps": [
+        "Choose one test tile shape with room for several thickness bands.",
+        "Apply the first band thin, the middle band at your normal thickness, and the top band deliberately heavy.",
+        "Keep the clay body and firing identical across all thickness ladders in the same round.",
+        "Write the thickness order on the back or in the firing log so it cannot be forgotten later.",
+        "Fire all ladders together with witness cones.",
+        "Read the ladder from thinnest to thickest and mark the first zone that looks stable, mature, and useful."
+      ],
+      "checkpoints": [
+        "the same glaze shows a visible progression instead of random application noise",
+        "the chosen production thickness is based on evidence, not on the prettiest accidental band",
+        "run distance or opacity change is recorded"
+      ],
+      "commonMistakes": [
+        "testing only one coat count on a reactive glaze",
+        "choosing the most dramatic run zone instead of the first stable usable zone",
+        "forgetting to compare the ladder on the actual production body"
+      ],
+      "relatedWorkflowIds": ["thickness-ladder"],
+      "sourceIds": ["insight-glazes", "mayco-glaze-combinations", "digitalfire-plc6cr"]
+    },
+    {
+      "id": "choose-cone6-clear-host",
+      "name": "Choose a cone-6 clear host",
+      "goal": "Pick the right clear before adding stains, underglaze, or reactive colour branches.",
+      "steps": [
+        "Select one stable general clear, one low-expansion porcelain clear, and one warm-colour host clear.",
+        "Apply all three on the same body and form shapes so the comparison stays honest.",
+        "Fire a clear-only round first with no colour under or over the host.",
+        "Inspect rims, handles, and edges for crazing or shivering instead of judging from flat tiles alone.",
+        "Only after the clear host passes the fit check should you place stains, underglaze, or decals under it.",
+        "If warm colours are important, repeat the comparison with the actual warm-colour system before choosing the winner."
+      ],
+      "checkpoints": [
+        "the chosen host fits the body",
+        "the chosen host stays clear at the intended thickness",
+        "sensitive warm colours were tested in the real host instead of assumed"
+      ],
+      "commonMistakes": [
+        "testing colour first and host second",
+        "choosing the clearest host on stoneware and assuming it will also fit porcelain",
+        "assuming every transparent is an equally good warm-colour host"
+      ],
+      "relatedRecipeIds": ["g2926b", "g1214m", "g1216m", "g3838a"],
+      "sourceIds": ["digitalfire-g2926b", "digitalfire-g1214m", "digitalfire-g1216m", "digitalfire-g3838a"]
+    },
+    {
+      "id": "rebuild-material-substitution",
+      "name": "Rebuild a material substitution deliberately",
+      "goal": "Preserve the test logic when a key material has to change.",
+      "steps": [
+        "Write down why the substitution is happening: supply, safety, fit, gassing, or colour.",
+        "Keep one control batch of the original recipe whenever the material is still available and safe to test.",
+        "Identify whether the old material carried chemistry, slurry behaviour, or both.",
+        "Build the first substitution branch with the minimum change needed to answer the question.",
+        "Fire the control and the new branch together on the same body and at the same thickness.",
+        "Only after the first branch is understood should you tune silica, clay, or another flux."
+      ],
+      "checkpoints": [
+        "the substitution reason is clear in the log",
+        "the control and substitute are comparable",
+        "the fired difference can be tied to one intentional change"
+      ],
+      "commonMistakes": [
+        "making a substitution and a chemistry correction in the same first test",
+        "forgetting that a material can change bucket behaviour as much as fired chemistry",
+        "calling a pretty accident a successful substitute without checking the original intent"
+      ],
+      "relatedPlaybookIds": [
+        "raw-kaolin-to-calcined-split",
+        "whiting-to-wollastonite",
+        "gerstley-borate-to-frit-rebuild"
+      ],
+      "sourceIds": ["digitalfire-material-substitution", "insight-glazes"]
+    },
+    {
+      "id": "develop-colour-from-clear-host",
+      "name": "Develop a colour from a proven clear host",
+      "goal": "Separate host choice from colour loading so the colour test teaches something real.",
+      "steps": [
+        "Choose a clear host that already fits the body and looks right on its own.",
+        "Pick one colour family only, such as celadon, cobalt blue, or chrome-tin pink.",
+        "Create a short line blend of the colourant or stain in that one host.",
+        "Keep application thickness constant so the colour comparison is not secretly a thickness comparison.",
+        "If the family is sensitive, repeat the same colour line in one alternate host rather than changing the colour percentages again.",
+        "Promote the lowest loading that reaches the colour target without burying the host."
+      ],
+      "checkpoints": [
+        "the host was proven first",
+        "only one colour family is being mapped at a time",
+        "the chosen colour load is the first successful zone, not the most extreme"
+      ],
+      "commonMistakes": [
+        "switching host and colourant amount in the same test round",
+        "using a reactive base when the goal was to understand the colour itself",
+        "adding more colourant to solve a weak host"
+      ],
+      "relatedRecipeIds": ["g2926b", "g1214m", "gr6-n", "g2826r"],
+      "sourceIds": ["digitalfire-ceramic-stain", "mason-reference-guide", "digitalfire-oxides"]
+    },
+    {
+      "id": "diagnose-pinholes-before-editing-recipe",
+      "name": "Diagnose pinholes before editing the recipe",
+      "goal": "Rule out firing and process problems before tearing apart a glaze that may be chemically fine.",
+      "steps": [
+        "Check whether the glaze is being applied too thickly for the body and surface shape.",
+        "Review the bisque and glaze firing for burn-out speed, top soak, and actual witness-cone result.",
+        "Look for high-LOI materials, organics, or contamination in the body and glaze stack.",
+        "Fire one process-adjusted batch before making a chemistry edit.",
+        "If the pinholes remain, then compare the original recipe against a lower-gas or more open-melt branch.",
+        "Record whether the problem changed during firing, during cooling, or only after over-thick application."
+      ],
+      "checkpoints": [
+        "the schedule was checked before chemistry was blamed",
+        "thickness and body preparation were reviewed",
+        "the chemistry edit is based on a remaining problem, not on guesswork"
+      ],
+      "commonMistakes": [
+        "adding frit or removing carbonate before checking the firing itself",
+        "reading blistering, crawling, and pinholing as the same defect",
+        "judging the whole recipe from one bad test tile"
+      ],
+      "relatedMaterialIds": ["whiting", "dolomite", "gerstley-borate", "copper-carbonate"],
+      "sourceIds": ["digitalfire-pinholing", "digitalfire-blistering", "orton-pyrometric-guide"]
+    },
+    {
+      "id": "convert-reactive-prototype-to-usable-glaze",
+      "name": "Convert a reactive prototype into a usable glaze",
+      "goal": "Move from a dramatic test result toward something a studio can actually repeat on ware.",
+      "steps": [
+        "Start with the most successful reactive test and define what part of it is non-negotiable: colour, break, run, or texture.",
+        "Run a thickness ladder to find the first stable usable zone.",
+        "Test the glaze on the real ware shape, not only on a dramatic vertical tile.",
+        "If it still runs too much, move one step toward a more stable host or a slightly stiffer chemistry branch.",
+        "Retest the same colour family after the stability change instead of assuming it survived unchanged.",
+        "Promote the version that keeps the core effect at the lowest operational risk."
+      ],
+      "checkpoints": [
+        "the studio knows what part of the original effect actually mattered",
+        "the chosen version works on the intended form",
+        "stability was improved without losing all of the visual reason for the glaze"
+      ],
+      "commonMistakes": [
+        "trying to preserve every dramatic feature of a test-only glaze",
+        "fixing run risk without rechecking colour or break",
+        "judging usability from catch-plate drama alone"
+      ],
+      "relatedRecipeIds": ["g2826r", "g3806c", "ga6-b"],
+      "sourceIds": ["digitalfire-melt-fluidity", "insight-glazes", "digitalfire-g2826r", "digitalfire-g3806c"]
+    },
+    {
+      "id": "build-natural-base-family-test",
+      "name": "Build a natural-base family test",
+      "goal": "Expand one slip-based glaze family methodically instead of mixing several romantic branches at once.",
+      "steps": [
+        "Choose one natural base such as Alberta Slip or Ravenscrag Slip.",
+        "Mix the plainest base recipe first and test it on the actual body.",
+        "After the base passes, choose one branch only: amber, floating blue, celadon, or matte.",
+        "If the raw base shrinks badly, add a roasted-branch comparison before changing the chemistry.",
+        "Keep every branch on the same body and firing so the family resemblance can be judged clearly.",
+        "Photograph the transitions and note whether the family is body-driven, thickness-driven, or additive-driven."
+      ],
+      "checkpoints": [
+        "the base was understood before the effect branch was mixed",
+        "raw versus roasted handling was documented if relevant",
+        "the family is developing from one clear lineage rather than several random recipes"
+      ],
+      "commonMistakes": [
+        "jumping straight to the dramatic branch and skipping the base",
+        "calling a raw-shrinkage problem a chemistry problem",
+        "testing the branches on different bodies and then comparing them as if the body did not matter"
+      ],
+      "relatedRecipeIds": ["ga6-a", "ga6-b", "ga6-c", "gr6-a", "gr6-m", "gr6-n"],
+      "sourceIds": ["digitalfire-ga6a", "digitalfire-ga6b", "digitalfire-ga6c", "digitalfire-gr6a", "digitalfire-gr6m", "digitalfire-gr6n"]
+    },
+    {
+      "id": "promote-glaze-to-production-candidate",
+      "name": "Promote a glaze to production candidate",
+      "goal": "Decide whether a good-looking test result is ready for serious use.",
+      "steps": [
+        "Retest the chosen glaze in a fresh batch instead of trusting the original test bucket.",
+        "Apply it on the actual production body and form range, including rims and handles.",
+        "Fire it in the normal production schedule with witness cones.",
+        "Check fit, run risk, surface quality, cleanability, and whether the visual effect survives the real form.",
+        "If the glaze is intended for functional use, keep decorative and functional claims separate until the glaze earns the stronger claim.",
+        "Archive the final recipe, batch notes, and photos as the production candidate record."
+      ],
+      "checkpoints": [
+        "the second batch reproduced the first result",
+        "the glaze was tested on the real production forms",
+        "a clear record exists of what exactly is being promoted"
+      ],
+      "commonMistakes": [
+        "promoting a glaze after one lucky firing",
+        "assuming a test tile result transfers cleanly to a mug or bowl interior",
+        "forgetting to record the final version after several rounds of edits"
+      ],
+      "relatedWorkflowIds": ["body-matrix", "firing-matrix"],
+      "sourceIds": ["insight-glazes", "orton-pyrometric-guide", "digitalfire-glaze-fit"]
+    }
+  ]
+}

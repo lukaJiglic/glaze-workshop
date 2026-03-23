@@ -48,7 +48,4 @@ defineProps<{ size?: 'sm' | 'md' | 'lg' }>()
 .lg .spinner-orb { width: 64px; height: 64px; }
 .lg .spinner-orb::after { inset: 8px; }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 </style>

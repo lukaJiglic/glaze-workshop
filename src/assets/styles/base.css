@@ -7,6 +7,11 @@
 html {
   font-size: 17.6px;
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
@@ -100,4 +105,67 @@ h1, h2, h3, h4, h5, h6 {
   max-width: var(--content-max);
   margin: 0 auto;
   padding: 0 var(--space-6);
+}
+
+@media print {
+  /* Hide interactive and decorative elements */
+  .app-nav,
+  .texture-overlay::before,
+  .workshop-header,
+  .sidebar-toggle,
+  .desktop-sidebar,
+  .nav-links,
+  .theme-toggle,
+  .search-bar,
+  .sort-bar,
+  .compare-bar,
+  .recipe-actions,
+  .drawer-actions,
+  button:not(.print-show),
+  .close-btn,
+  [class*="toggle"],
+  [class*="filter"] {
+    display: none !important;
+  }
+
+  /* Force light mode for printing — override dark theme */
+  [data-theme="dark"] {
+    color-scheme: light;
+  }
+
+  /* Ensure page background is white/light for printing */
+  body, .app-nav, [class*="-view"], [class*="-header"] {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Font fallbacks for environments without Google Fonts */
+  body {
+    font-family: Georgia, 'Times New Roman', serif !important;
+  }
+  [style*="font-family: var(--font-display)"],
+  .page-title, .hero-title, .card-term, .recipe-mini-name, .step-title, .active-title {
+    font-family: Georgia, 'Times New Roman', serif !important;
+  }
+  [style*="font-family: var(--font-mono)"],
+  .label-upper, .ing-pct, .ing-grams, .oxide-label, .path-difficulty, .progress-label {
+    font-family: 'Courier New', Courier, monospace !important;
+  }
+
+  /* Remove shadows, transforms */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Ensure content is full width */
+  .workshop-layout, .workshop-main {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Page breaks */
+  .recipe-card, .ingredient-row {
+    break-inside: avoid;
+  }
 }

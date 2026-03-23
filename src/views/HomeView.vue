@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useStorage } from '@vueuse/core'
 import { useGlazeStore } from '@/stores/glaze'
 import { useWorkshopStore } from '@/stores/workshop'
-import { gsap } from 'gsap'
 import HeroSection from '@/components/home/HeroSection.vue'
 import FamilyPreviewGrid from '@/components/home/FamilyPreviewGrid.vue'
 import RecipeCard from '@/components/recipe/RecipeCard.vue'
@@ -30,13 +29,6 @@ const showOnboarding = computed(() =>
   workshopStore.recentlyViewed.length === 0 &&
   workshopStore.favoriteIds.length === 0
 )
-
-const statsEl = ref<HTMLElement | null>(null)
-
-onMounted(() => {
-  if (!statsEl.value) return
-  // Stats will be handled by v-reveal
-})
 </script>
 
 <template>
@@ -150,7 +142,7 @@ onMounted(() => {
 }
 
 .stats-band {
-  background: var(--carbon);
+  background: var(--band);
   padding: var(--space-10) var(--space-8);
 }
 
@@ -174,7 +166,7 @@ onMounted(() => {
   font-family: var(--font-display);
   font-size: var(--text-5xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
   line-height: 1;
 }
 

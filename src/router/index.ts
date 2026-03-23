@@ -40,6 +40,24 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Edit Recipe' },
   },
   {
+    path: '/chemistry',
+    name: 'chemistry',
+    component: defineAsyncComponent(() => import('@/views/ChemistryExplorerView.vue')),
+    meta: { title: 'Chemistry Explorer' },
+  },
+  {
+    path: '/learn',
+    name: 'learn',
+    component: defineAsyncComponent(() => import('@/views/LearnView.vue')),
+    meta: { title: 'Learn' },
+  },
+  {
+    path: '/glossary',
+    name: 'glossary',
+    component: defineAsyncComponent(() => import('@/views/GlossaryView.vue')),
+    meta: { title: 'Glossary' },
+  },
+  {
     path: '/troubleshooter',
     name: 'troubleshooter',
     component: defineAsyncComponent(() => import('@/views/TroubleshooterView.vue')),

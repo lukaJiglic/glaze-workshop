@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useWorkshopStore } from '@/stores/workshop'
 import { useGlazeStore } from '@/stores/glaze'
@@ -56,6 +56,92 @@ function toggleCaution(id: string) {
     editableRecipe.value.cautionIds.splice(idx, 1)
   }
 }
+
+// ── Colour options ──────────────────────────────────────────────
+const colourOptions = computed(() => {
+  const colours = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const c of r.colourIds) colours.add(c)
+  }
+  return Array.from(colours).sort()
+})
+
+function toggleColour(id: string) {
+  if (!editableRecipe.value) return
+  const idx = editableRecipe.value.colourIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.colourIds.push(id)
+  } else {
+    editableRecipe.value.colourIds.splice(idx, 1)
+  }
+}
+
+// ── Kiln options ──────────────────────────────────────────────
+const kilnOptions = computed(() => {
+  const kilns = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const k of r.kilnIds) kilns.add(k)
+  }
+  return Array.from(kilns).sort()
+})
+
+function toggleKiln(id: string) {
+  if (!editableRecipe.value) return
+  if (!editableRecipe.value.kilnIds) editableRecipe.value.kilnIds = []
+  const idx = editableRecipe.value.kilnIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.kilnIds.push(id)
+  } else {
+    editableRecipe.value.kilnIds.splice(idx, 1)
+  }
+}
+
+// ── Clay body options ──────────────────────────────────────────
+const clayOptions = computed(() => {
+  const clays = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const c of r.clayIds) clays.add(c)
+  }
+  return Array.from(clays).sort()
+})
+
+function toggleClay(id: string) {
+  if (!editableRecipe.value) return
+  if (!editableRecipe.value.clayIds) editableRecipe.value.clayIds = []
+  const idx = editableRecipe.value.clayIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.clayIds.push(id)
+  } else {
+    editableRecipe.value.clayIds.splice(idx, 1)
+  }
+}
+
+// ── Technique options ──────────────────────────────────────────
+const techniqueOptions = computed(() => {
+  const techniques = new Set<string>()
+  for (const r of glazeStore.recipes) {
+    for (const t of r.techniqueIds) techniques.add(t)
+  }
+  return Array.from(techniques).sort()
+})
+
+function toggleTechnique(id: string) {
+  if (!editableRecipe.value) return
+  if (!editableRecipe.value.techniqueIds) editableRecipe.value.techniqueIds = []
+  const idx = editableRecipe.value.techniqueIds.indexOf(id)
+  if (idx === -1) {
+    editableRecipe.value.techniqueIds.push(id)
+  } else {
+    editableRecipe.value.techniqueIds.splice(idx, 1)
+  }
+}
+
+// ── Tableware status options ──────────────────────────────────
+const tablewareOptions = [
+  { id: 'functional', label: 'Functional' },
+  { id: 'decorative-only', label: 'Decorative Only' },
+  { id: 'test-only', label: 'Test Only' },
+]
 
 // ── Surface & style options ──────────────────────────────────────
 const surfaceOptions = computed(() => {
@@ -205,18 +291,30 @@ function handleSwap(idx: number, _originalId: string, opt: SubstitutionOption) {
   editableRecipe.value.notes.push(`Substituted: replaced ${fromLabel} with ${opt.label}. ${opt.difficultyNote}`)
   openSwitcherIndex.value = null
   swapToast.value = { fromLabel, toLabel: opt.label }
-  setTimeout(() => { swapToast.value = null }, 3000)
+  if (_swapToastTimer !== null) clearTimeout(_swapToastTimer)
+  _swapToastTimer = setTimeout(() => { swapToast.value = null; _swapToastTimer = null }, 3000)
 }
 
 // ── Auto-save with debounce ────────────────────────────────────────
+let _statusTimer: ReturnType<typeof setTimeout> | null = null
+let _swapToastTimer: ReturnType<typeof setTimeout> | null = null
+
+function setStatusAfterDelay(status: 'idle' | 'saving' | 'saved', ms: number) {
+  if (_statusTimer !== null) clearTimeout(_statusTimer)
+  _statusTimer = setTimeout(() => {
+    _statusTimer = null
+    autoSaveStatus.value = status
+    if (status === 'saved') {
+      setStatusAfterDelay('idle', 2000)
+    }
+  }, ms)
+}
+
 const debouncedSave = useDebounceFn(() => {
   if (!editableRecipe.value) return
   autoSaveStatus.value = 'saving'
   workshopStore.saveCustomRecipe({ ...editableRecipe.value })
-  setTimeout(() => {
-    autoSaveStatus.value = 'saved'
-    setTimeout(() => { autoSaveStatus.value = 'idle' }, 2000)
-  }, 300)
+  setStatusAfterDelay('saved', 300)
 }, 1000)
 
 watch(
@@ -235,7 +333,76 @@ function saveRecipe() {
   if (!editableRecipe.value) return
   workshopStore.saveCustomRecipe({ ...editableRecipe.value })
   autoSaveStatus.value = 'saved'
-  setTimeout(() => { autoSaveStatus.value = 'idle' }, 2000)
+  setStatusAfterDelay('idle', 2000)
+}
+
+onUnmounted(() => {
+  if (_statusTimer !== null) clearTimeout(_statusTimer)
+  if (_swapToastTimer !== null) clearTimeout(_swapToastTimer)
+})
+
+// ── Version history ────────────────────────────────────────────────
+const showVersionHistory = ref(false)
+const versionHistory = computed(() =>
+  editableRecipe.value ? workshopStore.getVersionHistory(editableRecipe.value.id) : []
+)
+
+function restoreVersion(version: CustomRecipe) {
+  workshopStore.restoreVersion(version)
+  editableRecipe.value = JSON.parse(JSON.stringify(version))
+}
+
+// ── Tags ────────────────────────────────────────────────────────────
+const tagInput = ref('')
+
+function addTag() {
+  if (!editableRecipe.value) return
+  const trimmed = tagInput.value.trim()
+  if (!trimmed) return
+  if (!editableRecipe.value.tags) editableRecipe.value.tags = []
+  if (!editableRecipe.value.tags.includes(trimmed)) {
+    editableRecipe.value.tags.push(trimmed)
+  }
+  tagInput.value = ''
+}
+
+function removeTag(tag: string) {
+  if (!editableRecipe.value?.tags) return
+  const idx = editableRecipe.value.tags.indexOf(tag)
+  if (idx !== -1) editableRecipe.value.tags.splice(idx, 1)
+}
+
+// ── Firing log ─────────────────────────────────────────────────────
+const showFiringLogForm = ref(false)
+const newLogEntry = ref({
+  date: new Date().toISOString().split('T')[0],
+  kiln: '',
+  programName: '',
+  cone: '',
+  resultNotes: '',
+})
+
+function addLogEntry() {
+  if (!editableRecipe.value) return
+  if (!newLogEntry.value.date || !newLogEntry.value.resultNotes) return
+  if (!editableRecipe.value.firingLog) editableRecipe.value.firingLog = []
+  editableRecipe.value.firingLog.unshift({
+    ...newLogEntry.value,
+    id: `log-${Date.now()}`,
+  })
+  newLogEntry.value = {
+    date: new Date().toISOString().split('T')[0],
+    kiln: '',
+    programName: '',
+    cone: editableRecipe.value.cone,
+    resultNotes: '',
+  }
+  showFiringLogForm.value = false
+}
+
+function removeLogEntry(entryId: string) {
+  if (!editableRecipe.value?.firingLog) return
+  editableRecipe.value.firingLog = editableRecipe.value.firingLog.filter(e => e.id !== entryId)
 }
 
 // ── Open in calculator ─────────────────────────────────────────────
@@ -344,6 +511,90 @@ onMounted(() => {
                   @click="toggleAtmosphere(atm.id)"
                 >
                   {{ atm.label }}
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── CLASSIFICATION ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.04 }">
+            <h2 class="card-title">Classification</h2>
+
+            <div class="field-group">
+              <label class="field-label">Colour</label>
+              <div class="tag-picker">
+                <button
+                  v-for="c in colourOptions"
+                  :key="c"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.colourIds.includes(c) }"
+                  @click="toggleColour(c)"
+                >
+                  {{ c.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group" v-if="kilnOptions.length">
+              <label class="field-label">Kiln Type</label>
+              <div class="tag-picker">
+                <button
+                  v-for="k in kilnOptions"
+                  :key="k"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.kilnIds?.includes(k) }"
+                  @click="toggleKiln(k)"
+                >
+                  {{ k.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group" v-if="clayOptions.length">
+              <label class="field-label">Clay Body</label>
+              <div class="tag-picker">
+                <button
+                  v-for="c in clayOptions"
+                  :key="c"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.clayIds?.includes(c) }"
+                  @click="toggleClay(c)"
+                >
+                  {{ c.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group" v-if="techniqueOptions.length">
+              <label class="field-label">Technique</label>
+              <div class="tag-picker">
+                <button
+                  v-for="t in techniqueOptions"
+                  :key="t"
+                  class="tag-pick-btn"
+                  :class="{ active: editableRecipe.techniqueIds?.includes(t) }"
+                  @click="toggleTechnique(t)"
+                >
+                  {{ t.replace(/-/g, ' ') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Tableware Status</label>
+              <div class="firing-buttons">
+                <button
+                  v-for="opt in tablewareOptions"
+                  :key="opt.id"
+                  class="toggle-btn"
+                  :class="{
+                    active: editableRecipe.tablewareStatus === opt.id,
+                    'tw-functional': opt.id === 'functional' && editableRecipe.tablewareStatus === opt.id,
+                    'tw-decorative': opt.id === 'decorative-only' && editableRecipe.tablewareStatus === opt.id,
+                  }"
+                  @click="editableRecipe.tablewareStatus = opt.id"
+                >
+                  {{ opt.label }}
                 </button>
               </div>
             </div>
@@ -515,8 +766,97 @@ onMounted(() => {
             ></textarea>
           </section>
 
-          <!-- ─── CAUTION PICKER ─── -->
+          <!-- ─── TAGS ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.11 }">
+            <h2 class="card-title">Tags</h2>
+            <div class="tags-input-area">
+              <div v-if="editableRecipe.tags?.length" class="tags-list">
+                <span v-for="tag in editableRecipe.tags" :key="tag" class="tag-chip">
+                  {{ tag }}
+                  <button class="tag-remove" @click="removeTag(tag)">×</button>
+                </span>
+              </div>
+              <div class="tag-input-row">
+                <input
+                  v-model="tagInput"
+                  class="tag-text-input"
+                  placeholder="Add tag (press Enter)…"
+                  @keydown.enter.prevent="addTag"
+                />
+                <button class="tag-add-btn" :disabled="!tagInput.trim()" @click="addTag">+ Add</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─── FIRING LOG ─── -->
           <section class="editor-card" v-reveal="{ delay: 0.12 }">
+            <div class="section-header-row">
+              <h2 class="card-title">Firing Log</h2>
+              <button class="add-log-btn" @click="showFiringLogForm = !showFiringLogForm">
+                {{ showFiringLogForm ? 'Cancel' : '+ Add Entry' }}
+              </button>
+            </div>
+
+            <!-- Add entry form -->
+            <Transition name="expand">
+              <div v-if="showFiringLogForm" class="log-form">
+                <div class="log-form-row">
+                  <div class="log-field">
+                    <label class="field-label">Date</label>
+                    <input type="date" v-model="newLogEntry.date" class="text-input" />
+                  </div>
+                  <div class="log-field">
+                    <label class="field-label">Cone fired to</label>
+                    <input type="text" v-model="newLogEntry.cone" class="text-input" :placeholder="editableRecipe.cone || '6'" />
+                  </div>
+                </div>
+                <div class="log-form-row">
+                  <div class="log-field">
+                    <label class="field-label">Kiln</label>
+                    <input type="text" v-model="newLogEntry.kiln" class="text-input" placeholder="e.g. L&amp;L Easy Fire" />
+                  </div>
+                  <div class="log-field">
+                    <label class="field-label">Program</label>
+                    <input type="text" v-model="newLogEntry.programName" class="text-input" placeholder="e.g. Standard Cone 6" />
+                  </div>
+                </div>
+                <div class="log-field">
+                  <label class="field-label">Result Notes</label>
+                  <textarea
+                    v-model="newLogEntry.resultNotes"
+                    class="text-input log-notes-input"
+                    rows="3"
+                    placeholder="Describe the outcome — colour, surface, any issues..."
+                  />
+                </div>
+                <button
+                  class="btn btn-primary btn-sm"
+                  :disabled="!newLogEntry.date || !newLogEntry.resultNotes"
+                  @click="addLogEntry"
+                >Add to Log</button>
+              </div>
+            </Transition>
+
+            <!-- Log entries -->
+            <div v-if="editableRecipe.firingLog?.length" class="log-list">
+              <div v-for="entry in editableRecipe.firingLog" :key="entry.id" class="log-entry">
+                <div class="log-entry-header">
+                  <span class="log-date">{{ entry.date }}</span>
+                  <span v-if="entry.cone" class="log-tag">Cone {{ entry.cone }}</span>
+                  <span v-if="entry.kiln" class="log-tag">{{ entry.kiln }}</span>
+                  <span v-if="entry.programName" class="log-tag">{{ entry.programName }}</span>
+                  <button class="log-remove-btn" @click="removeLogEntry(entry.id)">×</button>
+                </div>
+                <p class="log-notes">{{ entry.resultNotes }}</p>
+              </div>
+            </div>
+            <p v-else-if="!showFiringLogForm" class="empty-log">
+              No firing entries yet. Record your results here after each test fire.
+            </p>
+          </section>
+
+          <!-- ─── CAUTION PICKER ─── -->
+          <section class="editor-card" v-reveal="{ delay: 0.13 }">
             <h2 class="card-title">Cautions</h2>
             <p class="field-hint">Flag safety concerns for anyone using this recipe.</p>
             <div class="tag-picker">
@@ -619,6 +959,26 @@ onMounted(() => {
               Back to My Recipes
             </RouterLink>
           </div>
+
+          <!-- ─── VERSION HISTORY ─── -->
+          <div v-if="versionHistory.length > 0" class="version-history">
+            <button class="version-toggle" @click="showVersionHistory = !showVersionHistory">
+              <span class="version-label">{{ versionHistory.length }} saved version{{ versionHistory.length !== 1 ? 's' : '' }}</span>
+              <span class="version-arrow">{{ showVersionHistory ? '▾' : '▸' }}</span>
+            </button>
+            <Transition name="expand-info">
+              <div v-if="showVersionHistory" class="version-list">
+                <div v-for="(ver, idx) in versionHistory" :key="ver.updatedAt" class="version-item">
+                  <div class="version-meta">
+                    <span class="version-num">v{{ versionHistory.length - idx }}</span>
+                    <span class="version-time">{{ new Date(ver.updatedAt).toLocaleString() }}</span>
+                    <span class="version-ing-count">{{ ver.ingredients.length }} ingredients</span>
+                  </div>
+                  <button class="version-restore" @click="restoreVersion(ver)">Restore</button>
+                </div>
+              </div>
+            </Transition>
+          </div>
         </main>
 
         <!-- ─── RIGHT: SUMMARY SIDEBAR ─── -->
@@ -665,6 +1025,14 @@ onMounted(() => {
               <div class="stat-row">
                 <span class="stat-label">Atmosphere</span>
                 <span class="stat-value">{{ editableRecipe.atmosphereIds.join(', ') || '---' }}</span>
+              </div>
+              <div class="stat-row" v-if="editableRecipe.colourIds.length">
+                <span class="stat-label">Colour</span>
+                <span class="stat-value">{{ editableRecipe.colourIds.map(c => c.replace(/-/g, ' ')).join(', ') }}</span>
+              </div>
+              <div class="stat-row" v-if="editableRecipe.tablewareStatus">
+                <span class="stat-label">Status</span>
+                <span class="stat-value">{{ editableRecipe.tablewareStatus.replace(/-/g, ' ') }}</span>
               </div>
             </div>
 
@@ -723,7 +1091,7 @@ onMounted(() => {
 
 /* ─── HEADER ─── */
 .editor-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-6)) var(--space-8) var(--space-6);
 }
 
@@ -747,7 +1115,7 @@ onMounted(() => {
 }
 
 .back-link:hover {
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .back-arrow {
@@ -766,7 +1134,7 @@ onMounted(() => {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
   background: transparent;
   border: 2px solid transparent;
   border-radius: var(--radius-md);
@@ -900,6 +1268,16 @@ onMounted(() => {
   background: var(--clay);
   border-color: var(--clay);
   color: white;
+}
+
+.toggle-btn.tw-functional {
+  background: var(--sage);
+  border-color: var(--sage);
+}
+
+.toggle-btn.tw-decorative {
+  background: var(--stone);
+  border-color: var(--stone);
 }
 
 .text-input {
@@ -1082,8 +1460,8 @@ onMounted(() => {
 
 /* Editor swap toast */
 .editor-swap-toast {
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-4);
   display: flex;
@@ -1434,9 +1812,9 @@ onMounted(() => {
 }
 
 .tag-pick-btn.active {
-  background: var(--carbon);
+  background: var(--band);
   border-color: var(--carbon);
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .tag-pick-btn.active.warning {
@@ -1643,7 +2021,7 @@ onMounted(() => {
   bottom: 0;
   left: calc(100 / 120 * 100%);
   width: 2px;
-  background: var(--carbon);
+  background: var(--band);
   opacity: 0.25;
 }
 
@@ -1834,6 +2212,375 @@ onMounted(() => {
   font-family: var(--font-body);
   color: var(--stone);
   font-size: var(--text-lg);
+}
+
+/* ─── VERSION HISTORY ─── */
+.version-history {
+  margin-bottom: var(--space-6);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.version-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.version-toggle:hover {
+  color: var(--clay);
+  background: var(--clay-10);
+}
+
+.version-label {
+  font-weight: 700;
+}
+
+.version-arrow {
+  font-size: 10px;
+}
+
+.version-list {
+  border-top: 1px solid var(--ink-10);
+  padding: var(--space-2) 0;
+  overflow: hidden;
+}
+
+.version-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  gap: var(--space-3);
+  transition: background var(--transition-fast);
+}
+
+.version-item:hover {
+  background: var(--chalk);
+}
+
+.version-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.version-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--clay);
+  min-width: 24px;
+}
+
+.version-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone);
+}
+
+.version-ing-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  opacity: 0.7;
+}
+
+.version-restore {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.version-restore:hover {
+  border-color: var(--clay);
+  color: var(--clay);
+  background: var(--clay-10);
+}
+
+/* ─── TAGS ─── */
+.tags-input-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--band);
+  color: var(--on-band);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: var(--on-band);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 0 0 2px;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.tag-remove:hover {
+  opacity: 1;
+}
+
+.tag-input-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.tag-text-input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tag-text-input:focus {
+  border-color: var(--clay);
+  box-shadow: 0 0 0 3px var(--clay-10);
+}
+
+.tag-add-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--clay);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--clay);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tag-add-btn:hover:not(:disabled) {
+  background: var(--clay);
+  color: white;
+}
+
+.tag-add-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* expand-info transition (collapsible version history) */
+.expand-info-enter-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.expand-info-leave-active {
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.expand-info-enter-from {
+  opacity: 0;
+  max-height: 0;
+}
+
+.expand-info-enter-to {
+  opacity: 1;
+  max-height: 400px;
+}
+
+.expand-info-leave-from {
+  opacity: 1;
+  max-height: 400px;
+}
+
+.expand-info-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+
+/* ─── Firing log ─── */
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.section-header-row .card-title {
+  margin-bottom: 0;
+}
+
+.add-log-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--clay);
+  background: var(--clay-10);
+  border: 1px solid var(--clay);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.add-log-btn:hover {
+  background: var(--clay-20);
+}
+
+.log-form {
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.log-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.log-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-notes-input {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  align-self: flex-start;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.log-entry {
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+.log-entry-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.log-date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--carbon);
+}
+
+.log-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--stone);
+  background: var(--chalk);
+  border: 1px solid var(--ink-10);
+  border-radius: 3px;
+  padding: 1px 6px;
+  text-transform: uppercase;
+}
+
+.log-remove-btn {
+  margin-left: auto;
+  color: var(--stone);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+.log-remove-btn:hover {
+  opacity: 1;
+  color: var(--clay);
+}
+
+.log-notes {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink);
+  font-style: italic;
+  margin: 0;
+}
+
+.empty-log {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--stone);
+  padding: var(--space-2) 0;
+  text-align: center;
 }
 
 /* ═══ RESPONSIVE ═══ */

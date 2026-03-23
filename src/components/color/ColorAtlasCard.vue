@@ -176,7 +176,7 @@ function openRecipe(recipe: NonNullable<typeof linkedRecipes.value[number]>) {
 }
 
 .atlas-card.expanded .expand-indicator {
-  background: rgba(196, 83, 42, 0.85);
+  background: var(--clay);
 }
 
 .card-name-overlay {
@@ -249,7 +249,7 @@ function openRecipe(recipe: NonNullable<typeof linkedRecipes.value[number]>) {
   transition: width 0.4s ease;
 }
 
-.score-fill.run-risk { background: #c0392b; }
+.score-fill.run-risk { background: var(--danger); }
 
 .linked-count {
   padding-top: var(--space-2);
@@ -292,7 +292,7 @@ function openRecipe(recipe: NonNullable<typeof linkedRecipes.value[number]>) {
 
 .recipe-link-btn:hover {
   background: var(--clay-10);
-  border-color: rgba(196, 83, 42, 0.2);
+  border-color: var(--clay-20);
 }
 
 .recipe-link-name {

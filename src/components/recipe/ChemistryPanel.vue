@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { UMFResult, OxideEntry } from '@/types'
+import type { UMFResult, OxideEntry, UMFDiagnostic } from '@/types'
 import { UMF_TARGETS } from '@/data/material-analyses'
+import { useGlazeStore } from '@/stores/glaze'
 
 const props = defineProps<{
   chemistry: UMFResult
   compact?: boolean
 }>()
+
+const glazeStore = useGlazeStore()
 
 const collapsed = ref(props.compact ?? false)
 
@@ -97,6 +100,28 @@ const interpretations = computed(() => {
     notes.push({ type: 'warn', text: `High recipe LOI (${c.totalLOI.toFixed(1)}%) — significant gas release during firing. Fire slowly through 900–1050°C to allow CO₂ and H₂O to escape. Pinholes likely if fired too fast.` })
   }
 
+  // Seger limit warnings — classic ranges for well-balanced glazes
+  const firingRange = c.firingRangeId ?? 'mid-fire'
+  if (firingRange === 'high-fire' || firingRange === 'mid-fire') {
+    if (c.totalAl > 0 && c.totalAl > t.al2o3[1] * 1.2) {
+      notes.push({ type: 'warn', text: `Al₂O₃ (${c.totalAl.toFixed(2)}) is well above the Seger limit for ${t.label}. The glaze may be too refractory — dry, rough, or under-melted at target temperature.` })
+    }
+    if (c.totalSi > t.sio2[1] * 1.15) {
+      notes.push({ type: 'warn', text: `SiO₂ (${c.totalSi.toFixed(2)}) exceeds the upper Seger limit for ${t.label}. May need higher temperature or longer soak to fully melt.` })
+    }
+  }
+
+  // Thermal expansion confidence (Seger approximation is rough ±15%)
+  if (c.expansionIndex > 0) {
+    const lower = Math.round(c.expansionIndex * 0.85)
+    const upper = Math.round(c.expansionIndex * 1.15)
+    if (c.expansionIndex > t.expansion[1]) {
+      notes.push({ type: 'warn', text: `Expansion index ~${c.expansionIndex.toFixed(0)} (range ${lower}–${upper}) — above the comfortable zone for ${t.label}. Crazing is likely on standard bodies.` })
+    } else if (c.expansionIndex < t.expansion[0]) {
+      notes.push({ type: 'info', text: `Expansion index ~${c.expansionIndex.toFixed(0)} (range ${lower}–${upper}) — very low expansion. Could shiver on high-expansion bodies.` })
+    }
+  }
+
   // Approximate data
   if (c.hasApproximateData) {
     notes.push({ type: 'info', text: 'Wood ash chemistry varies significantly between batches and species. These values are typical averages — treat the UMF as a guide, not a precise result.' })
@@ -171,6 +196,32 @@ const groups = computed(() => {
       status: rangeStatus(c.totalSi, targets.value.sio2),
     },
   ]
+})
+
+// ─── Surface-specific UMF benchmarks ────────────────────────────────────────
+const matchingBenchmarks = computed(() => {
+  const id = props.chemistry.firingRangeId
+  if (!id) return []
+  return glazeStore.benchmarksByFiringRange.get(id) ?? []
+})
+
+const showBenchmarks = ref(false)
+
+const matchingDiagnostics = computed(() => {
+  if (!glazeStore.umfDiagnostics.length) return []
+  const c = props.chemistry
+  const t = targets.value
+  const relevant: UMFDiagnostic[] = []
+
+  for (const diag of glazeStore.umfDiagnostics) {
+    const diagId = diag.id.toLowerCase()
+    // Show diagnostics relevant to current chemistry issues
+    if (diagId.includes('craze') && c.knaO > t.knao[1]) relevant.push(diag)
+    else if (diagId.includes('matte') && c.siToAl !== null && c.siToAl < t.siToAl[0]) relevant.push(diag)
+    else if (diagId.includes('run') && c.totalAl < t.al2o3[0]) relevant.push(diag)
+    else if (diagId.includes('pinhole') && c.totalLOI > 18) relevant.push(diag)
+  }
+  return relevant
 })
 </script>
 
@@ -308,6 +359,43 @@ const groups = computed(() => {
             </div>
           </div>
 
+          <!-- ── Surface benchmarks ── -->
+          <div v-if="matchingBenchmarks.length" class="benchmark-block">
+            <button class="benchmark-toggle" @click="showBenchmarks = !showBenchmarks">
+              <span class="benchmark-toggle-label">Surface benchmarks</span>
+              <span class="benchmark-toggle-count">{{ matchingBenchmarks.length }}</span>
+              <span class="benchmark-toggle-icon">{{ showBenchmarks ? '▴' : '▾' }}</span>
+            </button>
+            <div v-if="showBenchmarks" class="benchmark-list">
+              <div v-for="bm in matchingBenchmarks" :key="bm.id" class="benchmark-card">
+                <div class="bm-header">
+                  <span class="bm-name">{{ bm.name }}</span>
+                  <span class="bm-cone">{{ bm.coneRange }}</span>
+                </div>
+                <p class="bm-goal">{{ bm.surfaceGoal }}</p>
+                <div class="bm-bands">
+                  <div v-for="(val, key) in bm.targetBands" :key="key" class="bm-band">
+                    <span class="bm-band-key">{{ key }}</span>
+                    <span class="bm-band-val">{{ val }}</span>
+                  </div>
+                </div>
+                <div v-if="bm.chemistrySignals.length" class="bm-signals">
+                  <p v-for="(sig, i) in bm.chemistrySignals" :key="i" class="bm-signal">{{ sig }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Diagnostics (shown when chemistry issues detected) ── -->
+          <div v-if="matchingDiagnostics.length" class="diagnostic-block">
+            <div v-for="diag in matchingDiagnostics" :key="diag.id" class="diagnostic-card">
+              <span class="diag-issue">{{ diag.issue }}</span>
+              <ul class="diag-moves">
+                <li v-for="(m, i) in diag.moveDirection" :key="i">{{ m }}</li>
+              </ul>
+            </div>
+          </div>
+
           <!-- ── Missing materials warning ── -->
           <div v-if="chemistry.missingMaterials.length" class="missing-block">
             <span class="missing-icon">◌</span>
@@ -441,7 +529,7 @@ const groups = computed(() => {
 .status-low  .metric-value { color: var(--stone-dark); }
 .status-high .metric-value { color: var(--clay); }
 .status-ok   { border-color: var(--ink-10); }
-.status-high { border-color: rgba(196, 83, 42, 0.3); }
+.status-high { border-color: var(--clay-30); }
 .status-low  { border-color: var(--ink-20); }
 
 /* ── Oxide groups ── */
@@ -453,11 +541,11 @@ const groups = computed(() => {
   padding: var(--space-3) var(--space-4);
   border-left: 3px solid transparent;
 }
-.group-alkali    { border-left-color: rgba(196, 83, 42, 0.65); }
-.group-earth     { border-left-color: rgba(122, 143, 110, 0.75); }
-.group-stabiliser{ border-left-color: rgba(196, 154, 58, 0.70); }
-.group-glass     { border-left-color: rgba(139, 115, 85, 0.55); }
-.group-colorant  { border-left-color: rgba(44, 36, 22, 0.30); }
+.group-alkali    { border-left-color: var(--oxide-alkali); }
+.group-earth     { border-left-color: var(--oxide-earth); }
+.group-stabiliser{ border-left-color: var(--oxide-stabiliser); }
+.group-glass     { border-left-color: var(--oxide-glass); }
+.group-colorant  { border-left-color: var(--oxide-colorant); }
 
 .group-header {
   display: flex;
@@ -512,11 +600,11 @@ const groups = computed(() => {
   border-radius: var(--radius-full);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.oxide-bar-fill.group-alkali    { background: rgba(196, 83, 42, 0.60); }
-.oxide-bar-fill.group-earth     { background: rgba(122, 143, 110, 0.75); }
-.oxide-bar-fill.group-stabiliser{ background: rgba(196, 154, 58, 0.70); }
-.oxide-bar-fill.group-glass     { background: rgba(139, 115, 85, 0.55); }
-.oxide-bar-fill.group-colorant  { background: rgba(44, 36, 22, 0.25); }
+.oxide-bar-fill.group-alkali    { background: var(--oxide-alkali); }
+.oxide-bar-fill.group-earth     { background: var(--oxide-earth); }
+.oxide-bar-fill.group-stabiliser{ background: var(--oxide-stabiliser); }
+.oxide-bar-fill.group-glass     { background: var(--oxide-glass); }
+.oxide-bar-fill.group-colorant  { background: var(--oxide-colorant); }
 
 .oxide-moles {
   font-size: 10px;
@@ -533,9 +621,9 @@ const groups = computed(() => {
   border-radius: var(--radius-md);
   align-items: flex-start;
 }
-.note-ok   { background: rgba(122, 143, 110, 0.10); border-left: 2px solid var(--sage); }
-.note-warn { background: rgba(196, 83, 42, 0.08);   border-left: 2px solid var(--clay); }
-.note-info { background: rgba(44, 36, 22, 0.04);    border-left: 2px solid var(--ink-20); }
+.note-ok   { background: var(--sage-10); border-left: 2px solid var(--sage); }
+.note-warn { background: var(--clay-08); border-left: 2px solid var(--clay); }
+.note-info { background: var(--ink-04); border-left: 2px solid var(--ink-20); }
 
 .interp-icon {
   font-size: 10px;
@@ -596,6 +684,182 @@ const groups = computed(() => {
   font-style: italic;
   color: var(--stone);
   line-height: 1.4;
+}
+
+/* ── Benchmarks ── */
+.benchmark-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.benchmark-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.benchmark-toggle-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.benchmark-toggle-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  background: var(--ink-05);
+  border-radius: var(--radius-full);
+  padding: 1px 6px;
+}
+
+.benchmark-toggle-icon {
+  font-size: 10px;
+  color: var(--stone);
+}
+
+.benchmark-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.benchmark-card {
+  padding: var(--space-2) var(--space-3);
+  background: var(--parchment);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bm-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--carbon);
+  letter-spacing: 0.02em;
+}
+
+.bm-cone {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+}
+
+.bm-goal {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--stone);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.bm-bands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.bm-band {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  background: var(--ink-05);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+}
+
+.bm-band-key {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--stone);
+}
+
+.bm-band-val {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--carbon);
+}
+
+.bm-signals {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bm-signal {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--stone);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ── Diagnostics ── */
+.diagnostic-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.diagnostic-card {
+  padding: var(--space-2) var(--space-3);
+  background: var(--clay-06);
+  border-left: 2px solid var(--clay);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.diag-issue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--clay);
+}
+
+.diag-moves {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.diag-moves li {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--stone-dark);
+  line-height: 1.45;
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.diag-moves li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--clay);
+  font-family: var(--font-mono);
+  font-size: 10px;
 }
 
 /* ── Compact mode ── */

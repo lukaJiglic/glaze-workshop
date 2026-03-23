@@ -16,8 +16,11 @@ const rowEl = ref<HTMLElement | null>(null)
 const infoOpen = ref(false)
 const switcherOpen = ref(false)
 
+let gramsTween: gsap.core.Tween | null = null
+
 watch(() => props.ingredient.scaledGrams, (newVal) => {
-  gsap.to(displayGrams, {
+  gramsTween?.kill()
+  gramsTween = gsap.to(displayGrams, {
     value: newVal,
     duration: 0.5,
     ease: 'power2.out',
@@ -71,6 +74,7 @@ function toggleSwitcher() {
         :class="{ active: switcherOpen }"
         @click="toggleSwitcher"
         title="Show substitutes"
+        aria-label="Show substitutes"
       >⇄</button>
     </div>
 
@@ -296,9 +300,9 @@ function toggleSwitcher() {
 .tip-watch-item {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: #c0392b;
+  color: var(--danger);
   padding: 1px var(--space-1);
-  background: rgba(192, 57, 43, 0.08);
+  background: var(--danger-10);
   border-radius: 2px;
 }
 

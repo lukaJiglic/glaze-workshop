@@ -217,7 +217,7 @@ onMounted(() => {
 }
 
 .atlas-header {
-  background: var(--carbon);
+  background: var(--band);
   padding: calc(var(--nav-height) + var(--space-8)) var(--space-8) var(--space-8);
 }
 
@@ -233,7 +233,7 @@ onMounted(() => {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 700;
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .page-sub {
@@ -321,9 +321,9 @@ onMounted(() => {
 }
 
 .firing-btn.active {
-  background: var(--carbon);
+  background: var(--band);
   border-color: var(--carbon);
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .atlas-meta {

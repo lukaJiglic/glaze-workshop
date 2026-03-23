@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWorkshopStore } from '@/stores/workshop'
 import { storeToRefs } from 'pinia'
+import { materialAnalyses } from '@/data/material-analyses'
 import IngredientRow from './IngredientRow.vue'
 import AnimatedNumber from '@/components/ui/AnimatedNumber.vue'
 import type { SubstitutionOption } from '@/data/materials-knowledge'
@@ -10,6 +11,25 @@ import type { SubstitutionOption } from '@/data/materials-knowledge'
 const store = useWorkshopStore()
 const router = useRouter()
 const { batchWeight, scaledIngredients, totalWeight, calculatorRecipe } = storeToRefs(store)
+
+// LOI-adjusted fired weight
+const weightedLOI = computed(() => {
+  const recipe = calculatorRecipe.value
+  if (!recipe) return 0
+  const totalAmount = recipe.ingredients.reduce((s, i) => s + i.amount, 0)
+  if (totalAmount === 0) return 0
+  let loi = 0
+  for (const ing of recipe.ingredients) {
+    const analysis = materialAnalyses.get(ing.materialId)
+    if (analysis) loi += (ing.amount / totalAmount) * analysis.loi
+  }
+  return Math.round(loi * 10) / 10
+})
+
+const firedWeight = computed(() => {
+  if (weightedLOI.value === 0) return totalWeight.value
+  return totalWeight.value * (1 - weightedLOI.value / 100)
+})
 
 const presets = [250, 500, 1000, 2000, 5000]
 
@@ -114,6 +134,15 @@ function handleSwap(originalId: string, opt: SubstitutionOption) {
             <AnimatedNumber :value="totalWeight" :decimals="1" suffix="g" />
           </span>
           <span></span>
+        </div>
+        <div v-if="weightedLOI > 0.5" class="fired-weight-row">
+          <div class="fired-weight-info">
+            <span class="fired-label">Est. fired weight</span>
+            <span class="fired-hint">after LOI loss of {{ weightedLOI }}%</span>
+          </div>
+          <span class="fired-value">
+            <AnimatedNumber :value="firedWeight" :decimals="1" suffix="g" />
+          </span>
         </div>
       </div>
 
@@ -301,11 +330,51 @@ function handleSwap(originalId: string, opt: SubstitutionOption) {
   font-size: var(--text-base);
 }
 
+.fired-weight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-3);
+  background: rgba(122, 143, 110, 0.08);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--sage);
+}
+
+.fired-weight-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.fired-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+}
+
+.fired-hint {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--stone);
+  font-style: italic;
+}
+
+.fired-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--sage-dark);
+}
+
 /* Swap toast */
 .swap-toast {
   margin-top: var(--space-4);
-  background: var(--carbon);
-  color: var(--cream);
+  background: var(--band);
+  color: var(--on-band);
   border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-4);
   display: flex;

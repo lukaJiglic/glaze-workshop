@@ -9,10 +9,13 @@
 // Sources: Digitalfire reference database, Hansen "Digitalfire Ceramic Materials"
 // database, Hamer & Hamer "The Potter's Dictionary", Insight-Live published analyses.
 
+export type CostTier = 'cheap' | 'moderate' | 'expensive'
+
 export interface MaterialAnalysis {
   loi: number                    // Loss on Ignition, weight % (CO2, H2O released during firing)
   oxides: Record<string, number> // oxide id → weight % of raw material
   note?: string                  // data quality note (e.g. "variable — typical average")
+  costTier?: CostTier            // approximate cost bracket for studio estimation
 }
 
 // ─── Oxide molecular weights (g/mol) ──────────────────────────────────────────
@@ -261,6 +264,12 @@ export const materialAnalyses = new Map<string, MaterialAnalysis>([
     oxides: { b2o3: 27.26, cao: 27.28, sio2: 0.80 },
     note: 'More consistent than Gerstley Borate. Good boron + calcium source.',
   }],
+  ['gillespie-borate', {
+    loi: 24.5,
+    oxides: { b2o3: 27.00, cao: 21.00, mgo: 8.00, na2o: 1.50, sio2: 4.50 },
+    note: 'Popular Gerstley Borate substitute. Higher MgO and more consistent batch-to-batch.',
+    costTier: 'moderate',
+  }],
 
   // ── FRITS ─────────────────────────────────────────────────────────────────
   ['ferro-frit-3134', {
@@ -471,4 +480,47 @@ export const materialAnalyses = new Map<string, MaterialAnalysis>([
     oxides: { mgo: 16.4 },
     note: 'MgSO₄·7H₂O. Minimal chemistry contribution at 0.1–0.5% use levels.',
   }],
+  ['cmc-gum', {
+    loi: 100.0,
+    oxides: {},
+    note: 'Carboxymethyl cellulose. Organic binder/suspender — burns out completely during firing. No oxide contribution.',
+  }],
 ])
+
+// ─── Material cost tiers ──────────────────────────────────────────────────────
+// Rough per-kg brackets for studio cost estimation.
+// cheap ≈ under $3/kg, moderate ≈ $3–12/kg, expensive ≈ over $12/kg
+export const MATERIAL_COST_TIERS: Record<string, CostTier> = {
+  // Cheap — bulk clay and flux staples
+  silica: 'cheap', kaolin: 'cheap', 'epk-kaolin': 'cheap', 'ball-clay': 'cheap',
+  bentonite: 'cheap', whiting: 'cheap', dolomite: 'cheap', talc: 'cheap',
+  'potash-feldspar': 'cheap', 'custer-feldspar': 'cheap', 'g200-feldspar': 'cheap',
+  'soda-feldspar': 'cheap', 'nepheline-syenite': 'cheap', wollastonite: 'cheap',
+  'red-iron-oxide': 'cheap', 'black-iron-oxide': 'cheap', 'yellow-iron-oxide': 'cheap',
+  'soda-ash': 'cheap', 'epsom-salt': 'cheap', 'calcined-kaolin': 'cheap', 'cmc-gum': 'cheap',
+
+  // Moderate — specialty fluxes, frits, common colorants
+  'grolleg-kaolin': 'moderate', 'cornwall-stone': 'moderate',
+  'strontium-carbonate': 'moderate', 'barium-carbonate': 'moderate', 'bone-ash': 'moderate',
+  'zinc-oxide': 'moderate', 'gerstley-borate': 'moderate', 'colemanite': 'moderate',
+  'ferro-frit-3134': 'moderate', 'ferro-frit-3124': 'moderate', 'ferro-frit-3195': 'moderate',
+  'ferro-frit-3110': 'moderate', 'ferro-frit-3249': 'moderate', 'ferro-frit-4110': 'moderate',
+  'ferro-frit-3107': 'moderate', 'fusion-frit-f524': 'moderate', 'fusion-frit-f69': 'moderate',
+  spodumene: 'moderate', 'copper-carbonate': 'moderate', 'copper-oxide': 'moderate',
+  'manganese-dioxide': 'moderate', 'manganese-carbonate': 'moderate',
+  'chrome-oxide': 'moderate', rutile: 'moderate', ilmenite: 'moderate',
+  'alberta-slip': 'moderate', 'ravenscrag-slip': 'moderate', 'barnard-clay': 'moderate',
+  'alberta-slip-roasted': 'moderate', 'wood-ash': 'moderate', 'calcined-alumina': 'moderate',
+  'zirconium-silicate': 'moderate', 'titanium-dioxide': 'moderate',
+  'black-copper-oxide': 'moderate', 'nickel-oxide': 'moderate',
+  'mason-stain-generic': 'moderate',
+
+  // Expensive — precious colorants, lithium, tin, specialty
+  'lithium-carbonate': 'expensive', 'tin-oxide': 'expensive',
+  'cobalt-carbonate': 'expensive', 'cobalt-oxide': 'expensive',
+  'red-lead': 'expensive',
+}
+
+export function getMaterialCostTier(materialId: string): CostTier {
+  return MATERIAL_COST_TIERS[materialId] ?? 'moderate'
+}
