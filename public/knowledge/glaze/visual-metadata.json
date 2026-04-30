@@ -1,0 +1,374 @@
+{
+  "meta": {
+    "title": "Visual metadata and app-facing surface descriptors",
+    "createdAt": "2026-03-10",
+    "note": "Scores are qualitative studio-style values from 0 to 5. They are intended for filtering and display, not scientific measurement."
+  },
+  "scales": {
+    "glossLevel": "0 = fully dry, 5 = mirror gloss",
+    "opacityLevel": "0 = fully transparent, 5 = fully opaque",
+    "variationLevel": "0 = flat/even, 5 = highly variegated",
+    "runRisk": "0 = very stable, 5 = catch-plate recommended",
+    "textureLevel": "0 = smooth glass, 5 = heavily textured or broken",
+    "crackleLevel": "0 = no craze intended, 5 = strong decorative crackle",
+    "poolingLevel": "0 = minimal pooling response, 5 = strong pooling and edge break"
+  },
+  "familyDefaults": [
+    {
+      "familyId": "clear-liner",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 2 }
+    },
+    {
+      "familyId": "majolica-family",
+      "scores": { "glossLevel": 4, "opacityLevel": 5, "variationLevel": 1, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 }
+    },
+    {
+      "familyId": "celadon-family",
+      "scores": { "glossLevel": 4, "opacityLevel": 1, "variationLevel": 2, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 4 }
+    },
+    {
+      "familyId": "shino-family",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 4 }
+    },
+    {
+      "familyId": "temmoku-family",
+      "scores": { "glossLevel": 5, "opacityLevel": 2, "variationLevel": 1, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 3 }
+    },
+    {
+      "familyId": "ash-family",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 3, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 5 }
+    },
+    {
+      "familyId": "crystalline-family",
+      "scores": { "glossLevel": 4, "opacityLevel": 1, "variationLevel": 5, "runRisk": 5, "textureLevel": 4, "crackleLevel": 0, "poolingLevel": 4 }
+    },
+    {
+      "familyId": "raku-metallic-family",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 5, "runRisk": 1, "textureLevel": 4, "crackleLevel": 4, "poolingLevel": 3 }
+    },
+    {
+      "familyId": "oatmeal-rutile-family",
+      "scores": { "glossLevel": 2, "opacityLevel": 3, "variationLevel": 4, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 }
+    }
+  ],
+  "recipeOverrides": [
+    {
+      "recipeId": "g3879",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal",
+      "poolingColorHint": "slightly cooler clear in thick areas"
+    },
+    {
+      "recipeId": "clear-to-milky-crackle",
+      "scores": { "glossLevel": 4, "opacityLevel": 2, "variationLevel": 2, "runRisk": 1, "textureLevel": 0, "crackleLevel": 5, "poolingLevel": 2 },
+      "edgeBreak": "fine craze network",
+      "poolingColorHint": "more milkiness in thicker zones"
+    },
+    {
+      "recipeId": "edouards-celadon-vert",
+      "scores": { "glossLevel": 4, "opacityLevel": 1, "variationLevel": 2, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "lighter green on thinner edges",
+      "poolingColorHint": "deeper celadon in pools"
+    },
+    {
+      "recipeId": "edouards-shino",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm flashing and orange peel",
+      "poolingColorHint": "darker orange-brown in thicker areas"
+    },
+    {
+      "recipeId": "tenmoku-qit-3",
+      "scores": { "glossLevel": 5, "opacityLevel": 2, "variationLevel": 1, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "brown break on thin rims",
+      "poolingColorHint": "deep black-brown pools"
+    },
+    {
+      "recipeId": "edouards-blue-texture-2",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "lighter blue break on texture",
+      "poolingColorHint": "denser cobalt blue in deeper glaze"
+    },
+    {
+      "recipeId": "crystalline-base-glaze",
+      "scores": { "glossLevel": 4, "opacityLevel": 1, "variationLevel": 5, "runRisk": 5, "textureLevel": 4, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "run-prone glass edge",
+      "poolingColorHint": "warm pools around crystal fields"
+    },
+    {
+      "recipeId": "g2934",
+      "scores": { "glossLevel": 1, "opacityLevel": 3, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "soft matte edge",
+      "poolingColorHint": "slightly darker cream in thicker zones"
+    },
+    {
+      "recipeId": "g1214z1",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "soft pale satin edge",
+      "poolingColorHint": "slightly warmer cream in thicker areas"
+    },
+    {
+      "recipeId": "g1216m",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal",
+      "poolingColorHint": "barely cooler clear in deep glaze"
+    },
+    {
+      "recipeId": "g2571a",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "gentle satin edge",
+      "poolingColorHint": "slightly warmer cream in thicker areas"
+    },
+    {
+      "recipeId": "g1947u",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 2 },
+      "edgeBreak": "minimal warm clear break",
+      "poolingColorHint": "slightly warmer transparency in thick pools"
+    },
+    {
+      "recipeId": "g2240",
+      "scores": { "glossLevel": 1, "opacityLevel": 4, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "dry matte rim with little break",
+      "poolingColorHint": "denser cool ivory in thicker glaze"
+    },
+    {
+      "recipeId": "ga6-c",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "amber-to-blue break on texture",
+      "poolingColorHint": "deeper rutile blue in recesses with warmer amber edges"
+    },
+    {
+      "recipeId": "ga6-g",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm amber break over brown field",
+      "poolingColorHint": "richer rutile brown in thicker glaze"
+    },
+    {
+      "recipeId": "ga6-h",
+      "scores": { "glossLevel": 4, "opacityLevel": 4, "variationLevel": 1, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 2 },
+      "edgeBreak": "slightly softer black on thin edges",
+      "poolingColorHint": "dense glossy black in thicker zones"
+    },
+    {
+      "recipeId": "gr6-m",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "cream break over texture and rims",
+      "poolingColorHint": "deep blue pools with pale floating highlights"
+    },
+    {
+      "recipeId": "gr6-n",
+      "scores": { "glossLevel": 4, "opacityLevel": 1, "variationLevel": 2, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "lighter green on thin edges",
+      "poolingColorHint": "deeper celadon in pooled glaze"
+    },
+    {
+      "recipeId": "gr10-c",
+      "scores": { "glossLevel": 1, "opacityLevel": 3, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "soft dry matte edge",
+      "poolingColorHint": "slightly denser cream in thicker glaze"
+    },
+    {
+      "recipeId": "g2934y",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 1, "runRisk": 1, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "soft silky edge",
+      "poolingColorHint": "slightly warmer cream in thicker areas"
+    },
+    {
+      "recipeId": "g3806c",
+      "scores": { "glossLevel": 5, "opacityLevel": 1, "variationLevel": 4, "runRisk": 5, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "clear-to-turquoise break with strong movement",
+      "poolingColorHint": "deep turquoise-green pools in thick glaze"
+    },
+    {
+      "recipeId": "g2826r",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 3, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "cream break over ridges and texture",
+      "poolingColorHint": "stormy blue pools in recesses"
+    },
+    {
+      "recipeId": "g2826x",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 3, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "brown-red break on thin rims",
+      "poolingColorHint": "dense dark iron-red to black-brown in deep glaze"
+    },
+    {
+      "recipeId": "g2926j",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal",
+      "poolingColorHint": "clear with a slightly cooler look in thicker areas"
+    },
+    {
+      "recipeId": "g2931l",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal",
+      "poolingColorHint": "clean low-fire transparency with slight warmth"
+    },
+    {
+      "recipeId": "g3838a",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal",
+      "poolingColorHint": "very clean clear with slight coolness in thicker glaze"
+    },
+    {
+      "recipeId": "turquoise-raku",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 5, "runRisk": 1, "textureLevel": 4, "crackleLevel": 4, "poolingLevel": 3 },
+      "edgeBreak": "black crackle network over turquoise",
+      "poolingColorHint": "deeper blue-green in recesses"
+    },
+    {
+      "recipeId": "metallic-copper-raku",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 1, "textureLevel": 4, "crackleLevel": 3, "poolingLevel": 3 },
+      "edgeBreak": "metallic break to darker bronze",
+      "poolingColorHint": "red-metallic pools"
+    },
+    {
+      "recipeId": "leach-4321-clear",
+      "scores": { "glossLevel": 4, "opacityLevel": 0, "variationLevel": 1, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "slight warm amber on thin rims",
+      "poolingColorHint": "faint warm tint in thick pools over stoneware"
+    },
+    {
+      "recipeId": "malcolm-davis-shino",
+      "scores": { "glossLevel": 1, "opacityLevel": 3, "variationLevel": 5, "runRisk": 2, "textureLevel": 4, "crackleLevel": 1, "poolingLevel": 4 },
+      "edgeBreak": "thin areas go orange-to-black from carbon trapping",
+      "poolingColorHint": "thick areas are creamy white; crawled blisters trap carbon in orange flashes"
+    },
+    {
+      "recipeId": "oil-spot-temmoku",
+      "scores": { "glossLevel": 5, "opacityLevel": 3, "variationLevel": 4, "runRisk": 2, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "brown-to-rust on thin rims and edges",
+      "poolingColorHint": "black with silver and gold iridescent oil-spot crystals in thick zones"
+    },
+    {
+      "recipeId": "randys-red",
+      "scores": { "glossLevel": 4, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "vivid red-orange where thin; dark brown where thick",
+      "poolingColorHint": "deep brown-black pooling in recesses; red surface on walls"
+    },
+    {
+      "recipeId": "hamada-nuka",
+      "scores": { "glossLevel": 2, "opacityLevel": 3, "variationLevel": 3, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm cream with slightly lighter thin edges",
+      "poolingColorHint": "honey-warm pooling in grooves and textured areas"
+    },
+    {
+      "recipeId": "edouards-feuilles-dautomne",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 5, "runRisk": 2, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm autumn leaf tones where thin — orange to brown transitions",
+      "poolingColorHint": "deeper rust-brown in pools with barium-driven matte surface"
+    },
+    {
+      "recipeId": "blue-chun-3",
+      "scores": { "glossLevel": 4, "opacityLevel": 2, "variationLevel": 3, "runRisk": 3, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "pale blue-white where thin; clear on sharp edges",
+      "poolingColorHint": "deep opalescent blue in thick pools — chun blue from copper in reduction"
+    },
+    {
+      "recipeId": "sh-fake-ash-1",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 3, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "amber-rust break on rims with rutile variegation",
+      "poolingColorHint": "honey-amber pools with darker iron-brown in deepest recesses"
+    },
+    {
+      "recipeId": "stiff-white-crackle",
+      "scores": { "glossLevel": 3, "opacityLevel": 4, "variationLevel": 1, "runRisk": 0, "textureLevel": 1, "crackleLevel": 5, "poolingLevel": 1 },
+      "edgeBreak": "opaque white to translucent on thin edges; craze network visible",
+      "poolingColorHint": "dense milky white in thick areas with prominent crackle pattern"
+    },
+    {
+      "recipeId": "steves-brilliant-ink-blue",
+      "scores": { "glossLevel": 5, "opacityLevel": 3, "variationLevel": 1, "runRisk": 2, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "lighter cobalt blue on thin rims",
+      "poolingColorHint": "intense saturated ink-blue in thick zones — zinc helps cobalt saturate"
+    },
+    {
+      "recipeId": "edouards-mottled-blue-ash",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 3, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 5 },
+      "edgeBreak": "lighter blue-grey break on texture with ash-driven variation",
+      "poolingColorHint": "deep mottled blue-green in pools — wood ash variability adds unpredictability"
+    },
+    {
+      "recipeId": "edouards-mottled-brown-ash",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 3, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "amber-to-brown mottled break on edges",
+      "poolingColorHint": "dark iron-brown with amber highlights in ash-affected pools"
+    },
+    {
+      "recipeId": "helens-satin-mottled-eucalyptus",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "pale green-grey on thin edges; copper and rutile drift apart",
+      "poolingColorHint": "green-teal with copper spots in thick zones; rutile adds creamy float"
+    },
+    {
+      "recipeId": "helens-matt-textured-rust",
+      "scores": { "glossLevel": 1, "opacityLevel": 3, "variationLevel": 4, "runRisk": 1, "textureLevel": 4, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "dry rust-orange texture on exposed edges",
+      "poolingColorHint": "darker rust-brown in recesses with rutile-driven surface crawl"
+    },
+    {
+      "recipeId": "clear-crackle-cone-6",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 1, "runRisk": 2, "textureLevel": 0, "crackleLevel": 5, "poolingLevel": 2 },
+      "edgeBreak": "clear to slightly milky on thin edges; craze lines visible",
+      "poolingColorHint": "transparent with prominent crackle network — thicker areas show more crazing"
+    },
+    {
+      "recipeId": "aqua-blue-dry-glaze",
+      "scores": { "glossLevel": 1, "opacityLevel": 3, "variationLevel": 3, "runRisk": 1, "textureLevel": 3, "crackleLevel": 0, "poolingLevel": 2 },
+      "edgeBreak": "dry pale blue-green on texture with toothy surface",
+      "poolingColorHint": "aqua-turquoise where thicker; copper and barium create a dry-matte field"
+    },
+    {
+      "recipeId": "bright-bronze-glaze",
+      "scores": { "glossLevel": 3, "opacityLevel": 3, "variationLevel": 4, "runRisk": 2, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "metallic bronze shimmer on edges",
+      "poolingColorHint": "dark bronze-brown with metallic lustre from copper-iron-manganese blend"
+    },
+    {
+      "recipeId": "jade-green-raku",
+      "scores": { "glossLevel": 2, "opacityLevel": 2, "variationLevel": 5, "runRisk": 1, "textureLevel": 4, "crackleLevel": 4, "poolingLevel": 3 },
+      "edgeBreak": "black crackle on jade-green field; metallic flashing on edges",
+      "poolingColorHint": "deeper green with copper lustre in thick areas; cobalt adds depth"
+    },
+    {
+      "recipeId": "copper-lustre-raku",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 5, "runRisk": 1, "textureLevel": 3, "crackleLevel": 3, "poolingLevel": 3 },
+      "edgeBreak": "metallic copper-red to gold lustre on exposed areas",
+      "poolingColorHint": "deeper copper-red pools with crackle network; reduction atmosphere variable"
+    },
+    {
+      "recipeId": "rusty-red-black-fire",
+      "scores": { "glossLevel": 2, "opacityLevel": 3, "variationLevel": 5, "runRisk": 1, "textureLevel": 4, "crackleLevel": 3, "poolingLevel": 3 },
+      "edgeBreak": "rusty red-orange on exposed edges; black where heavily reduced",
+      "poolingColorHint": "black copper oxide creates dark pools with red flash where oxygen reached"
+    },
+    {
+      "recipeId": "dan-dermer-oatmeal",
+      "scores": { "glossLevel": 2, "opacityLevel": 3, "variationLevel": 4, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm cream-to-tan break on rims with rutile speckling",
+      "poolingColorHint": "oatmeal cream with amber rutile drift in thicker areas"
+    },
+    {
+      "recipeId": "benjis-ash-glaze",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 3, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "pale straw on thin edges; titanium adds slight opacity",
+      "poolingColorHint": "warm amber-green pools with subtle variegation from titanium"
+    },
+    {
+      "recipeId": "g2916f",
+      "scores": { "glossLevel": 5, "opacityLevel": 0, "variationLevel": 0, "runRisk": 1, "textureLevel": 0, "crackleLevel": 0, "poolingLevel": 1 },
+      "edgeBreak": "minimal — industrial-quality transparency",
+      "poolingColorHint": "very clean clear; slightly warmer than boron-only clears"
+    },
+    {
+      "recipeId": "gr6-a",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 2, "runRisk": 2, "textureLevel": 1, "crackleLevel": 0, "poolingLevel": 3 },
+      "edgeBreak": "warm tan break on rims from slip minerals",
+      "poolingColorHint": "natural amber-tan in recesses — Ravenscrag slip body character shows through"
+    },
+    {
+      "recipeId": "ga6-b",
+      "scores": { "glossLevel": 3, "opacityLevel": 2, "variationLevel": 4, "runRisk": 2, "textureLevel": 2, "crackleLevel": 0, "poolingLevel": 4 },
+      "edgeBreak": "warm honey-amber break on edges with rutile float",
+      "poolingColorHint": "deeper amber-honey pools with rutile variegation and lithium-driven flow"
+    }
+  ]
+}

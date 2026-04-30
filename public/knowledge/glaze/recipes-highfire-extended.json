@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "title": "Extended high-fire glaze recipes",
+    "createdAt": "2026-03-10"
+  },
+  "recipes": [
+    {
+      "id": "benjis-transparent",
+      "name": "Benji's Transparent",
+      "firingRangeId": "high-fire",
+      "cone": "9",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 39.5 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 18.5 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 3.0 },
+        { "materialId": "ball-clay", "sourceLabel": "Ball clay", "amount": 7.4 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 31.5 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Transparent high-fire base for porcelain or light stoneware."],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "tenmoku-qit-3",
+      "name": "Tenmoku QIT #3",
+      "firingRangeId": "high-fire",
+      "cone": "9",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["temmoku"],
+      "colourIds": ["black", "brown"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 43.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 15.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 4.5 },
+        { "materialId": "ball-clay", "sourceLabel": "Ball clay", "amount": 7.5 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 30.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Iron oxide", "amount": 5.5 },
+        { "materialId": "cobalt-carbonate", "sourceLabel": "Cobalt carbonate", "amount": 4.5 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": ["Dark iron-cobalt temmoku surface."],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "blue-chun-3",
+      "name": "Blue Chun #3",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 33.3 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 27.8 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 2.8 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 36.1 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": ["Copper blue chun family; reduction tag inferred from style."],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "sh-fake-ash-1",
+      "name": "SH Fake Ash #1",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware"],
+      "techniqueIds": ["ash-glazing"],
+      "styleIds": ["ash", "variegated"],
+      "colourIds": ["amber", "brown", "variegated"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 49.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 13.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 14.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 24.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 7.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Ash-like surface without actual ash in the batch."],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "dan-dermer-clear-base",
+      "name": "Dan Dermer Clear Base",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 30.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 19.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 9.0 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 42.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Simple clear base intended for cone-10 use."],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "dan-dermer-oatmeal",
+      "name": "Dan Dermer Oatmeal",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "variegated"],
+      "colourIds": ["cream", "amber"],
+      "surfaceIds": ["satin", "variegated"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 39.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 12.0 },
+        { "materialId": "silica", "sourceLabel": "Flint", "amount": 37.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": ["Oatmeal cream rutile surface."],
+      "sourceIds": ["ct-stoneware"]
+    }
+  ]
+}

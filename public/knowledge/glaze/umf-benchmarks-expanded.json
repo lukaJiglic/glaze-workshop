@@ -1,0 +1,407 @@
+{
+  "meta": {
+    "title": "Expanded UMF benchmarks by glaze intent",
+    "createdAt": "2026-03-15",
+    "note": "These are directional benchmark bands for recipe development and diagnosis. They are not approval limits and do not replace fit, durability, or firing tests."
+  },
+  "profiles": [
+    {
+      "id": "lowfire-bright-clear",
+      "name": "Low-fire bright clear",
+      "firingRangeId": "low-fire",
+      "coneRange": "06-04",
+      "surfaceGoal": "very glossy transparent host for bright colour",
+      "targetBands": {
+        "knao": "0.18-0.38",
+        "cao": "0.15-0.35",
+        "mgo": "0.00-0.10",
+        "b2o3": "0.40-0.70",
+        "al2o3": "0.12-0.24",
+        "sio2": "1.8-2.7",
+        "siAlRatio": "9-15",
+        "expansionDirection": "medium to medium-high"
+      },
+      "chemistrySignals": [
+        "clarity normally depends on a strong boron contribution",
+        "too much alumina quickly kills low-fire brilliance",
+        "this is often a colour-host chemistry, not a fit-maximized chemistry"
+      ],
+      "bestReferenceRecipeIds": ["g3879", "g2931k"],
+      "watchFor": [
+        "bright and clear does not mean low expansion",
+        "red bodies can still warm the final read through the clear"
+      ],
+      "sourceIds": ["digitalfire-g3879", "digitalfire-g2931k", "digitalfire-limit-article"]
+    },
+    {
+      "id": "lowfire-lower-expansion-clear",
+      "name": "Low-fire lower-expansion clear",
+      "firingRangeId": "low-fire",
+      "coneRange": "04-02",
+      "surfaceGoal": "transparent with better fit on tighter bodies",
+      "targetBands": {
+        "knao": "0.12-0.28",
+        "cao": "0.18-0.35",
+        "mgo": "0.05-0.18",
+        "b2o3": "0.35-0.65",
+        "al2o3": "0.14-0.26",
+        "sio2": "1.9-2.9",
+        "siAlRatio": "8-13",
+        "expansionDirection": "low to medium"
+      },
+      "chemistrySignals": [
+        "3249-style chemistry usually shows up somewhere in this direction",
+        "the lower-expansion branch often trades a little brilliance for survivability",
+        "moderate MgO helps fit but can flatten the surface if pushed too far"
+      ],
+      "bestReferenceRecipeIds": ["g1916q", "g2931l"],
+      "watchFor": [
+        "if the clear looks dull, the problem may be under-melt or thickness, not only the lower expansion chemistry",
+        "low-fire fit still depends heavily on the body itself"
+      ],
+      "sourceIds": ["digitalfire-g1916q", "digitalfire-g2931l", "digitalfire-crazing"]
+    },
+    {
+      "id": "cone6-stable-clear-liner",
+      "name": "Cone-6 stable clear liner",
+      "firingRangeId": "mid-fire",
+      "coneRange": "5-6",
+      "surfaceGoal": "stable glossy transparent for liner or general host use",
+      "targetBands": {
+        "knao": "0.18-0.34",
+        "cao": "0.32-0.55",
+        "mgo": "0.00-0.10",
+        "b2o3": "0.18-0.32",
+        "al2o3": "0.30-0.42",
+        "sio2": "2.9-3.9",
+        "siAlRatio": "8.5-11",
+        "expansionDirection": "medium"
+      },
+      "chemistrySignals": [
+        "enough alumina to stay stable without turning cloudy",
+        "enough silica to behave like a liner rather than a fluid effect glaze",
+        "boron is present but not dominating the whole chemistry"
+      ],
+      "bestReferenceRecipeIds": ["g2926b", "g1214w", "g2916f"],
+      "watchFor": [
+        "stable cone-6 clear is a chemistry and a thickness problem at the same time",
+        "using it as a universal host for every stain can still fail on sensitive warm colours"
+      ],
+      "sourceIds": ["digitalfire-g2926b", "digitalfire-g1214w", "digitalfire-g2916f"]
+    },
+    {
+      "id": "cone6-warm-colour-host",
+      "name": "Cone-6 warm-colour host clear",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "glossy host that keeps chrome-tin and sensitive warm colours cleaner",
+      "targetBands": {
+        "knao": "0.16-0.30",
+        "cao": "0.35-0.55",
+        "mgo": "0.00-0.08",
+        "b2o3": "0.14-0.28",
+        "al2o3": "0.28-0.40",
+        "sio2": "3.0-4.0",
+        "siAlRatio": "9-11.5",
+        "expansionDirection": "medium to low"
+      },
+      "chemistrySignals": [
+        "the host should stay transparent and quiet rather than adding its own variegation",
+        "zinc-free or zinc-controlled direction is often safer for warm stain work",
+        "host choice matters as much as the colourant percentage"
+      ],
+      "bestReferenceRecipeIds": ["g1214m", "g2926b"],
+      "watchFor": [
+        "adding opacifiers or titanium to the host often ruins the reason this chemistry was chosen",
+        "clean colour still needs a white or lighter body underneath"
+      ],
+      "sourceIds": ["digitalfire-g1214m", "digitalfire-ceramic-stain", "mason-reference-guide"]
+    },
+    {
+      "id": "cone6-porcelain-clear",
+      "name": "Cone-6 porcelain clear",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "glossy transparent with lower expansion for tight porcelain bodies",
+      "targetBands": {
+        "knao": "0.10-0.24",
+        "cao": "0.28-0.48",
+        "mgo": "0.06-0.16",
+        "b2o3": "0.18-0.32",
+        "al2o3": "0.30-0.42",
+        "sio2": "3.1-4.2",
+        "siAlRatio": "9-12",
+        "expansionDirection": "low"
+      },
+      "chemistrySignals": [
+        "this family typically sacrifices some expansion to survive porcelain fit",
+        "a little MgO often helps pull the expansion down without becoming a matte",
+        "the chemistry still needs enough melt to stay truly clear"
+      ],
+      "bestReferenceRecipeIds": ["g1216l", "g1216m", "g2926j", "g3838a"],
+      "watchFor": [
+        "a clear that fits porcelain can look needlessly tight or dull on a more open stoneware",
+        "do not assume one porcelain body represents all porcelain fit problems"
+      ],
+      "sourceIds": ["digitalfire-g1216l", "digitalfire-g1216m", "digitalfire-g2926j", "digitalfire-g3838a"]
+    },
+    {
+      "id": "cone6-silky-functional-matte",
+      "name": "Cone-6 silky functional matte",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "satin to silky matte with a better chance of functional performance",
+      "targetBands": {
+        "knao": "0.16-0.32",
+        "cao": "0.20-0.45",
+        "mgo": "0.12-0.30",
+        "b2o3": "0.08-0.24",
+        "al2o3": "0.32-0.48",
+        "sio2": "3.0-4.2",
+        "siAlRatio": "8-10.5",
+        "expansionDirection": "low to medium"
+      },
+      "chemistrySignals": [
+        "MgO should be present enough to soften the surface but not so high that the glaze goes waxy or dead",
+        "functional mattes usually need more chemistry discipline than decorative mattes",
+        "silky mattes often sit closer to glossy-clear chemistry than potters expect"
+      ],
+      "bestReferenceRecipeIds": ["g2934y", "g2934"],
+      "watchFor": [
+        "surface feel is not the same thing as durability",
+        "cooling can move the same recipe from satin to rough matte"
+      ],
+      "sourceIds": ["digitalfire-g2934y", "digitalfire-g2934", "insight-glazes"]
+    },
+    {
+      "id": "cone6-calcium-matte",
+      "name": "Cone-6 calcium matte contrast",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "calcium-led matte or satin that contrasts with magnesia mattes",
+      "targetBands": {
+        "knao": "0.18-0.34",
+        "cao": "0.40-0.62",
+        "mgo": "0.00-0.10",
+        "b2o3": "0.08-0.20",
+        "al2o3": "0.28-0.42",
+        "sio2": "2.8-3.8",
+        "siAlRatio": "8.5-10.5",
+        "expansionDirection": "medium"
+      },
+      "chemistrySignals": [
+        "higher calcium can produce a cleaner, more mineral matte than a soft dolomite matte",
+        "small zinc participation can further redirect the surface",
+        "this route is useful as a comparison chemistry, not just as a production candidate"
+      ],
+      "bestReferenceRecipeIds": ["g1214z1"],
+      "watchFor": [
+        "colour response differs from MgO mattes even when the surface sheen looks similar",
+        "stain compatibility can shift when zinc is involved"
+      ],
+      "sourceIds": ["digitalfire-g1214z1", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "cone6-reactive-floating-blue",
+      "name": "Cone-6 reactive floating blue chemistry",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "blue pools, cream breaks, and floating variegation",
+      "targetBands": {
+        "knao": "0.20-0.36",
+        "cao": "0.24-0.46",
+        "mgo": "0.00-0.08",
+        "b2o3": "0.14-0.30",
+        "al2o3": "0.20-0.34",
+        "sio2": "2.5-3.4",
+        "siAlRatio": "9.5-14",
+        "expansionDirection": "medium to medium-high"
+      },
+      "chemistrySignals": [
+        "this family is deliberately more fluid and reactive than a liner clear",
+        "lower alumina and active fluxes leave room for breaking and pooling",
+        "rutile, cobalt, and often tin are only part of the look; the host fluidity is the other part"
+      ],
+      "bestReferenceRecipeIds": ["g2826r", "gr6-m"],
+      "watchFor": [
+        "if the chemistry gets too stable the recipe stops floating and only stays blue",
+        "if the chemistry gets too fluid the result becomes a run test instead of a glaze"
+      ],
+      "sourceIds": ["digitalfire-g2826r", "digitalfire-gr6m", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "cone6-clean-celadon",
+      "name": "Cone-6 clean celadon direction",
+      "firingRangeId": "mid-fire",
+      "coneRange": "6",
+      "surfaceGoal": "clean green celadon-like transparent with light iron",
+      "targetBands": {
+        "knao": "0.16-0.30",
+        "cao": "0.30-0.50",
+        "mgo": "0.00-0.10",
+        "b2o3": "0.12-0.28",
+        "al2o3": "0.28-0.40",
+        "sio2": "3.0-4.0",
+        "siAlRatio": "9-12",
+        "expansionDirection": "medium to low"
+      },
+      "chemistrySignals": [
+        "the host should stay transparent and restrained",
+        "iron is usually low enough to tint rather than saturate",
+        "body colour matters almost as much as the recipe here"
+      ],
+      "bestReferenceRecipeIds": ["gr6-n", "g2926b"],
+      "watchFor": [
+        "dark or iron-rich bodies can wipe out the clean celadon read",
+        "too much opacity or rutile turns the family into variegated green rather than celadon"
+      ],
+      "sourceIds": ["digitalfire-gr6n", "digitalfire-g2926b"]
+    },
+    {
+      "id": "cone10-gloss-clear",
+      "name": "Cone-10 gloss clear",
+      "firingRangeId": "high-fire",
+      "coneRange": "9-10",
+      "surfaceGoal": "classic feldspathic high-fire transparency",
+      "targetBands": {
+        "knao": "0.18-0.34",
+        "cao": "0.35-0.60",
+        "mgo": "0.00-0.12",
+        "b2o3": "0.00-0.10",
+        "al2o3": "0.30-0.48",
+        "sio2": "3.3-4.8",
+        "siAlRatio": "9-12.5",
+        "expansionDirection": "medium"
+      },
+      "chemistrySignals": [
+        "high-fire gloss usually leans on calcium, feldspar, and silica more than on boron",
+        "the chemistry should look more finished and less forced than a low-fire clear",
+        "high silica only helps if the kiln actually delivers the heatwork"
+      ],
+      "bestReferenceRecipeIds": ["g1947u", "gr10-a", "gr10-b"],
+      "watchFor": [
+        "cone-10 clarity can disguise poor fit if the body is not part of the test set",
+        "reduction and oxidation can both count as cone-10 but do not produce the same look"
+      ],
+      "sourceIds": ["digitalfire-g1947u", "digitalfire-gr10a", "digitalfire-gr10b", "orton-pyrometric-guide"]
+    },
+    {
+      "id": "cone10-dolomite-satin",
+      "name": "Cone-10 dolomite satin matte",
+      "firingRangeId": "high-fire",
+      "coneRange": "10",
+      "surfaceGoal": "silky reduction matte with enough melt to avoid a dead surface",
+      "targetBands": {
+        "knao": "0.14-0.28",
+        "cao": "0.22-0.42",
+        "mgo": "0.16-0.34",
+        "b2o3": "0.00-0.08",
+        "al2o3": "0.30-0.46",
+        "sio2": "3.1-4.5",
+        "siAlRatio": "8.5-11",
+        "expansionDirection": "low to medium"
+      },
+      "chemistrySignals": [
+        "MgO should be high enough to create softness without killing the melt",
+        "this chemistry often feels better than it looks in unity numbers alone",
+        "dolomite matte success still depends on firing, cooling, and body"
+      ],
+      "bestReferenceRecipeIds": ["g2571a", "gr10-c"],
+      "watchFor": [
+        "beautiful silky mattes can still be weak or mark-prone",
+        "legacy materials and substitutions can shift the feel faster than the formula suggests"
+      ],
+      "sourceIds": ["digitalfire-g2571a", "digitalfire-gr10c", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "cone10-iron-gloss",
+      "name": "Cone-10 iron gloss or temmoku direction",
+      "firingRangeId": "high-fire",
+      "coneRange": "9-10",
+      "surfaceGoal": "dark transparent iron gloss rather than opaque black",
+      "targetBands": {
+        "knao": "0.16-0.30",
+        "cao": "0.34-0.60",
+        "mgo": "0.00-0.14",
+        "b2o3": "0.00-0.08",
+        "al2o3": "0.28-0.44",
+        "sio2": "3.1-4.4",
+        "siAlRatio": "8.5-12",
+        "expansionDirection": "medium"
+      },
+      "chemistrySignals": [
+        "the host is still a transparent iron-bearing glass rather than an opaque stain base",
+        "iron loading and atmosphere do the colour work on top of a fundamentally glossy chemistry",
+        "too much stiffness kills depth and turns the result muddy"
+      ],
+      "bestReferenceRecipeIds": ["tenmoku-qit-3"],
+      "watchFor": [
+        "iron saturation can make the glaze look black without actually producing a rich temmoku depth",
+        "a body that contributes too much iron can collapse the colour separation"
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    }
+  ],
+  "diagnostics": [
+    {
+      "id": "clear-crazes-on-porcelain",
+      "issue": "A cone-6 clear looks good but crazes on porcelain.",
+      "moveDirection": [
+        "lower the K2O and Na2O pressure",
+        "move part of the flux package toward the lower-expansion clear family",
+        "keep enough silica and alumina to stay transparent"
+      ],
+      "referenceProfileIds": ["cone6-porcelain-clear", "cone6-stable-clear-liner"]
+    },
+    {
+      "id": "matte-is-chalky",
+      "issue": "A matte is dry, rough, or cutlery-marking badly.",
+      "moveDirection": [
+        "move away from the most extreme MgO or under-melted zone",
+        "compare against the silky-functional matte profile",
+        "check cooling before rewriting the chemistry"
+      ],
+      "referenceProfileIds": ["cone6-silky-functional-matte", "cone10-dolomite-satin"]
+    },
+    {
+      "id": "floating-blue-not-floating",
+      "issue": "The blue is flat and even instead of breaking cream and blue.",
+      "moveDirection": [
+        "compare against the reactive floating-blue benchmark instead of a liner clear",
+        "check whether alumina and overall stability are too high",
+        "verify thickness and texture response before increasing cobalt"
+      ],
+      "referenceProfileIds": ["cone6-reactive-floating-blue"]
+    },
+    {
+      "id": "celadon-turns-brown",
+      "issue": "A celadon test drifts toward amber or brown.",
+      "moveDirection": [
+        "reduce iron loading back toward the tint zone",
+        "use a cleaner transparent host and lighter body",
+        "remove opacifying or rutile-heavy influences"
+      ],
+      "referenceProfileIds": ["cone6-clean-celadon"]
+    },
+    {
+      "id": "lowfire-clear-cloudy",
+      "issue": "A low-fire clear is cloudy or milky without being intended as a milky clear.",
+      "moveDirection": [
+        "check thickness first",
+        "avoid over-stiffening with alumina or clay",
+        "make sure the glaze actually matured at the intended heatwork"
+      ],
+      "referenceProfileIds": ["lowfire-bright-clear", "lowfire-lower-expansion-clear"]
+    },
+    {
+      "id": "highfire-clear-looks-dry",
+      "issue": "A cone-10 transparent looks underfired or dry.",
+      "moveDirection": [
+        "confirm witness-cone heatwork before changing chemistry",
+        "check whether silica and alumina outran the delivered heatwork",
+        "compare against the gloss-clear benchmark before adding extra flux blindly"
+      ],
+      "referenceProfileIds": ["cone10-gloss-clear"]
+    }
+  ]
+}

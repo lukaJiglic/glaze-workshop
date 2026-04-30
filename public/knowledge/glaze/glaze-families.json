@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "title": "Glaze family and tradition guide",
+    "createdAt": "2026-03-10",
+    "note": "Families are broad practice categories. Real studio recipes often blend family behaviors."
+  },
+  "families": [
+    {
+      "id": "clear-liner",
+      "name": "Clear liner / transparent",
+      "summary": "Transparent base intended to show clay, underglaze, or slips rather than dominate them.",
+      "commonBodies": ["white-earthenware", "white-stoneware", "porcelain", "stoneware"],
+      "commonAtmospheres": ["oxidation", "reduction"],
+      "commonSignals": ["higher transparency", "low opacifier load", "fit and bubble healing matter a lot"],
+      "representativeRecipes": ["earthenware-clear-gloss-1", "g3879", "g2926b", "g1216l", "benjis-transparent"]
+    },
+    {
+      "id": "majolica-family",
+      "name": "Majolica",
+      "summary": "Opaque white low-fire glaze used as a painted ground for bright decoration.",
+      "commonBodies": ["white-earthenware"],
+      "commonAtmospheres": ["oxidation"],
+      "commonSignals": ["opaque white base", "painted color on top", "low-fire decoration tradition"],
+      "representativeRecipes": ["maiolica-glaze"],
+      "sourceIds": ["digitalfire-majolica", "ct-earthenware"]
+    },
+    {
+      "id": "celadon-family",
+      "name": "Celadon",
+      "summary": "Transparent iron-bearing glaze, often green over porcelain or light stoneware in reduction.",
+      "commonBodies": ["porcelain", "white-stoneware"],
+      "commonAtmospheres": ["reduction"],
+      "commonSignals": ["iron as a subtle colorant", "clarity and pooling matter", "light body improves legibility"],
+      "representativeRecipes": ["edouards-celadon-vert"],
+      "sourceIds": ["digitalfire-celadon", "ct-stoneware"]
+    },
+    {
+      "id": "shino-family",
+      "name": "Shino",
+      "summary": "Feldspathic high-fire family known for warm orange, cream, carbon trapping, and strong atmosphere sensitivity.",
+      "commonBodies": ["stoneware", "porcelain"],
+      "commonAtmospheres": ["reduction", "wood-ash-atmosphere"],
+      "commonSignals": ["feldspathic base", "warm blushes", "carbon trapping potential"],
+      "representativeRecipes": ["edouards-shino"],
+      "sourceIds": ["digitalfire-shino", "ct-stoneware"]
+    },
+    {
+      "id": "temmoku-family",
+      "name": "Temmoku",
+      "summary": "Dark glossy iron glaze ranging from black-brown to oil-spot variants.",
+      "commonBodies": ["stoneware", "porcelain"],
+      "commonAtmospheres": ["reduction"],
+      "commonSignals": ["high iron saturation", "deep dark glass", "may break brown at thinner edges"],
+      "representativeRecipes": ["tenmoku-qit-3"],
+      "sourceIds": ["digitalfire-temmoku", "ct-stoneware"]
+    },
+    {
+      "id": "ash-family",
+      "name": "Ash glaze",
+      "summary": "Family built from natural ash or ash-like chemistry, often variegated and atmosphere-responsive.",
+      "commonBodies": ["stoneware", "porcelain"],
+      "commonAtmospheres": ["oxidation", "reduction", "wood-ash-atmosphere"],
+      "commonSignals": ["calcium-alkali fluxing", "natural variation", "broken or pooled surfaces"],
+      "representativeRecipes": ["edouards-mottled-blue-ash", "edouards-celadon-vert", "benjis-ash-glaze", "sh-fake-ash-1"],
+      "sourceIds": ["ct-midfire", "ct-stoneware"]
+    },
+    {
+      "id": "chun-family",
+      "name": "Chun / Jun blue",
+      "summary": "Blue reduction family often tied to copper and opalescent or misty blue surfaces.",
+      "commonBodies": ["porcelain", "white-stoneware"],
+      "commonAtmospheres": ["reduction"],
+      "commonSignals": ["misty blue pooling", "soft cloudy transparency", "reduction-sensitive color"],
+      "representativeRecipes": ["blue-chun-3"],
+      "sourceIds": ["ct-stoneware"]
+    },
+    {
+      "id": "copper-red-family",
+      "name": "Copper red",
+      "summary": "Family where copper develops red rather than green, usually under reduction or raku conditions.",
+      "commonBodies": ["porcelain", "stoneware", "raku-clay"],
+      "commonAtmospheres": ["reduction", "raku-reduction"],
+      "commonSignals": ["copper-heavy chemistry", "red or metallic copper response", "high atmosphere sensitivity"],
+      "representativeRecipes": ["copper-red-raku", "metallic-red-1-raku", "copper-lustre-raku"],
+      "sourceIds": ["ct-raku", "digitalfire-raku"]
+    },
+    {
+      "id": "crystalline-family",
+      "name": "Crystalline",
+      "summary": "Special high-zinc family designed for visible crystal growth during controlled cooling holds.",
+      "commonBodies": ["porcelain", "white-stoneware"],
+      "commonAtmospheres": ["oxidation"],
+      "commonSignals": ["very fluid glaze", "crystal-growth hold required", "catch plate required"],
+      "representativeRecipes": ["crystalline-base-glaze"],
+      "sourceIds": ["ct-stoneware", "digitalfire-plc6cr"]
+    },
+    {
+      "id": "raku-metallic-family",
+      "name": "Metallic raku",
+      "summary": "Low-fire family built around hot removal and post-fire reduction to produce metallic, crackled, and carbon-smoked surfaces.",
+      "commonBodies": ["raku-clay", "grogged-sculpture"],
+      "commonAtmospheres": ["raku-reduction"],
+      "commonSignals": ["decorative-only", "crackle or smoke patterns", "rapid thermal cycles"],
+      "representativeRecipes": ["turquoise-raku", "metallic-copper-raku", "dry-alligator-raku", "rusty-red-black-fire"],
+      "sourceIds": ["digitalfire-raku", "ct-raku"]
+    },
+    {
+      "id": "oatmeal-rutile-family",
+      "name": "Oatmeal / rutile matte",
+      "summary": "Cream-to-amber family driven by rutile or titanium mottling in satin or matte bases.",
+      "commonBodies": ["stoneware", "porcelain"],
+      "commonAtmospheres": ["oxidation", "reduction"],
+      "commonSignals": ["warm cream", "rutile variegation", "breaking over texture"],
+      "representativeRecipes": ["dan-dermer-oatmeal", "helens-matt-textured-rust", "benjis-ash-glaze"],
+      "sourceIds": ["ct-midfire", "ct-stoneware"]
+    }
+  ]
+}

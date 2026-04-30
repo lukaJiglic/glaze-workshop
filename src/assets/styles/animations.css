@@ -1,0 +1,142 @@
+/* CSS-only transitions and animations */
+
+/* Fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-base);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide up */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Slide right (drawer) */
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform var(--transition-slow);
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+/* Color swatch hover */
+.color-swatch {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.color-swatch:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(196, 83, 42, 0.15);
+}
+
+/* Button hover */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--clay);
+  color: var(--chalk);
+  border: 2px solid var(--clay);
+}
+
+.btn-primary:hover {
+  background: var(--clay-dark);
+  border-color: var(--clay-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-clay);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--clay);
+  border: 2px solid var(--clay);
+}
+
+.btn-secondary:hover {
+  background: var(--clay-10);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--stone);
+  border: 2px solid var(--ink-10);
+}
+
+.btn-ghost:hover {
+  background: var(--parchment);
+  color: var(--ink);
+  border-color: var(--ink-20);
+}
+
+/* Reveal initial state (GSAP will animate in) */
+.will-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Pulse animation */
+@keyframes pulse-clay {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.pulse {
+  animation: pulse-clay 2s ease-in-out infinite;
+}
+
+/* Shimmer for loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--parchment) 25%,
+    var(--chalk) 50%,
+    var(--parchment) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Spin */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Orb float */
+@keyframes orb-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(6px) rotate(-0.5deg); }
+}

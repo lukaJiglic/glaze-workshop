@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "title": "Digitalfire extended reference recipes",
+    "createdAt": "2026-03-10",
+    "note": "These recipes extend the core Digitalfire pack with more low-fire, cone-6, and cone-10 reference formulas that are useful for fit, clarity, matte development, and reactive surface comparison."
+  },
+  "recipes": [
+    {
+      "id": "g1214m",
+      "name": "G1214M Cone 6 Clear Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain", "stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer Feldspar", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK Kaolin", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 30.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 10.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Reference glossy cone-6 transparent from the 20x5 development line.",
+        "Often used when a clearer chrome-tin pink or maroon host is wanted than G2926B."
+      ],
+      "sourceIds": ["digitalfire-g1214m"]
+    },
+    {
+      "id": "g1214z1",
+      "name": "G1214Z1 Cone 6 Calcium Matte Variant",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 21.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 21.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 12.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 15.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "F-4 Feldspar", "amount": 30.0 },
+        { "materialId": "zinc-oxide", "sourceLabel": "Zinc Oxide", "amount": 1.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "A calcium-zinc matte branch of the 20x5 cone-6 development family.",
+        "Useful as a contrast recipe when testing how more CaO, less gloss, and light zinc shift the surface away from a transparent base."
+      ],
+      "sourceIds": ["digitalfire-g1214z1"]
+    },
+    {
+      "id": "g1215u",
+      "name": "G1215U Cone 6 Low-Expansion Glossy Clear",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Ferro Frit 3249", "amount": 32.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 19.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK Kaolin", "amount": 22.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 17.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "F-4 Feldspar", "amount": 10.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Low-expansion glossy cone-6 clear developed to fit tighter bodies than the earlier G1214 family.",
+        "A useful bridge recipe between classic cone-6 transparents and the porcelain-oriented G1216 variants."
+      ],
+      "sourceIds": ["digitalfire-g1215u"]
+    },
+    {
+      "id": "g1216m",
+      "name": "G1216M Cone 6 Ultraclear for Porcelains",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Ferro Frit 3249", "amount": 27.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK Kaolin", "amount": 17.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 13.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "F-4 Feldspar", "amount": 7.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 4.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 12.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "A very clear, lower-expansion cone-6 transparent for porcelains and tight white bodies.",
+        "The talc-plus-frit adjustment lowers expansion relative to the more basic 20x5 clear variants."
+      ],
+      "sourceIds": ["digitalfire-g1216m"]
+    },
+    {
+      "id": "g1947u",
+      "name": "G1947U Cone 10 Glossy Transparent",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer Feldspar", "amount": 39.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 17.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Reference cone-10 glossy transparent based on feldspar, silica, and calcium-magnesium fluxes.",
+        "Useful as a modern comparison point for older high-fire clear recipes."
+      ],
+      "sourceIds": ["digitalfire-g1947u"]
+    },
+    {
+      "id": "g2240",
+      "name": "G2240 Cone 10R Classic Spodumene Matte",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["matte"],
+      "colourIds": ["white", "cream"],
+      "surfaceIds": ["matte", "opaque"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer Feldspar", "amount": 20.0 },
+        { "materialId": "spodumene", "sourceLabel": "Spodumene", "amount": 20.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 20.0 },
+        { "materialId": "ball-clay", "sourceLabel": "OM4 Ball Clay", "amount": 20.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 20.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Classic cone-10 reduction spodumene matte used as a durable high-fire matte reference point.",
+        "A useful contrast against dolomite mattes because the surface character comes from a different chemistry path."
+      ],
+      "sourceIds": ["digitalfire-g2240"]
+    },
+    {
+      "id": "g2826r",
+      "name": "G2826R Cone 6 Floating Blue",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue", "cream", "variegated"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Feldspar", "amount": 31.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 31.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 17.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt Oxide", "amount": 0.5 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin Oxide", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Floating blue reference recipe showing how rutile, cobalt, and tin can create cream breaking over blue pools.",
+        "A strong comparison recipe for studying cooling, thickness, and texture response."
+      ],
+      "sourceIds": ["digitalfire-g2826r"]
+    },
+    {
+      "id": "g2826x",
+      "name": "G2826X Cone 6 Iron Red",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["red", "brown", "variegated"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 31.2 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Feldspar", "amount": 24.6 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 19.7 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 19.7 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red Iron Oxide", "amount": 11.5 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Digitalfire's cone-6 iron red reference, related to Randy's Red chemistry.",
+        "Benefits from firing schedules and cooling strategies that support iron-red development."
+      ],
+      "sourceIds": ["digitalfire-g2826x"]
+    },
+    {
+      "id": "g2926j",
+      "name": "G2926J Cone 6 Lower-Expansion Clear",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 10.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 15.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 14.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 9.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 34.0 },
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Frit 3249", "amount": 18.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Lower-expansion branch of the G2926 transparent family for tighter porcelains and white bodies.",
+        "Useful when G2926B looks right but still crazes or pings on a low-expansion body."
+      ],
+      "sourceIds": ["digitalfire-g2926j"]
+    },
+    {
+      "id": "g2931l",
+      "name": "G2931L Lower-Expansion Low-Fire Clear",
+      "firingRangeId": "low-fire",
+      "cone": "04-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Frit 3249", "amount": 40.0 },
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 18.0 },
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline Syenite", "amount": 13.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 13.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 9.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 7.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Lower-expansion low-fire clear aimed at bodies that craze under higher-sodium or higher-boron transparents.",
+        "A useful comparison against G1916Q and G2931K when testing fit direction at low fire."
+      ],
+      "sourceIds": ["digitalfire-g2931l"]
+    },
+    {
+      "id": "g3838a",
+      "name": "G3838A Low-Expansion Transparent for P300 Porcelain",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Ferro Frit 3249", "amount": 60.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 15.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 11.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 14.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Low-expansion transparent documented for Plainsman P300 porcelain and similar tight cone-6 bodies.",
+        "Useful when other cone-6 clears are attractive but still craze on porcelain."
+      ],
+      "sourceIds": ["digitalfire-g3838a", "plainsman-p300"]
+    }
+  ]
+}

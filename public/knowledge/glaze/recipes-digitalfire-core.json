@@ -1,0 +1,256 @@
+{
+  "meta": {
+    "title": "Digitalfire core reference recipes",
+    "createdAt": "2026-03-10",
+    "note": "These are modern public Digitalfire reference recipes refreshed against the current public recipe pages available in March 2026."
+  },
+  "recipes": [
+    {
+      "id": "g3879",
+      "name": "G3879 Cone 04+ UltraClear Glossy Base",
+      "firingRangeId": "low-fire",
+      "cone": "06-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 82.9 },
+        { "materialId": "fusion-frit-f69", "sourceLabel": "Fusion Frit F-69", "amount": 3.9 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 8.8 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 4.4 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Ultra-clear low-fire base designed to be clearer and less amber than G1916Q or G2931K.",
+        "Needs gum solution or a brushing medium if you want a hard dry layer."
+      ],
+      "sourceIds": ["digitalfire-g3879"]
+    },
+    {
+      "id": "g1916q",
+      "name": "G1916Q Low Fire Highly-Expansion-Adjustable Transparent",
+      "firingRangeId": "low-fire",
+      "cone": "04-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Ferro Frit 3195", "amount": 65.0 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Ferro Frit 3110", "amount": 10.0 },
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Ferro Frit 3249", "amount": 10.0 },
+        { "materialId": "ball-clay", "sourceLabel": "No. 5 Ball Clay", "amount": 15.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Fit is tuned by trading the high-expansion 3110 against the low-expansion 3249.",
+        "Digitalfire recommends cone 04 or cone 03 over cone 06 for better glaze-body bond and ware strength."
+      ],
+      "sourceIds": ["digitalfire-g1916q"]
+    },
+    {
+      "id": "g2931k",
+      "name": "G2931K Zero3 K Cone 03 Transparent",
+      "firingRangeId": "low-fire",
+      "cone": "03-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Ferro Frit 3195", "amount": 26.3 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Ferro Frit 3134", "amount": 34.7 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 21.1 },
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Ferro Frit 3249", "amount": 10.5 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Ferro Frit 3110", "amount": 7.4 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Designed for Zero3 stoneware and porcelain systems at cone 03-02.",
+        "More glassy and cleaner than the older Worthington-style low-fire clear lineage."
+      ],
+      "sourceIds": ["digitalfire-g2931k"]
+    },
+    {
+      "id": "g2926b",
+      "name": "G2926B Cone 6 Whiteware / Porcelain Transparent",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain", "stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline Syenite", "amount": 16.6 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Ferro Frit 3134", "amount": 23.1 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 17.8 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 6.3 },
+        { "materialId": "silica", "sourceLabel": "Silica 325 mesh", "amount": 34.2 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 2.1 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Widely documented cone-6 glossy base that is clear, stable, and low in melt mobility.",
+        "A strong host for many stains, but some chrome-tin maroons and some pink systems develop better in other bases."
+      ],
+      "sourceIds": ["digitalfire-g2926b"]
+    },
+    {
+      "id": "g2934",
+      "name": "G2934 Matte Glaze Base for Cone 6",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["matte", "satin-matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["matte", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Ferro Frit 3124", "amount": 17.4 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 23.5 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 26.9 },
+        { "materialId": "kaolin", "sourceLabel": "EP Kaolin", "amount": 18.3 },
+        { "materialId": "calcined-kaolin", "sourceLabel": "Calcined Kaolin", "amount": 13.9 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "A durable MgO matte base whose matteness changes strongly with cooling rate.",
+        "Calcined kaolin is part of the drying-shrinkage control strategy, not just a chemistry detail."
+      ],
+      "sourceIds": ["digitalfire-g2934"]
+    },
+    {
+      "id": "g1214w",
+      "name": "G1214W Cone 6 Transparent Base",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 25.0 },
+        { "materialId": "kaolin", "sourceLabel": "EP Kaolin", "amount": 25.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 10.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 25.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "F-4 Feldspar", "amount": 15.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Classic low-expansion cone-6 transparent derived from Digitalfire's G1214 development work.",
+        "Useful reference point for comparing later craze-control transparents."
+      ],
+      "sourceIds": ["digitalfire-g1214w"]
+    },
+    {
+      "id": "g1216l",
+      "name": "G1216L Transparent for Cone 6 Porcelains",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "soda-feldspar", "sourceLabel": "Minspar", "amount": 8.2 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Ferro Frit 3134", "amount": 10.3 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Ferro Frit 3124", "amount": 22.7 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 14.4 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.6 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 4.1 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 21.6 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Lower-expansion cone-6 clear tuned for porcelains by adding some MgO to the G1214 lineage.",
+        "Useful when a standard clear looks good but crazes on tight porcelains."
+      ],
+      "sourceIds": ["digitalfire-g1216l"]
+    },
+    {
+      "id": "g2571a",
+      "name": "G2571A Cone 10 Silky Dolomite Matte",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln"],
+      "clayIds": ["stoneware", "porcelain", "grogged-sculpture"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 5.5 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer Feldspar", "amount": 28.5 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 28.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 15.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 19.0 },
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley Borate", "amount": 4.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "A classic cone-10 reduction dolomite matte with a silky feel and good durability reputation.",
+        "Widely used as a base for bamboo, rutile, stain, and earthy reduction color development."
+      ],
+      "sourceIds": ["digitalfire-g2571a"]
+    },
+    {
+      "id": "g2916f",
+      "name": "G2916F Cone 6 Stoneware / Whiteware Transparent",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 18.2 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 3.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 29.0 },
+        { "materialId": "ball-clay", "sourceLabel": "Old Hickory #5 Ball Clay", "amount": 7.9 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 15.7 },
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline Syenite", "amount": 26.3 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 1.9 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Industrial dinnerware clear noted for exceptional transparency, hardness, and suspension.",
+        "Often harder to source because it depends on Fusion Frit F-524."
+      ],
+      "sourceIds": ["digitalfire-g2916f"]
+    }
+  ]
+}

@@ -1,0 +1,1614 @@
+{
+  "meta": {
+    "title": "Studio expansion recipe additions",
+    "createdAt": "2026-03-15",
+    "note": "These are additional workshop-facing formulas to expand the research set. They are intended for controlled testing and branch development, not blind production use."
+  },
+  "recipes": [
+    {
+      "id": "sx-lowfire-zincfree-clear-host",
+      "name": "SX Low-Fire Zinc-Free Clear Host",
+      "firingRangeId": "low-fire",
+      "cone": "04-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 52.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 14.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 10.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Low-fire clear host branch for stain and underglaze testing where zinc influence is intentionally minimized."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-g2931k", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "sx-lowfire-majolica-bright-white",
+      "name": "SX Low-Fire Majolica Bright White",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware"],
+      "techniqueIds": ["majolica"],
+      "styleIds": ["majolica"],
+      "colourIds": ["white"],
+      "surfaceIds": ["opaque", "glossy"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 45.0 },
+        { "materialId": "ferro-frit-4110", "sourceLabel": "Frit 4110", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 20.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 10.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 5.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Opaque low-fire majolica base tuned for brush decoration under a white field."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "sx-lowfire-turquoise-clear",
+      "name": "SX Low-Fire Turquoise Clear",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["turquoise", "green"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 75.0 },
+        { "materialId": "fusion-frit-f69", "sourceLabel": "Fusion Frit F-69", "amount": 5.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 10.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.5 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 6.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Copper turquoise branch built on a low-fire clear host for controlled color testing."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-g3879", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-lowfire-soft-crackle-clear",
+      "name": "SX Low-Fire Soft Crackle Clear",
+      "firingRangeId": "low-fire",
+      "cone": "05-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["crackle"],
+      "colourIds": ["clear", "cream"],
+      "surfaceIds": ["glossy", "transparent", "crackle"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 40.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 35.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 15.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 10.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-expansion low-fire crackle branch for decorative and stain-wash effects."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-g1916q", "digitalfire-crazing"]
+    },
+    {
+      "id": "sx-midfire-liner-zincfree",
+      "name": "SX Cone-6 Liner Zinc-Free",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 15.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 35.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 2.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Stable cone-6 liner branch for general host testing without zinc-specific shifts."
+      ],
+      "sourceIds": ["digitalfire-g2926b", "insight-glazes"]
+    },
+    {
+      "id": "sx-midfire-warm-host-clear",
+      "name": "SX Cone-6 Warm Host Clear",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 30.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 10.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Warm-color host clear branch used for pink, maroon, and warm stain comparison panels."
+      ],
+      "sourceIds": ["digitalfire-g1214m", "digitalfire-ceramic-stain", "mason-reference-guide"]
+    },
+    {
+      "id": "sx-midfire-porcelain-fit-clear",
+      "name": "SX Cone-6 Porcelain Fit Clear",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Frit 3249", "amount": 28.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 17.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 13.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "Minspar", "amount": 7.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 4.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 11.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Lower-expansion clear branch intended for tight porcelain fit conditions."
+      ],
+      "sourceIds": ["digitalfire-g1216m", "digitalfire-g3838a", "digitalfire-crazing"]
+    },
+    {
+      "id": "sx-midfire-silky-functional-matte",
+      "name": "SX Cone-6 Silky Functional Matte",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 22.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "ball-clay", "sourceLabel": "Ball clay", "amount": 10.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 8.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 2.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Silky matte branch aimed at smoother functional surfaces than rough dry-matte families."
+      ],
+      "sourceIds": ["digitalfire-g2934y", "digitalfire-g2934", "insight-glazes"]
+    },
+    {
+      "id": "sx-midfire-celadon-light",
+      "name": "SX Cone-6 Light Celadon",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": ["celadon"],
+      "styleIds": ["celadon"],
+      "colourIds": ["celadon-green", "green"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin oxide", "amount": 3.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 0.8 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Light celadon branch tuned for clean green pooling on white bodies."
+      ],
+      "sourceIds": ["digitalfire-gr6n", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-midfire-floating-blue-soft",
+      "name": "SX Cone-6 Floating Blue Soft",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue", "cream", "variegated"],
+      "surfaceIds": ["semi-transparent", "variegated", "glossy"],
+      "ingredients": [
+        { "materialId": "ravenscrag-slip", "sourceLabel": "Ravenscrag Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 0.8 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.5 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin oxide", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Softer floating-blue branch with lower cobalt than highly saturated versions."
+      ],
+      "sourceIds": ["digitalfire-gr6m", "digitalfire-g2826r"]
+    },
+    {
+      "id": "sx-midfire-iron-rust-break",
+      "name": "SX Cone-6 Iron Rust Break",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated", "matte"],
+      "colourIds": ["red", "brown", "variegated"],
+      "surfaceIds": ["semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 30.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 25.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 18.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 9.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Iron-rust branch for schedule and thickness testing around cone-6 iron-red behavior."
+      ],
+      "sourceIds": ["digitalfire-g2826x", "ct-midfire", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-midfire-alberta-honey",
+      "name": "SX Cone-6 Alberta Honey",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["amber"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "alberta-slip", "sourceLabel": "Alberta Slip", "amount": 78.0 },
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 22.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 2.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Warm transparent amber branch for natural-base family testing."
+      ],
+      "sourceIds": ["digitalfire-ga6a", "digitalfire-ga6b"]
+    },
+    {
+      "id": "sx-midfire-black-satin",
+      "name": "SX Cone-6 Black Satin",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte"],
+      "colourIds": ["black"],
+      "surfaceIds": ["satin", "opaque"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 20.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 15.0 },
+        { "materialId": "calcined-kaolin", "sourceLabel": "Calcined kaolin", "amount": 15.0 },
+        { "materialId": "mason-stain-generic", "sourceLabel": "Mason black stain", "amount": 5.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Satin black branch built from a stable matte host and stain route."
+      ],
+      "sourceIds": ["digitalfire-g2934y", "mason-reference-guide"]
+    },
+    {
+      "id": "sx-midfire-turquoise-fluid",
+      "name": "SX Cone-6 Turquoise Fluid",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["turquoise", "green", "variegated"],
+      "surfaceIds": ["glossy", "runny", "variegated"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 30.0 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 30.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 21.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 19.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Fluid cone-6 copper branch for movement and pooling comparisons against stable hosts."
+      ],
+      "sourceIds": ["digitalfire-g3806c", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "sx-highfire-gloss-liner",
+      "name": "SX Cone-10 Gloss Liner",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 38.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 15.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 16.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 7.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire transparent liner branch for cone-10 functional testing."
+      ],
+      "sourceIds": ["digitalfire-g1947u", "ct-stoneware"]
+    },
+    {
+      "id": "sx-highfire-clean-celadon",
+      "name": "SX Cone-10 Clean Celadon",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": ["celadon"],
+      "styleIds": ["celadon"],
+      "colourIds": ["celadon-green", "green"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 40.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 14.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 8.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 1.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire celadon direction from a clean transparent host with low iron loading."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-g1947u", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-highfire-silky-dolomite",
+      "name": "SX Cone-10 Silky Dolomite",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 6.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 28.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 27.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 16.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 20.0 },
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 3.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Silky dolomite matte branch for cone-10 reduction matte comparisons."
+      ],
+      "sourceIds": ["digitalfire-g2571a", "ct-stoneware"]
+    },
+    {
+      "id": "sx-highfire-temmoku-deep",
+      "name": "SX Cone-10 Deep Temmoku",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["black", "brown", "red"],
+      "surfaceIds": ["glossy", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 44.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 12.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-iron glossy branch for deep temmoku-style black-brown with warm breaks."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-highfire-ash-cream",
+      "name": "SX Cone-10 Ash Cream",
+      "firingRangeId": "high-fire",
+      "cone": "9-10",
+      "atmosphereIds": ["reduction", "wood-ash-atmosphere"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware"],
+      "techniqueIds": ["ash-glazing"],
+      "styleIds": ["ash", "variegated"],
+      "colourIds": ["cream", "amber", "variegated"],
+      "surfaceIds": ["semi-transparent", "variegated", "satin"],
+      "ingredients": [
+        { "materialId": "wood-ash", "sourceLabel": "Wood ash", "amount": 25.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 35.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 13.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 15.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Soft ash-cream branch for high-fire atmospheric and reduction variations."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-highfire-shino-warm-break",
+      "name": "SX Cone-10 Shino Warm Break",
+      "firingRangeId": "high-fire",
+      "cone": "9-10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": ["shino"],
+      "styleIds": ["shino"],
+      "colourIds": ["amber", "cream", "variegated"],
+      "surfaceIds": ["semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 30.0 },
+        { "materialId": "wood-ash", "sourceLabel": "Wood ash", "amount": 25.0 },
+        { "materialId": "spodumene", "sourceLabel": "Spodumene", "amount": 10.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 35.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "Soda feldspar", "amount": 5.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Warm shino branch for reduction break and carbon-sensitive surface exploration."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx-raku-turquoise-soft",
+      "name": "SX Raku Turquoise Soft",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["turquoise", "green"],
+      "surfaceIds": ["variegated", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 85.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 10.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 8.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 0.5 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Copper-cobalt turquoise raku branch with controlled crackle and soft metallic response."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx-raku-metallic-black",
+      "name": "SX Raku Metallic Black",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "variegated"],
+      "colourIds": ["black", "metallic"],
+      "surfaceIds": ["variegated", "crackle", "dry"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 60.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 25.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 5.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 6.0 },
+        { "materialId": "black-copper-oxide", "sourceLabel": "Black copper oxide", "amount": 2.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Dark metallic raku branch for black-copper variation and reduction pattern testing."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx-raku-white-crackle-base",
+      "name": "SX Raku White Crackle Base",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["white"],
+      "surfaceIds": ["crackle", "opaque"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 75.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 20.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 10.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 5.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity"],
+      "notes": [
+        "White crackle raku base for smoke and post-reduction contrast effects."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx2-lowfire-super-clear-03",
+      "name": "SX2 Low-Fire Super Clear 03",
+      "firingRangeId": "low-fire",
+      "cone": "03-02",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 30.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 30.0 },
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Frit 3249", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 10.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Low-fire clear branch for cone-03 maturity and strong transparent coverage."
+      ],
+      "sourceIds": ["digitalfire-g2931k", "digitalfire-g2931l"]
+    },
+    {
+      "id": "sx2-lowfire-matte-white-liner",
+      "name": "SX2 Low-Fire Matte White Liner",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["matte"],
+      "colourIds": ["white", "cream"],
+      "surfaceIds": ["matte", "opaque"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 42.0 },
+        { "materialId": "ferro-frit-4110", "sourceLabel": "Frit 4110", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 10.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 8.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Low-fire matte white branch for decorative-liner style testing."
+      ],
+      "sourceIds": ["ct-earthenware", "insight-glazes"]
+    },
+    {
+      "id": "sx2-lowfire-mint-crackle",
+      "name": "SX2 Low-Fire Mint Crackle",
+      "firingRangeId": "low-fire",
+      "cone": "05-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["crackle", "variegated"],
+      "colourIds": ["green", "turquoise"],
+      "surfaceIds": ["crackle", "glossy", "variegated"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 38.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 34.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 16.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 12.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.0 },
+        { "materialId": "cobalt-carbonate", "sourceLabel": "Cobalt carbonate", "amount": 0.3 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Decorative mint crackle branch for low-fire overlap and stain-wash work."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-g1916q"]
+    },
+    {
+      "id": "sx2-lowfire-amber-honey",
+      "name": "SX2 Low-Fire Amber Honey",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["red-earthenware", "white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["amber", "brown"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-4110", "sourceLabel": "Frit 4110", "amount": 72.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 15.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 13.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 2.5 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Transparent amber branch for low-fire honey and tea-wash effects."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx2-lowfire-underglaze-cover-clear",
+      "name": "SX2 Low-Fire Underglaze Cover Clear",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 80.0 },
+        { "materialId": "fusion-frit-f69", "sourceLabel": "Fusion Frit F-69", "amount": 4.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 6.0 },
+        { "materialId": "cmc-gum", "sourceLabel": "CMC gum", "amount": 1.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Cover-clear branch intended for painted underglaze preservation and gloss control."
+      ],
+      "sourceIds": ["digitalfire-g3879", "digitalfire-underglaze"]
+    },
+    {
+      "id": "sx2-midfire-clear-utility",
+      "name": "SX2 Cone-6 Utility Clear",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 17.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 22.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 8.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 33.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 2.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "General-purpose cone-6 clear for workflow baseline comparisons."
+      ],
+      "sourceIds": ["digitalfire-g2926b", "insight-glazes"]
+    },
+    {
+      "id": "sx2-midfire-zincfree-host",
+      "name": "SX2 Cone-6 Zinc-Free Host",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Custer feldspar", "amount": 18.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 22.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 30.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Clear host branch aimed at sensitive stain and warm-color systems."
+      ],
+      "sourceIds": ["digitalfire-g1214m", "digitalfire-ceramic-stain", "mason-reference-guide"]
+    },
+    {
+      "id": "sx2-midfire-cream-satin-calcium",
+      "name": "SX2 Cone-6 Cream Satin Calcium",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 22.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 20.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 12.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 15.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "Soda feldspar", "amount": 30.0 },
+        { "materialId": "zinc-oxide", "sourceLabel": "Zinc oxide", "amount": 1.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Calcium-satin branch for matte contrast against magnesia-dominant matte families."
+      ],
+      "sourceIds": ["digitalfire-g1214z1", "digitalfire-g2934"]
+    },
+    {
+      "id": "sx2-midfire-speckled-iron",
+      "name": "SX2 Cone-6 Speckled Iron",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated", "matte"],
+      "colourIds": ["brown", "black", "variegated"],
+      "surfaceIds": ["variegated", "satin"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 24.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 18.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 10.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 6.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Iron-rutile branch for speckled and broken mid-fire surfaces."
+      ],
+      "sourceIds": ["ct-midfire", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx2-midfire-copper-green-satin",
+      "name": "SX2 Cone-6 Copper Green Satin",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "variegated"],
+      "colourIds": ["green", "turquoise", "variegated"],
+      "surfaceIds": ["satin", "variegated"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 32.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 18.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 8.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 12.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 30.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 3.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Copper-rutile satin branch tuned for softer green breaks on cone-6 bodies."
+      ],
+      "sourceIds": ["ct-midfire", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx2-midfire-blue-break-rutile",
+      "name": "SX2 Cone-6 Blue Break Rutile",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["blue", "cream", "variegated"],
+      "surfaceIds": ["glossy", "variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 30.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 30.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 20.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 0.4 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin oxide", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Floating-blue adjacent branch with a slightly lower cobalt loading for softer transitions."
+      ],
+      "sourceIds": ["digitalfire-g2826r", "digitalfire-gr6m"]
+    },
+    {
+      "id": "sx2-midfire-opaque-white-gloss",
+      "name": "SX2 Cone-6 Opaque White Gloss",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["white"],
+      "surfaceIds": ["glossy", "opaque"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 16.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 22.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 8.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 34.0 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin oxide", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Opaque white gloss branch for under-decoration and contrast surfaces."
+      ],
+      "sourceIds": ["digitalfire-g2926b", "ct-midfire"]
+    },
+    {
+      "id": "sx2-midfire-clear-crackle-soft",
+      "name": "SX2 Cone-6 Clear Crackle Soft",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["crackle"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent", "crackle"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 68.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 18.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 14.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-expansion cone-6 clear crackle branch for decorative line and wash work."
+      ],
+      "sourceIds": ["ct-midfire", "digitalfire-crazing"]
+    },
+    {
+      "id": "sx2-highfire-porcelain-clear",
+      "name": "SX2 Cone-10 Porcelain Clear",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 40.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 14.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 8.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "High-fire clear branch oriented toward porcelain clarity and liner use."
+      ],
+      "sourceIds": ["digitalfire-g1947u", "ct-stoneware"]
+    },
+    {
+      "id": "sx2-highfire-celadon-soft",
+      "name": "SX2 Cone-10 Soft Celadon",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": ["celadon"],
+      "styleIds": ["celadon"],
+      "colourIds": ["celadon-green", "green"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 41.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 13.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 14.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 8.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 0.8 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Soft high-fire celadon branch for reduction pools and transparent depth."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx2-highfire-bamboo-matte",
+      "name": "SX2 Cone-10 Bamboo Matte",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream", "amber"],
+      "surfaceIds": ["satin", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 6.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 27.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 27.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 16.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 20.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Bamboo-tone matte branch for rutile warmth over silky reduction matte chemistry."
+      ],
+      "sourceIds": ["digitalfire-g2571a", "ct-stoneware"]
+    },
+    {
+      "id": "sx2-highfire-iron-saturate",
+      "name": "SX2 Cone-10 Iron Saturate",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["black", "brown", "red"],
+      "surfaceIds": ["glossy", "variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 42.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 13.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 14.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Iron-saturated high-fire branch for deep black-brown pools and red-brown breaks."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx2-highfire-ash-runny",
+      "name": "SX2 Cone-10 Ash Runny",
+      "firingRangeId": "high-fire",
+      "cone": "9-10",
+      "atmosphereIds": ["reduction", "wood-ash-atmosphere"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware"],
+      "techniqueIds": ["ash-glazing"],
+      "styleIds": ["ash", "variegated"],
+      "colourIds": ["amber", "cream", "variegated"],
+      "surfaceIds": ["runny", "variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "wood-ash", "sourceLabel": "Wood ash", "amount": 30.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 32.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 16.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Fluid ash branch for vertical movement and atmospheric break testing."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "sx2-highfire-satin-white-zircon",
+      "name": "SX2 Cone-10 Satin White Zircon",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte"],
+      "colourIds": ["white", "cream"],
+      "surfaceIds": ["satin", "opaque"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 34.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 14.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 15.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 23.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 8.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Satin white branch using zircon opacity on a high-fire matte-friendly base."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-g2571a"]
+    },
+    {
+      "id": "sx2-raku-copper-red-soft",
+      "name": "SX2 Raku Copper Red Soft",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["copper-red", "metallic-raku"],
+      "colourIds": ["copper-red", "red"],
+      "surfaceIds": ["variegated", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 90.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 8.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 7.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Soft copper-red raku branch for reduction-time comparisons."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx2-raku-jade-green",
+      "name": "SX2 Raku Jade Green",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["green", "turquoise"],
+      "surfaceIds": ["variegated", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 84.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 8.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 5.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 0.8 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Jade-shift raku branch for copper-cobalt balance testing."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx2-raku-oilspot-metallic",
+      "name": "SX2 Raku Oilspot Metallic",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "variegated"],
+      "colourIds": ["metallic", "black", "red"],
+      "surfaceIds": ["variegated", "dry", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 58.0 },
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 27.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 5.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 7.0 },
+        { "materialId": "manganese-dioxide", "sourceLabel": "Manganese dioxide", "amount": 2.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Metallic oilspot-style raku branch for smoke and reduction pattern work."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx2-raku-smoke-black-matte",
+      "name": "SX2 Raku Smoke Black Matte",
+      "firingRangeId": "raku",
+      "cone": "010-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku", "variegated"],
+      "colourIds": ["black", "metallic"],
+      "surfaceIds": ["dry", "crackle", "variegated"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 66.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 24.0 },
+        { "materialId": "black-copper-oxide", "sourceLabel": "Black copper oxide", "amount": 6.0 },
+        { "materialId": "cobalt-oxide", "sourceLabel": "Cobalt oxide", "amount": 0.4 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Smoke-black matte branch for dark reduction and carbon trap outcomes."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx3-lowfire-clear-brushable",
+      "name": "SX3 Low-Fire Clear Brushable",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "fusion-frit-f524", "sourceLabel": "Fusion Frit F-524", "amount": 78.0 },
+        { "materialId": "fusion-frit-f69", "sourceLabel": "Fusion Frit F-69", "amount": 4.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 6.0 },
+        { "materialId": "cmc-gum", "sourceLabel": "CMC gum", "amount": 2.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Brushable low-fire clear branch for decorated ware and underglaze cover tests."
+      ],
+      "sourceIds": ["digitalfire-g3879", "digitalfire-underglaze"]
+    },
+    {
+      "id": "sx3-lowfire-opaque-ivory",
+      "name": "SX3 Low-Fire Opaque Ivory",
+      "firingRangeId": "low-fire",
+      "cone": "04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware"],
+      "techniqueIds": ["majolica"],
+      "styleIds": ["majolica"],
+      "colourIds": ["white", "cream"],
+      "surfaceIds": ["opaque", "glossy"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 44.0 },
+        { "materialId": "ferro-frit-4110", "sourceLabel": "Frit 4110", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "zirconium-silicate", "sourceLabel": "Zircopax", "amount": 9.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 5.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Ivory-white opaque branch for majolica and painted low-fire work."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "sx3-lowfire-cobalt-blue-gloss",
+      "name": "SX3 Low-Fire Cobalt Blue Gloss",
+      "firingRangeId": "low-fire",
+      "cone": "05-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["blue"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3195", "sourceLabel": "Frit 3195", "amount": 58.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 20.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 12.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 10.0 },
+        { "materialId": "cobalt-carbonate", "sourceLabel": "Cobalt carbonate", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Low-fire cobalt gloss branch for saturated blue and underglaze-overlap comparisons."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx3-lowfire-copper-green-flow",
+      "name": "SX3 Low-Fire Copper Green Flow",
+      "firingRangeId": "low-fire",
+      "cone": "05-04",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-earthenware", "red-earthenware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["green", "turquoise"],
+      "surfaceIds": ["glossy", "runny", "variegated"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 50.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 24.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 14.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 12.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 3.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Fluid copper-green branch for vertical movement and pooling tests at low fire."
+      ],
+      "sourceIds": ["ct-earthenware", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "sx3-midfire-clear-porcelain-lowexp",
+      "name": "SX3 Cone-6 Clear Porcelain Low Expansion",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["porcelain", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3249", "sourceLabel": "Frit 3249", "amount": 32.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 14.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 15.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 22.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 10.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "Soda feldspar", "amount": 7.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Porcelain-fit clear branch for lower-expansion cone-6 bodies."
+      ],
+      "sourceIds": ["digitalfire-g1216m", "digitalfire-g3838a", "digitalfire-crazing"]
+    },
+    {
+      "id": "sx3-midfire-stable-matte-liner",
+      "name": "SX3 Cone-6 Stable Matte Liner",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "matte"],
+      "colourIds": ["cream"],
+      "surfaceIds": ["satin", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 18.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 22.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 26.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 16.0 },
+        { "materialId": "calcined-kaolin", "sourceLabel": "Calcined kaolin", "amount": 12.0 },
+        { "materialId": "talc", "sourceLabel": "Talc", "amount": 6.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Matte-liner branch balancing silky feel and stability for functional tests."
+      ],
+      "sourceIds": ["digitalfire-g2934", "digitalfire-g2934y", "insight-glazes"]
+    },
+    {
+      "id": "sx3-midfire-copper-turquoise-gloss",
+      "name": "SX3 Cone-6 Copper Turquoise Gloss",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["white-stoneware", "stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["turquoise", "green", "blue"],
+      "surfaceIds": ["glossy", "runny", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 29.0 },
+        { "materialId": "ferro-frit-3110", "sourceLabel": "Frit 3110", "amount": 30.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 22.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 19.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 2.2 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["metal-oxide-handling", "food-surface-testing"],
+      "notes": [
+        "Fluid copper-turquoise gloss branch for cone-6 movement and color depth."
+      ],
+      "sourceIds": ["digitalfire-g3806c", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "sx3-midfire-black-gloss-stain",
+      "name": "SX3 Cone-6 Black Gloss Stain",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["black"],
+      "surfaceIds": ["glossy", "opaque"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 16.0 },
+        { "materialId": "ferro-frit-3134", "sourceLabel": "Frit 3134", "amount": 22.0 },
+        { "materialId": "kaolin", "sourceLabel": "EPK", "amount": 18.0 },
+        { "materialId": "wollastonite", "sourceLabel": "Wollastonite", "amount": 8.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 34.0 },
+        { "materialId": "mason-stain-generic", "sourceLabel": "Mason black stain", "amount": 6.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Black gloss branch using stain-host strategy on a stable clear chemistry."
+      ],
+      "sourceIds": ["digitalfire-g2926b", "mason-reference-guide"]
+    },
+    {
+      "id": "sx3-midfire-satin-lithium-brown",
+      "name": "SX3 Cone-6 Satin Lithium Brown",
+      "firingRangeId": "mid-fire",
+      "cone": "6",
+      "atmosphereIds": ["oxidation"],
+      "kilnIds": ["electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte", "variegated"],
+      "colourIds": ["brown", "amber", "variegated"],
+      "surfaceIds": ["satin", "semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "alberta-slip-roasted", "sourceLabel": "Roasted Alberta Slip", "amount": 80.0 },
+        { "materialId": "ferro-frit-3124", "sourceLabel": "Frit 3124", "amount": 10.0 },
+        { "materialId": "lithium-carbonate", "sourceLabel": "Lithium carbonate", "amount": 2.0 },
+        { "materialId": "calcined-alumina", "sourceLabel": "Calcined alumina", "amount": 3.0 },
+        { "materialId": "rutile", "sourceLabel": "Rutile", "amount": 3.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 2.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Lithium-rutile Alberta branch for satin brown movement and pooling."
+      ],
+      "sourceIds": ["digitalfire-ga6g", "digitalfire-alberta-slip-roasted"]
+    },
+    {
+      "id": "sx3-highfire-clear-feldspathic",
+      "name": "SX3 Cone-10 Feldspathic Clear",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["stoneware", "white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["clear-gloss"],
+      "colourIds": ["clear"],
+      "surfaceIds": ["glossy", "transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 39.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 25.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 16.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Feldspathic clear branch for high-fire host and liner comparison."
+      ],
+      "sourceIds": ["digitalfire-g1947u", "ct-stoneware"]
+    },
+    {
+      "id": "sx3-highfire-temmoku-classic",
+      "name": "SX3 Cone-10 Temmoku Classic",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["variegated"],
+      "colourIds": ["black", "brown"],
+      "surfaceIds": ["glossy", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 43.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 12.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 10.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 20.0 },
+        { "materialId": "red-iron-oxide", "sourceLabel": "Red iron oxide", "amount": 14.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Classic temmoku branch for deep black-brown transparent iron glass."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx3-highfire-shino-orange-break",
+      "name": "SX3 Cone-10 Shino Orange Break",
+      "firingRangeId": "high-fire",
+      "cone": "9-10",
+      "atmosphereIds": ["reduction"],
+      "kilnIds": ["gas-kiln", "wood-kiln"],
+      "clayIds": ["stoneware", "porcelain"],
+      "techniqueIds": ["shino"],
+      "styleIds": ["shino"],
+      "colourIds": ["amber", "cream", "variegated"],
+      "surfaceIds": ["semi-transparent", "variegated"],
+      "ingredients": [
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 28.0 },
+        { "materialId": "wood-ash", "sourceLabel": "Wood ash", "amount": 27.0 },
+        { "materialId": "spodumene", "sourceLabel": "Spodumene", "amount": 11.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 34.0 },
+        { "materialId": "soda-feldspar", "sourceLabel": "Soda feldspar", "amount": 4.0 }
+      ],
+      "tablewareStatus": "test-only",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Shino orange-break branch for reduction carbon and warm break development."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "sx3-highfire-white-opacified-satin",
+      "name": "SX3 Cone-10 White Opacified Satin",
+      "firingRangeId": "high-fire",
+      "cone": "10",
+      "atmosphereIds": ["oxidation", "reduction"],
+      "kilnIds": ["gas-kiln", "electric-kiln"],
+      "clayIds": ["white-stoneware", "porcelain"],
+      "techniqueIds": [],
+      "styleIds": ["satin-matte"],
+      "colourIds": ["white", "cream"],
+      "surfaceIds": ["satin", "opaque"],
+      "ingredients": [
+        { "materialId": "potash-feldspar", "sourceLabel": "Potash feldspar", "amount": 35.0 },
+        { "materialId": "whiting", "sourceLabel": "Whiting", "amount": 14.0 },
+        { "materialId": "dolomite", "sourceLabel": "Dolomite", "amount": 14.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 14.0 },
+        { "materialId": "silica", "sourceLabel": "Silica", "amount": 23.0 },
+        { "materialId": "tin-oxide", "sourceLabel": "Tin oxide", "amount": 6.0 }
+      ],
+      "tablewareStatus": "possible-with-testing",
+      "cautionIds": ["food-surface-testing"],
+      "notes": [
+        "Satin white branch using tin opacity for warmer high-fire white surfaces."
+      ],
+      "sourceIds": ["ct-stoneware", "digitalfire-g2571a"]
+    },
+    {
+      "id": "sx3-raku-copper-lustre-soft",
+      "name": "SX3 Raku Copper Lustre Soft",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["metallic-raku"],
+      "colourIds": ["metallic", "copper-red"],
+      "surfaceIds": ["variegated", "semi-transparent"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 64.0 },
+        { "materialId": "nepheline-syenite", "sourceLabel": "Nepheline syenite", "amount": 28.0 },
+        { "materialId": "kaolin", "sourceLabel": "Kaolin", "amount": 8.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 9.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Softer copper-lustre raku branch for reduced metallic wash."
+      ],
+      "sourceIds": ["ct-raku"]
+    },
+    {
+      "id": "sx3-raku-red-metallic-strong",
+      "name": "SX3 Raku Red Metallic Strong",
+      "firingRangeId": "raku",
+      "cone": "08-06",
+      "atmosphereIds": ["oxidation", "raku-reduction"],
+      "kilnIds": ["raku-kiln"],
+      "clayIds": ["raku-clay", "grogged-sculpture"],
+      "techniqueIds": ["raku-reduction-technique"],
+      "styleIds": ["copper-red", "metallic-raku"],
+      "colourIds": ["copper-red", "red", "metallic"],
+      "surfaceIds": ["variegated", "crackle"],
+      "ingredients": [
+        { "materialId": "gerstley-borate", "sourceLabel": "Gerstley borate", "amount": 88.0 },
+        { "materialId": "bentonite", "sourceLabel": "Bentonite", "amount": 8.0 },
+        { "materialId": "copper-carbonate", "sourceLabel": "Copper carbonate", "amount": 10.0 }
+      ],
+      "tablewareStatus": "decorative-only",
+      "cautionIds": ["raku-porosity", "metal-oxide-handling"],
+      "notes": [
+        "Stronger metallic-red branch for reduction-time sensitivity tests."
+      ],
+      "sourceIds": ["ct-raku"]
+    }
+  ]
+}

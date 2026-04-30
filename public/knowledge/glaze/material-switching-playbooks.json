@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "Material switching playbooks",
+    "createdAt": "2026-03-15",
+    "note": "These playbooks are meant to preserve testing discipline during substitutions. They assume the studio is changing one meaningful thing at a time and recording both bucket behaviour and fired results."
+  },
+  "playbooks": [
+    {
+      "id": "raw-kaolin-to-calcined-split",
+      "fromMaterialIds": ["kaolin"],
+      "toMaterialIds": ["calcined-kaolin"],
+      "whenToUse": [
+        "the dry glaze layer is cracking or shrinking too much before firing",
+        "a matte or high-clay glaze crawls before chemistry changes are even tested"
+      ],
+      "whyThisIsHard": "Calcined kaolin preserves fired chemistry direction well but removes some of the raw clay behaviour that helped suspension and dry adhesion.",
+      "firstMove": "Start with a split rather than a full replacement so the glaze keeps some raw-clay handling.",
+      "expectedChemistryShift": [
+        "fired chemistry stays close if the substitution is done by equivalent fired contribution",
+        "raw LOI and drying behaviour change immediately"
+      ],
+      "workflowShift": [
+        "the glaze may settle differently or feel less brush-friendly",
+        "bucket fixes may be needed even if the fired result improves"
+      ],
+      "testSequence": [
+        "make a control batch with the original kaolin",
+        "make split versions rather than jumping straight to all-calcined",
+        "compare dry layer quality, then fire only the best-behaving branch"
+      ],
+      "stopIf": [
+        "the glaze loses too much suspension or application quality",
+        "the fired surface begins to dry out because other compensations were ignored"
+      ],
+      "referenceRecipeIds": ["g2934"],
+      "sourceIds": ["digitalfire-g2934", "digitalfire-loi", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "whiting-to-wollastonite",
+      "fromMaterialIds": ["whiting"],
+      "toMaterialIds": ["wollastonite"],
+      "whenToUse": [
+        "a carbonate-heavy glaze is pinholing or blistering",
+        "the studio wants calcium with less gas release"
+      ],
+      "whyThisIsHard": "Wollastonite brings CaO and SiO2 together, so it changes more than the gas burden.",
+      "firstMove": "Treat wollastonite as a chemistry rebuild, not as a direct whiting replacement.",
+      "expectedChemistryShift": [
+        "CO2 release drops",
+        "silica contribution rises unless the recipe is recalculated"
+      ],
+      "workflowShift": [
+        "melt behaviour often gets cleaner",
+        "the glaze can stiffen or change gloss if the added silica is ignored"
+      ],
+      "testSequence": [
+        "build a control batch with the original whiting recipe",
+        "make a chemistry-aware wollastonite version",
+        "fire both with the same thickness and schedule to see whether the real win came from lower gas or from the silica shift"
+      ],
+      "stopIf": [
+        "clarity drops because the recipe was never recalculated for the extra silica",
+        "the pinhole problem was really a firing schedule issue, not a whiting issue"
+      ],
+      "referenceRecipeIds": ["g2926b", "g1947u"],
+      "sourceIds": ["digitalfire-material-substitution", "digitalfire-pinholing", "digitalfire-g2571a"]
+    },
+    {
+      "id": "gerstley-borate-to-frit-rebuild",
+      "fromMaterialIds": ["gerstley-borate"],
+      "toMaterialIds": ["ferro-frit-3134", "ferro-frit-3195", "ferro-frit-3249", "wollastonite", "kaolin"],
+      "whenToUse": [
+        "a legacy recipe depends on Gerstley Borate but supply or consistency is unacceptable",
+        "the studio wants a more stable boron route"
+      ],
+      "whyThisIsHard": "There is no universal one-material replacement because Gerstley Borate contributes boron, calcium, sodium, magnesium, and slurry personality all at once.",
+      "firstMove": "Rebuild the chemistry in parts instead of searching for one magic substitute.",
+      "expectedChemistryShift": [
+        "boron source becomes more repeatable",
+        "the old mineral-specific slurry behaviour disappears"
+      ],
+      "workflowShift": [
+        "the glaze often becomes more predictable in the bucket",
+        "the surface can look cleaner but may lose some legacy character"
+      ],
+      "testSequence": [
+        "capture the original recipe as a control even if it is flawed",
+        "rebuild the boron and calcium direction with frits and supporting materials",
+        "run line blends around the rebuilt version because the first chemistry match is rarely the last one needed"
+      ],
+      "stopIf": [
+        "the studio starts accepting a pretty result without checking whether the original intent was actually preserved",
+        "the rebuild quietly raises expansion or loses needed magnesium"
+      ],
+      "referenceRecipeIds": ["g2571a"],
+      "sourceIds": ["digitalfire-gb-substitutes", "digitalfire-3134-not-gb-substitute", "digitalfire-material-substitution"]
+    },
+    {
+      "id": "custer-to-g200hp",
+      "fromMaterialIds": ["custer-feldspar"],
+      "toMaterialIds": ["g200-feldspar"],
+      "whenToUse": [
+        "a recipe is written around North American potash feldspar but the studio has the other common brand",
+        "a historical recipe must be recreated more carefully"
+      ],
+      "whyThisIsHard": "Both materials are labeled like ordinary potash feldspars, but the sodium and potassium balance is not identical.",
+      "firstMove": "Run a direct comparison batch before adding other corrections.",
+      "expectedChemistryShift": [
+        "K2O to Na2O balance moves slightly",
+        "fit and colour-break behaviour can drift even when the recipe still looks broadly similar"
+      ],
+      "workflowShift": [
+        "bucket behaviour usually changes less than fired behaviour",
+        "this is a subtle substitution that can still matter a lot in stable or colour-critical glazes"
+      ],
+      "testSequence": [
+        "make one control and one one-material substitution batch",
+        "fire on the intended body with the same application thickness",
+        "only if needed, tune silica or flux balance after the first comparison"
+      ],
+      "stopIf": [
+        "the studio changes three materials at once and loses the ability to see what the feldspar did",
+        "the recipe is an old archival formula and the test is judged without acknowledging era-specific material drift"
+      ],
+      "referenceRecipeIds": ["g1947u", "g2571a"],
+      "sourceIds": ["digitalfire-material-substitution", "insight-glazes"]
+    },
+    {
+      "id": "potash-feldspar-to-nepheline",
+      "fromMaterialIds": ["potash-feldspar"],
+      "toMaterialIds": ["nepheline-syenite"],
+      "whenToUse": [
+        "the glaze is under-melting at mid fire and a more active feldspathic flux is desired",
+        "a studio wants to push a recipe down in temperature or increase melt"
+      ],
+      "whyThisIsHard": "Nepheline syenite is not just a hotter feldspar; it shifts both melt activity and expansion direction.",
+      "firstMove": "Use it as a branch test with careful fit observation rather than as a hidden recipe update.",
+      "expectedChemistryShift": [
+        "Na2O pressure usually rises",
+        "melt activity usually rises earlier in the firing"
+      ],
+      "workflowShift": [
+        "the glaze may become more fluid and brighter",
+        "crazing risk often rises before the surface visually warns you"
+      ],
+      "testSequence": [
+        "substitute only part of the feldspar first",
+        "run a fit-ring tile or rim test alongside the visual tiles",
+        "compare both melt quality and delayed craze lines after cooling"
+      ],
+      "stopIf": [
+        "the glaze starts fitting worse even though it looks more mature",
+        "the studio mistakes more gloss for better chemistry"
+      ],
+      "referenceRecipeIds": ["g2926b", "g2934y"],
+      "sourceIds": ["digitalfire-material-substitution", "digitalfire-crazing", "digitalfire-oxides"]
+    },
+    {
+      "id": "frit-3134-to-frit-3195",
+      "fromMaterialIds": ["ferro-frit-3134"],
+      "toMaterialIds": ["ferro-frit-3195"],
+      "whenToUse": [
+        "a glaze is too fluid or too craze-prone in a 3134-heavy direction",
+        "the studio wants a slightly more buffered boron frit path"
+      ],
+      "whyThisIsHard": "3195 is not only a boron source change; it also shifts alumina, magnesium, and the overall feel of the melt.",
+      "firstMove": "Compare the two frit directions in the same base recipe before changing anything else.",
+      "expectedChemistryShift": [
+        "melt usually gets a little less aggressive",
+        "expansion risk often eases slightly compared with a high-3134 branch"
+      ],
+      "workflowShift": [
+        "clarity or gloss can shift subtly",
+        "a previously dramatic colour host may become calmer"
+      ],
+      "testSequence": [
+        "build a control using the original 3134 recipe",
+        "make a 3195 branch and keep thickness identical",
+        "use the same stain or colour host panel if colour behaviour was part of the reason for the change"
+      ],
+      "stopIf": [
+        "the studio assumes a calmer frit automatically fixed fit or durability",
+        "the change hides a firing problem that should have been corrected first"
+      ],
+      "referenceRecipeIds": ["g2926b", "ga6-a"],
+      "sourceIds": ["digitalfire-g2926b", "digitalfire-material-substitution", "digitalfire-crazing"]
+    },
+    {
+      "id": "lowfire-clear-fit-shift",
+      "fromMaterialIds": ["ferro-frit-3110"],
+      "toMaterialIds": ["ferro-frit-3249"],
+      "whenToUse": [
+        "a low-fire clear is too high expansion for the body",
+        "the studio wants to tune fit while staying in the same general clear family"
+      ],
+      "whyThisIsHard": "3110 and 3249 push low-fire clear behaviour in opposite directions, so the balance affects clarity, melt, and fit at once.",
+      "firstMove": "Adjust the clear family balance rather than adding random silica or talc first.",
+      "expectedChemistryShift": [
+        "Na2O pressure drops as the 3249 branch increases",
+        "MgO influence rises and the overall expansion direction drops"
+      ],
+      "workflowShift": [
+        "the lower-expansion clear may look slightly less brilliant or more restrained",
+        "fit usually improves before the glaze becomes visually dramatic"
+      ],
+      "testSequence": [
+        "keep the rest of the recipe fixed",
+        "make a short line blend from the hotter branch toward the lower-expansion branch",
+        "check clarity and delayed crazing together rather than separately"
+      ],
+      "stopIf": [
+        "the studio celebrates a fit correction that actually underfired the surface",
+        "the body itself was never fired high enough to judge fit honestly"
+      ],
+      "referenceRecipeIds": ["g1916q", "g2931l"],
+      "sourceIds": ["digitalfire-g1916q", "digitalfire-g2931l", "digitalfire-crazing"]
+    },
+    {
+      "id": "barium-to-strontium",
+      "fromMaterialIds": ["barium-carbonate"],
+      "toMaterialIds": ["strontium-carbonate"],
+      "whenToUse": [
+        "a legacy barium recipe must be made more conservative for modern studio handling",
+        "a surface idea depends on alkaline-earth behaviour but raw soluble barium is not acceptable"
+      ],
+      "whyThisIsHard": "Strontium is a safer workflow choice but it does not recreate barium chemistry perfectly.",
+      "firstMove": "Treat the strontium version as a new branch that must earn its place on its own.",
+      "expectedChemistryShift": [
+        "the surface often becomes cleaner or less idiosyncratic",
+        "colour and texture can shift even when the chemistry direction stays related"
+      ],
+      "workflowShift": [
+        "raw handling safety improves",
+        "surface identity may become more ordinary if the original glaze depended heavily on barium-specific behaviour"
+      ],
+      "testSequence": [
+        "make the original only if the studio is prepared to handle it safely for comparison",
+        "test the strontium branch on the same body and schedule",
+        "judge not only the target colour but also gloss, fit, and edge behaviour"
+      ],
+      "stopIf": [
+        "the studio calls the substitution successful just because the colour stayed in the same family",
+        "functional claims are made without fresh testing"
+      ],
+      "referenceRecipeIds": ["edouards-feuilles-dautomne"],
+      "sourceIds": ["digitalfire-material-substitution", "digitalfire-oxides", "ct-stoneware"]
+    },
+    {
+      "id": "copper-carbonate-to-copper-oxide",
+      "fromMaterialIds": ["copper-carbonate"],
+      "toMaterialIds": ["copper-oxide"],
+      "whenToUse": [
+        "the studio wants the same copper direction with less carbonate gas",
+        "a recipe is pinholing or bubbling and copper is one suspected contributor"
+      ],
+      "whyThisIsHard": "Copper oxide is stronger by weight and changes both LOI and colourant strength at once.",
+      "firstMove": "Reduce the copper amount rather than starting at equal weight.",
+      "expectedChemistryShift": [
+        "copper effect can strengthen even when the number on paper goes down",
+        "gassing load drops because the carbonate component is gone"
+      ],
+      "workflowShift": [
+        "the glaze may heal bubbles better if the rest of the system is sound",
+        "the same recipe can over-colour or crawl if the switch is treated casually"
+      ],
+      "testSequence": [
+        "make a control with copper carbonate",
+        "make a reduced copper-oxide branch",
+        "compare colour, melt, and surface healing on the same firing"
+      ],
+      "stopIf": [
+        "the studio keeps increasing copper because the first oxide test looked different",
+        "food-surface caution is ignored because the material label changed"
+      ],
+      "referenceRecipeIds": ["g3806c", "helens-satin-mottled-eucalyptus"],
+      "sourceIds": ["digitalfire-oxides", "digitalfire-pinholing", "ct-midfire"]
+    },
+    {
+      "id": "cobalt-carbonate-to-cobalt-oxide",
+      "fromMaterialIds": ["cobalt-carbonate"],
+      "toMaterialIds": ["cobalt-oxide"],
+      "whenToUse": [
+        "a recipe must be rebuilt around oxide instead of carbonate",
+        "the studio wants to compare smoother cobalt colour against specklier cobalt response"
+      ],
+      "whyThisIsHard": "Cobalt oxide is stronger and can look different even when the hue family stays blue.",
+      "firstMove": "Use a lower oxide amount and compare directly against the carbonate version.",
+      "expectedChemistryShift": [
+        "blue saturation usually rises at lower weights",
+        "surface speckle or texture can appear if the oxide grade is coarser"
+      ],
+      "workflowShift": [
+        "the glaze can look more forceful or harsher if the loading is not reduced",
+        "small measurement errors become even more visible"
+      ],
+      "testSequence": [
+        "make control and oxide branches only",
+        "fire on both smooth and textured tiles if speckle matters",
+        "pick the lower-strength result unless the stronger blue is clearly better"
+      ],
+      "stopIf": [
+        "the studio treats oxide and carbonate as equal-strength forms",
+        "subtle blue quality is lost by chasing maximum saturation"
+      ],
+      "referenceRecipeIds": ["steves-brilliant-ink-blue", "g2826r"],
+      "sourceIds": ["digitalfire-oxides", "ct-midfire"]
+    },
+    {
+      "id": "raw-slip-to-roasted-slip",
+      "fromMaterialIds": ["alberta-slip", "ravenscrag-slip"],
+      "toMaterialIds": ["alberta-slip-roasted", "ravenscrag-slip-roasted"],
+      "whenToUse": [
+        "a natural-base glaze shrinks, cracks, or crawls in the dry stage",
+        "the studio wants the same family with calmer bucket behaviour"
+      ],
+      "whyThisIsHard": "Roasting keeps the fired chemistry direction but changes weight, LOI, and the way the slurry behaves.",
+      "firstMove": "Blend roasted and raw versions rather than jumping straight to fully roasted.",
+      "expectedChemistryShift": [
+        "fired chemistry direction stays related if roast-loss math is respected",
+        "raw shrinkage and gas burden drop"
+      ],
+      "workflowShift": [
+        "the glaze usually dries more cleanly and shrinks less",
+        "suspension and density can change enough that water amount must be revisited"
+      ],
+      "testSequence": [
+        "make a control with the raw natural base",
+        "make split roasted branches",
+        "compare dry adhesion, sieving feel, and fired family side by side"
+      ],
+      "stopIf": [
+        "the studio assumes the roasted version is automatically a better recipe",
+        "roast-loss math is ignored and the chemistry drifts unnoticed"
+      ],
+      "referenceRecipeIds": ["ga6-g", "gr6-a"],
+      "sourceIds": ["digitalfire-alberta-slip-roasted", "digitalfire-ravenscrag-slip-roast", "digitalfire-loi"]
+    }
+  ]
+}

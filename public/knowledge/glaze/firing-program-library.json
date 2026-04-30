@@ -1,0 +1,361 @@
+{
+  "meta": {
+    "title": "Firing program library by intent",
+    "createdAt": "2026-03-15",
+    "note": "Programs are controller-style templates. They are starting points that must be validated with witness cones, kiln behavior, and actual load density."
+  },
+  "programs": [
+    {
+      "id": "bisque-candled-standard",
+      "name": "Standard candled bisque",
+      "kind": "bisque",
+      "targetConeOrRange": "06-04",
+      "bestFor": [
+        "general stoneware and porcelain bisque loads",
+        "moderate wall thickness and mixed ware"
+      ],
+      "steps": [
+        { "rateFPerHour": 80, "targetF": 180, "holdMinutes": 90 },
+        { "rateFPerHour": 180, "targetF": 250, "holdMinutes": 120 },
+        { "rateFPerHour": 300, "targetF": 1000, "holdMinutes": 0 },
+        { "rateFPerHour": 350, "targetF": 1940, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "finish water-smoking safely",
+        "prepare body for even glaze uptake"
+      ],
+      "riskSignals": [
+        "steam-crack evidence in thick work",
+        "body still gassing heavily in glaze firing"
+      ],
+      "adjustments": [
+        "increase early holds for thicker or wetter loads",
+        "reduce ramp speed in the 572F to 1112F band if carbon burnout issues persist"
+      ],
+      "sourceIds": ["digitalfire-candling", "digitalfire-water-smoking", "digitalfire-carbon-burnout", "digitalfire-bq1000"]
+    },
+    {
+      "id": "lf-clear-bright",
+      "name": "Low-fire bright clear",
+      "kind": "glaze",
+      "targetConeOrRange": "06-04",
+      "bestFor": [
+        "maximum-brightness low-fire clear hosts",
+        "clear over underglaze color work"
+      ],
+      "steps": [
+        { "rateFPerHour": 100, "targetF": 220, "holdMinutes": 45 },
+        { "rateFPerHour": 300, "targetF": 1980, "holdMinutes": 0 },
+        { "rateFPerHour": 120, "targetF": 1940, "holdMinutes": 20 }
+      ],
+      "outcomeGoals": [
+        "maintain high transparency and brightness",
+        "reduce micro-bubble haze at low fire"
+      ],
+      "riskSignals": [
+        "cloudy clear from under-melt or excessive thickness",
+        "pinholes from incomplete burnout before seal"
+      ],
+      "adjustments": [
+        "if haze persists, extend final hold modestly",
+        "if color mutes, reduce over-thickness before modifying program"
+      ],
+      "sourceIds": ["digitalfire-04dsdh", "digitalfire-drop-and-soak", "digitalfire-pinholing"]
+    },
+    {
+      "id": "lf-clear-heal",
+      "name": "Low-fire fit and bubble-heal",
+      "kind": "glaze",
+      "targetConeOrRange": "04-02",
+      "bestFor": [
+        "zero3 low-fire clear branches",
+        "fit-focused low-fire tests where bubble healing is needed"
+      ],
+      "steps": [
+        { "rateFPerHour": 90, "targetF": 220, "holdMinutes": 60 },
+        { "rateFPerHour": 275, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 95, "targetF": 2035, "holdMinutes": 12 },
+        { "rateFPerHour": 999, "targetF": 1950, "holdMinutes": 20 }
+      ],
+      "outcomeGoals": [
+        "improve low-fire surface healing without over-driving fluidity",
+        "support clearer fit comparisons between low-fire branches"
+      ],
+      "riskSignals": [
+        "body overfire on thin low-fire ware",
+        "unwanted softening of decoration at higher low-fire cones"
+      ],
+      "adjustments": [
+        "if body is stressed, drop peak slightly and maintain hold profile",
+        "if bubbles remain, verify bisque burnout before increasing peak"
+      ],
+      "sourceIds": ["digitalfire-drop-and-soak", "digitalfire-g2931k", "digitalfire-g2931l", "orton-pyrometric-guide"]
+    },
+    {
+      "id": "c6-clear-basic",
+      "name": "Cone-6 clear basic",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "stable cone-6 clear and host tests",
+        "first-pass fit and clarity checks"
+      ],
+      "steps": [
+        { "rateFPerHour": 100, "targetF": 220, "holdMinutes": 45 },
+        { "rateFPerHour": 350, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 120, "targetF": 2195, "holdMinutes": 8 },
+        { "rateFPerHour": 999, "targetF": 1900, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "provide a neutral baseline for clear comparisons",
+        "avoid over-complicated cooling influence in first rounds"
+      ],
+      "riskSignals": [
+        "micro-bubbles remain in tight clear systems",
+        "color host tests conflate schedule and chemistry if this baseline is skipped"
+      ],
+      "adjustments": [
+        "move to drop-and-hold profile if bubbles persist",
+        "use witness-cone placement near test ware, not only shelf corners"
+      ],
+      "sourceIds": ["digitalfire-plc6ds", "orton-pyrometric-guide"]
+    },
+    {
+      "id": "c6-clear-drop-hold",
+      "name": "Cone-6 clear drop-and-hold",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "bubble-prone clear hosts",
+        "liner and warm-color host comparison panels"
+      ],
+      "steps": [
+        { "rateFPerHour": 60, "targetF": 220, "holdMinutes": 60 },
+        { "rateFPerHour": 400, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 108, "targetF": 2195, "holdMinutes": 10 },
+        { "rateFPerHour": 999, "targetF": 2095, "holdMinutes": 30 }
+      ],
+      "outcomeGoals": [
+        "heal micro-bubbles after maturity",
+        "improve transparency in cone-6 clear families"
+      ],
+      "riskSignals": [
+        "excessive running if glaze is already very fluid",
+        "false confidence if witness cones are not checked"
+      ],
+      "adjustments": [
+        "reduce top hold if fluid glazes begin to run",
+        "if bubbles remain, slow early climb and review bisque quality"
+      ],
+      "sourceIds": ["digitalfire-plc6ds", "digitalfire-drop-and-soak", "digitalfire-pinholing"]
+    },
+    {
+      "id": "c6-matte-slow-cool",
+      "name": "Cone-6 matte slow cool",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "satin and matte development",
+        "rutile and iron variation in controlled matte systems"
+      ],
+      "steps": [
+        { "rateFPerHour": 60, "targetF": 220, "holdMinutes": 60 },
+        { "rateFPerHour": 400, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 108, "targetF": 2200, "holdMinutes": 10 },
+        { "rateFPerHour": 999, "targetF": 2100, "holdMinutes": 30 },
+        { "rateFPerHour": 200, "targetF": 1400, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "open matte texture and satin balance",
+        "improve visual depth in matte and variegated surfaces"
+      ],
+      "riskSignals": [
+        "matte turns chalky if chemistry is already too stiff",
+        "unexpected cutlery marking increase in under-tuned matte systems"
+      ],
+      "adjustments": [
+        "if surface over-mattes, shorten controlled-cool segment",
+        "if glaze is too glossy, keep chemistry fixed and increase slow-cool influence first"
+      ],
+      "sourceIds": ["digitalfire-c6dhsc", "digitalfire-plc6ds", "digitalfire-c6ired"]
+    },
+    {
+      "id": "c6-floating-blue-break",
+      "name": "Cone-6 floating blue break",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "floating-blue branch tests",
+        "cream-break versus blue-pool tuning"
+      ],
+      "steps": [
+        { "rateFPerHour": 60, "targetF": 220, "holdMinutes": 60 },
+        { "rateFPerHour": 380, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 100, "targetF": 2200, "holdMinutes": 8 },
+        { "rateFPerHour": 999, "targetF": 2100, "holdMinutes": 35 },
+        { "rateFPerHour": 180, "targetF": 1600, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "develop cream breaking without fully flattening blue pools",
+        "map thickness sensitivity under repeatable schedule conditions"
+      ],
+      "riskSignals": [
+        "run risk rises sharply above medium-heavy application",
+        "break effect collapses under very thin coatings"
+      ],
+      "adjustments": [
+        "if excessive run appears, reduce hold at drop stage before changing recipe",
+        "if break is weak, verify thickness and texture before increasing cobalt or rutile"
+      ],
+      "sourceIds": ["digitalfire-g2826r", "digitalfire-c6dhsc", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "c6-iron-red-development",
+      "name": "Cone-6 iron-red development",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "iron-red branch comparison",
+        "schedule-first tuning for iron reds and rust-red transitions"
+      ],
+      "steps": [
+        { "rateFPerHour": 60, "targetF": 220, "holdMinutes": 60 },
+        { "rateFPerHour": 400, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 100, "targetF": 2195, "holdMinutes": 10 },
+        { "rateFPerHour": 999, "targetF": 2100, "holdMinutes": 60 },
+        { "rateFPerHour": 150, "targetF": 1400, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "bias toward stronger iron-red development",
+        "separate schedule effects from recipe effects in iron systems"
+      ],
+      "riskSignals": [
+        "if host is wrong, longer hold just deepens brown",
+        "surface can over-darken in thick zones"
+      ],
+      "adjustments": [
+        "if red is weak, compare host branch before raising iron",
+        "if glaze blackens, reduce thickness and confirm cooling profile"
+      ],
+      "sourceIds": ["digitalfire-c6ired", "digitalfire-g2826x", "digitalfire-oxides"]
+    },
+    {
+      "id": "c6-reactive-general",
+      "name": "Cone-6 reactive general",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "reactive amber, rutile, and fluid-midfire comparison sets",
+        "natural-base effect branches"
+      ],
+      "steps": [
+        { "rateFPerHour": 70, "targetF": 220, "holdMinutes": 50 },
+        { "rateFPerHour": 360, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 110, "targetF": 2200, "holdMinutes": 8 },
+        { "rateFPerHour": 999, "targetF": 2080, "holdMinutes": 20 }
+      ],
+      "outcomeGoals": [
+        "provide a repeatable schedule for reactive comparison",
+        "avoid overloading cooling complexity in early variant rounds"
+      ],
+      "riskSignals": [
+        "reactive branches can run unpredictably on vertical ware",
+        "under-tested reactive hosts can be mistaken for functional glazes"
+      ],
+      "adjustments": [
+        "if run risk dominates, drop hold time before rewriting chemistry",
+        "if surface is sealed with bubbles, shift to drop-and-hold clear program"
+      ],
+      "sourceIds": ["digitalfire-melt-fluidity", "digitalfire-plc6ds", "digitalfire-ga6b"]
+    },
+    {
+      "id": "c6-celadon-clean",
+      "name": "Cone-6 clean celadon",
+      "kind": "glaze",
+      "targetConeOrRange": "6",
+      "bestFor": [
+        "light celadon and low-iron transparent branches",
+        "white-body celadon evaluation rounds"
+      ],
+      "steps": [
+        { "rateFPerHour": 60, "targetF": 220, "holdMinutes": 45 },
+        { "rateFPerHour": 360, "targetF": 2000, "holdMinutes": 0 },
+        { "rateFPerHour": 110, "targetF": 2195, "holdMinutes": 8 },
+        { "rateFPerHour": 999, "targetF": 2090, "holdMinutes": 20 },
+        { "rateFPerHour": 240, "targetF": 1500, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "keep transparency while supporting gentle celadon pool depth",
+        "reduce avoidable haze in low-iron hosts"
+      ],
+      "riskSignals": [
+        "dark body contribution can mask schedule intent",
+        "too-thick application destroys clean celadon read"
+      ],
+      "adjustments": [
+        "if celadon muddies, verify body and thickness before changing iron",
+        "if too pale, increase coat consistency before colorant"
+      ],
+      "sourceIds": ["digitalfire-gr6n", "digitalfire-plc6ds", "digitalfire-oxides"]
+    },
+    {
+      "id": "c10-reduction-functional",
+      "name": "Cone-10 reduction functional baseline",
+      "kind": "glaze",
+      "targetConeOrRange": "10",
+      "bestFor": [
+        "cone-10 reduction clear, matte, and iron-family comparison",
+        "high-fire functional candidate rounds"
+      ],
+      "steps": [
+        { "rateFPerHour": 100, "targetF": 250, "holdMinutes": 120 },
+        { "rateFPerHour": 400, "targetF": 2200, "holdMinutes": 0 },
+        { "rateFPerHour": 108, "targetF": 2345, "holdMinutes": 15 },
+        { "rateFPerHour": 108, "targetF": 2365, "holdMinutes": 15 },
+        { "rateFPerHour": 999, "targetF": 1900, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "deliver repeatable high-fire reduction maturity",
+        "provide baseline for cone-10 surface family comparisons"
+      ],
+      "riskSignals": [
+        "reduction control drift can invalidate glaze comparisons",
+        "overfired loads may hide useful recipe distinctions"
+      ],
+      "adjustments": [
+        "record reduction window notes with every test run",
+        "if maturity is uncertain, rely on witness-cone position data, not controller screen only"
+      ],
+      "sourceIds": ["digitalfire-c10rpl", "orton-pyrometric-guide"]
+    },
+    {
+      "id": "og-refire-low",
+      "name": "Overglaze refire low-temperature baseline",
+      "kind": "refire",
+      "targetConeOrRange": "018-016",
+      "bestFor": [
+        "overglaze color, decal, and luster exploration",
+        "post-glaze decoration comparisons"
+      ],
+      "steps": [
+        { "rateFPerHour": 150, "targetF": 250, "holdMinutes": 45 },
+        { "rateFPerHour": 250, "targetF": 1350, "holdMinutes": 0 },
+        { "rateFPerHour": 120, "targetF": 1450, "holdMinutes": 10 },
+        { "rateFPerHour": 999, "targetF": 900, "holdMinutes": 0 }
+      ],
+      "outcomeGoals": [
+        "fuse overglaze layer without over-softening underlying glaze",
+        "standardize first-pass refire behavior"
+      ],
+      "riskSignals": [
+        "surface contamination can mimic overfire defects",
+        "overlong holds can flatten luster or decoration detail"
+      ],
+      "adjustments": [
+        "if gloss shifts unexpectedly, reduce top hold before lowering peak",
+        "keep decoration thickness constant while tuning refire"
+      ],
+      "sourceIds": ["digitalfire-overglaze"]
+    }
+  ]
+}

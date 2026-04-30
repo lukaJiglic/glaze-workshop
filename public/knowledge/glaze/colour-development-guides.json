@@ -1,0 +1,386 @@
+{
+  "meta": {
+    "title": "Colour development guides",
+    "createdAt": "2026-03-15",
+    "note": "These guides focus on the moving parts behind colour: host glaze, body, thickness, cooling, and chemistry. They are meant to help plan tests, not promise exact fired colour."
+  },
+  "families": [
+    {
+      "id": "clear-hosts",
+      "name": "Clear host selection",
+      "goal": "Use transparent bases intentionally instead of treating every clear as interchangeable.",
+      "bestHosts": [
+        "G2926B for stable general cone-6 hosting",
+        "G1214M for sensitive warm colours and chrome-tin routes",
+        "G1216M or G3838A for tight porcelain fit",
+        "G3879 for maximum low-fire clarity"
+      ],
+      "colourants": [
+        "stains and underglaze layers usually show more honestly under a clear than inside a reactive base",
+        "tiny host differences matter most in warm colours and near-white tints"
+      ],
+      "bodyEffects": [
+        "white stoneware and porcelain preserve colour purity better than warm buff or red bodies",
+        "red earthenware always contributes warmth under a clear, even under a very neutral host"
+      ],
+      "thicknessEffects": [
+        "one extra coat can be the difference between clean colour and clouded decoration",
+        "clarity problems at low fire are often thickness problems before they are chemistry problems"
+      ],
+      "coolingEffects": [
+        "stable clears usually change less with cooling than reactive families",
+        "slow cooling can still soften transparency or encourage a slight milkiness in some matte-adjacent hosts"
+      ],
+      "commonMistakes": [
+        "adding opacifier to a clear host and then wondering why the colour looks dead",
+        "testing a warm stain in the wrong clear and blaming the stain number",
+        "trying to solve a host problem by adding more colourant"
+      ],
+      "stepSequence": [
+        "pick the clear based on fit first and colour role second",
+        "fire the clear alone on the target body",
+        "put the same colour system under two or three host clears before committing"
+      ],
+      "referenceRecipeIds": ["g2926b", "g1214m", "g1216m", "g3838a", "g3879"],
+      "sourceIds": ["digitalfire-ceramic-stain", "mason-reference-guide", "digitalfire-g2926b", "digitalfire-g1214m"]
+    },
+    {
+      "id": "celadon-green",
+      "name": "Celadon green",
+      "goal": "Build a light iron transparent that reads green instead of muddy amber.",
+      "bestHosts": [
+        "clean transparent hosts with little or no opacifier",
+        "Ravenscrag celadon branches or stable cone-6 clears on very light bodies"
+      ],
+      "colourants": [
+        "low iron loads usually create the tint rather than a saturated iron effect",
+        "iron must stay low enough that the host remains transparent"
+      ],
+      "bodyEffects": [
+        "porcelain and very white stoneware show the clearest celadon family",
+        "warmer stoneware shifts the same recipe toward olive or amber"
+      ],
+      "thicknessEffects": [
+        "thin sections often look almost clear while pools go green",
+        "too much thickness pushes the family toward olive, amber, or cloudy green"
+      ],
+      "coolingEffects": [
+        "gentle cooling can deepen the green slightly in some hosts",
+        "the body effect is usually stronger than the cooling effect"
+      ],
+      "atmosphereEffects": [
+        "oxidation celadons at cone 6 read cleaner and lighter",
+        "reduction high-fire celadons can read deeper and more traditional"
+      ],
+      "commonMistakes": [
+        "using a dark or speckled body and expecting a pure celadon",
+        "adding rutile or opacifier and then wondering why the result is no longer celadon",
+        "raising iron to fix weak colour instead of improving the host and thickness"
+      ],
+      "stepSequence": [
+        "start with a clean transparent host",
+        "test low iron increments on a white body",
+        "promote the lowest iron amount that still gives a visible green pool"
+      ],
+      "referenceRecipeIds": ["gr6-n", "edouards-celadon-vert"],
+      "sourceIds": ["digitalfire-gr6n", "ct-stoneware", "digitalfire-oxides"]
+    },
+    {
+      "id": "iron-amber-honey",
+      "name": "Iron amber and honey",
+      "goal": "Use iron as a warm transparent colourant instead of pushing straight into temmoku or rust.",
+      "bestHosts": [
+        "Alberta Slip and similar warm natural bases",
+        "clear or semi-transparent bases with enough melt to stay glassy"
+      ],
+      "colourants": [
+        "small iron additions warm a transparent host into amber or honey",
+        "natural iron-bearing slip bases can reach amber with little or no extra colourant"
+      ],
+      "bodyEffects": [
+        "white bodies show a clearer honey read",
+        "iron-bearing bodies push the family darker and browner"
+      ],
+      "thicknessEffects": [
+        "thin edges can stay tea-clear while pooled areas go amber",
+        "heavy thickness quickly pushes the family toward brown"
+      ],
+      "coolingEffects": [
+        "slow cooling often deepens warmth and variation",
+        "faster cooling can keep the amber cleaner and more glassy"
+      ],
+      "commonMistakes": [
+        "overloading iron when the real goal was transparency plus warmth",
+        "choosing a host that is too matte to let the colour glow",
+        "ignoring the body contribution in natural-base systems"
+      ],
+      "stepSequence": [
+        "start from the warm clear or natural base first",
+        "test thickness on a vertical tile",
+        "stop at the first amber zone before the glaze goes brown and saturated"
+      ],
+      "referenceRecipeIds": ["ga6-a", "ga6-b", "gr10-a"],
+      "sourceIds": ["digitalfire-ga6a", "digitalfire-ga6b", "digitalfire-oxides"]
+    },
+    {
+      "id": "cobalt-blue",
+      "name": "Cobalt blue",
+      "goal": "Control blue saturation before cobalt flattens the whole glaze.",
+      "bestHosts": [
+        "stable transparent gloss for clean blue",
+        "reactive hosts when the goal is breaking, mottling, or depth rather than flat blue"
+      ],
+      "colourants": [
+        "small cobalt additions show immediately",
+        "cobalt pairs well with rutile, iron, or tin when a more complex blue is wanted"
+      ],
+      "bodyEffects": [
+        "white bodies keep cobalt brighter and cleaner",
+        "warm bodies mute or green the blue slightly"
+      ],
+      "thicknessEffects": [
+        "thin cobalt can read elegant and transparent",
+        "heavy cobalt often reads flat, heavy, or overly dark before it reads more beautiful"
+      ],
+      "coolingEffects": [
+        "cooling usually matters less than host and thickness in straightforward cobalt blue",
+        "it matters more in floating-blue families where cobalt is only one part of the result"
+      ],
+      "commonMistakes": [
+        "raising cobalt when the host itself is dull",
+        "using oxide and carbonate as if they were equal-strength additions",
+        "ignoring how fast cobalt buries subtle breaking"
+      ],
+      "stepSequence": [
+        "test light, medium, and strong cobalt loads in the same host",
+        "compare one stable host and one reactive host",
+        "choose the weakest cobalt loading that still reads blue enough"
+      ],
+      "referenceRecipeIds": ["steves-brilliant-ink-blue", "g2826r", "gr6-m"],
+      "sourceIds": ["ct-midfire", "digitalfire-g2826r", "digitalfire-oxides"]
+    },
+    {
+      "id": "floating-blue",
+      "name": "Floating blue",
+      "goal": "Get cream breaking, blue pools, and movement without losing all control.",
+      "bestHosts": [
+        "reactive cone-6 hosts with moderate fluidity",
+        "natural-base floating-blue branches when a softer geological look is wanted"
+      ],
+      "colourants": [
+        "cobalt gives the blue body of the glaze",
+        "rutile and often tin help create the cream breaking and float effect"
+      ],
+      "bodyEffects": [
+        "lighter bodies give more obvious cream-and-blue separation",
+        "dark bodies can collapse the family into murky blue-brown"
+      ],
+      "thicknessEffects": [
+        "this family often needs more thickness than a stable liner to come alive",
+        "too much thickness turns the floating effect into pure run risk"
+      ],
+      "coolingEffects": [
+        "cooling can increase cream breaking and variegation",
+        "standard versus slow cool should be treated as part of the recipe"
+      ],
+      "commonMistakes": [
+        "testing only one coat count",
+        "making the host too stable and then expecting it to float",
+        "pushing cobalt when the real missing ingredient is movement"
+      ],
+      "stepSequence": [
+        "compare an engineered floating blue and a natural-base floating blue",
+        "run at least three thickness levels",
+        "document texture response on the same tile because break over relief is part of the look"
+      ],
+      "referenceRecipeIds": ["g2826r", "gr6-m"],
+      "sourceIds": ["digitalfire-g2826r", "digitalfire-gr6m", "digitalfire-melt-fluidity"]
+    },
+    {
+      "id": "copper-turquoise",
+      "name": "Copper turquoise and green",
+      "goal": "Keep oxidation copper bright instead of muddy, brown, or overly volatile.",
+      "bestHosts": [
+        "clear glossy oxidation hosts",
+        "fluid gloss hosts only when dramatic pooling is part of the intent"
+      ],
+      "colourants": [
+        "copper usually wants a cleaner, more open host than iron does",
+        "higher copper is not the only route to stronger colour; host clarity matters more than many expect"
+      ],
+      "bodyEffects": [
+        "white bodies keep turquoise brighter",
+        "red or dark bodies push the colour toward green, brown, or a dirtier read"
+      ],
+      "thicknessEffects": [
+        "thicker copper often goes greener and darker",
+        "too much thickness can create crawling or a muddy sealed surface before the colour actually improves"
+      ],
+      "coolingEffects": [
+        "cooling usually changes depth more than hue in oxidation copper",
+        "very fluid hosts can show stronger pooling-based shifts"
+      ],
+      "commonMistakes": [
+        "adding more copper to a host that is already too opaque or too matte",
+        "treating food-surface questions as solved because the colour looks commercially familiar",
+        "using copper oxide at carbonate amounts"
+      ],
+      "stepSequence": [
+        "test a stable clear host and a fluid host side by side",
+        "use three copper levels rather than one heroic high load",
+        "reject the first version that begins to crawl or over-darken"
+      ],
+      "referenceRecipeIds": ["aqua-blue-dry-glaze", "g3806c", "turquoise-raku"],
+      "sourceIds": ["ct-earthenware", "digitalfire-g3806c", "ct-raku", "digitalfire-oxides"]
+    },
+    {
+      "id": "iron-red",
+      "name": "Iron red and rust red",
+      "goal": "Develop warm red iron surfaces without misreading brown as success.",
+      "bestHosts": [
+        "reactive cone-6 hosts designed for iron red",
+        "high-fire iron gloss hosts when the target is darker and richer"
+      ],
+      "colourants": [
+        "iron red is a host-plus-schedule problem, not just a high-iron problem",
+        "the host must stay active enough to let iron develop as a surface event"
+      ],
+      "bodyEffects": [
+        "lighter bodies show the red shift more clearly",
+        "iron-rich bodies push the result darker and can hide whether the glaze is truly red"
+      ],
+      "thicknessEffects": [
+        "iron red usually needs enough thickness to develop but not enough to go muddy black-brown",
+        "thin application often reads as a disappointing amber or weak brown"
+      ],
+      "coolingEffects": [
+        "cooling is often decisive in whether the glaze reads red, rust, or just brown",
+        "document the schedule before changing the formula"
+      ],
+      "commonMistakes": [
+        "raising iron before controlling schedule and thickness",
+        "judging success from one tile only",
+        "using an overly stable host and expecting iron red to appear"
+      ],
+      "stepSequence": [
+        "use the reference iron-red host first",
+        "compare standard cool and slower cool on identical application thickness",
+        "only then test small iron adjustments"
+      ],
+      "referenceRecipeIds": ["g2826x", "helens-matt-textured-rust"],
+      "sourceIds": ["digitalfire-g2826x", "ct-midfire", "digitalfire-oxides"]
+    },
+    {
+      "id": "chrome-tin-pink",
+      "name": "Chrome-tin pink and maroon",
+      "goal": "Protect warm chrome-tin colour from the wrong host chemistry.",
+      "bestHosts": [
+        "clear hosts chosen specifically for warm-colour development",
+        "clean white or porcelain bodies"
+      ],
+      "colourants": [
+        "chrome and tin can produce the famous pink route only in the right host window",
+        "the host must stay clean enough for the colour event to read"
+      ],
+      "bodyEffects": [
+        "white bodies matter more here than in darker iron families",
+        "warm or speckled bodies can make a good pink host look like a bad recipe"
+      ],
+      "thicknessEffects": [
+        "moderate, even coverage usually performs better than heavy pooling",
+        "too much opacity can choke the pink development"
+      ],
+      "coolingEffects": [
+        "cooling matters less than host choice and body colour in this family",
+        "schedule should still stay consistent while choosing the host"
+      ],
+      "commonMistakes": [
+        "testing the colour only in a general-purpose clear",
+        "letting zinc-bearing or overly modified hosts muddy the response",
+        "assuming more chrome or more tin solves a host problem"
+      ],
+      "stepSequence": [
+        "test the same pink addition in at least two clear hosts",
+        "use the lightest body available",
+        "lock the winning host before exploring shade changes"
+      ],
+      "referenceRecipeIds": ["g1214m"],
+      "sourceIds": ["digitalfire-g1214m", "mason-reference-guide", "digitalfire-ceramic-stain"]
+    },
+    {
+      "id": "oatmeal-cream-soft-white",
+      "name": "Oatmeal, cream, and soft white",
+      "goal": "Build warm opaque or semi-opaque surfaces without drifting into dead beige.",
+      "bestHosts": [
+        "silky or satin matte hosts",
+        "calcium or magnesia matte families with enough melt left in them"
+      ],
+      "colourants": [
+        "rutile, titanium, tin, and zircon all influence the warmth differently",
+        "a warm white often depends on host chemistry more than on one heavy opacifier"
+      ],
+      "bodyEffects": [
+        "warm bodies can make the result rich and earthy or simply dirty",
+        "white bodies show whether the recipe itself is elegant or only body-assisted"
+      ],
+      "thicknessEffects": [
+        "thin sections can keep some life while thick sections go oatmeal or stone",
+        "heavy opacity quickly kills depth if the host was already matte"
+      ],
+      "coolingEffects": [
+        "slow cooling often increases the soft buttery quality",
+        "fast cooling can keep the surface cleaner but less complex"
+      ],
+      "commonMistakes": [
+        "using zircon as a cheap tin replacement and expecting the same warmth",
+        "loading both rutile and opacity too heavily",
+        "choosing a base that is already too dry before adding cream-building ingredients"
+      ],
+      "stepSequence": [
+        "pick the host surface first: silky, satin, or matte",
+        "test one warmth source and one opacifier separately before combining them",
+        "promote the first version that keeps both softness and some depth"
+      ],
+      "referenceRecipeIds": ["g2934", "g2934y", "g2571a", "g2240"],
+      "sourceIds": ["digitalfire-g2934", "digitalfire-g2934y", "digitalfire-g2571a", "digitalfire-g2240"]
+    },
+    {
+      "id": "black-and-smoke",
+      "name": "Black, smoke, and deep dark surfaces",
+      "goal": "Separate transparent dark gloss, opaque black, and decorative smoke-black effects.",
+      "bestHosts": [
+        "transparent iron hosts for temmoku-style depth",
+        "stain or opacity-assisted hosts for flatter, denser blacks",
+        "raku or smoke paths for decorative carbon-black results"
+      ],
+      "colourants": [
+        "iron, manganese, cobalt, chrome, stain, and carbon all create dark surfaces differently",
+        "a black glaze can be rich and transparent or dead and opaque depending on the path"
+      ],
+      "bodyEffects": [
+        "dark bodies make it harder to see whether the glaze itself has depth",
+        "light bodies reveal whether the black comes from the glaze or from the body underneath"
+      ],
+      "thicknessEffects": [
+        "more thickness often gives more black but less complexity",
+        "thin edges can reveal whether the glaze is actually a dark transparent family"
+      ],
+      "coolingEffects": [
+        "cooling matters most in iron-rich glossy darks",
+        "smoke-black decorative systems depend more on post-fire reduction than on kiln cooling"
+      ],
+      "commonMistakes": [
+        "calling every black result the same family",
+        "using opacity to hide a weak dark host instead of improving the base",
+        "treating decorative smoke black as a functional glaze path"
+      ],
+      "stepSequence": [
+        "decide whether the target is depth, opacity, or smoke effect",
+        "test a dark transparent, an opacified dark, and a decorative route separately",
+        "judge the edge transitions as carefully as the pooled black zones"
+      ],
+      "referenceRecipeIds": ["tenmoku-qit-3", "ga6-h", "smoke-black", "dry-alligator-raku"],
+      "sourceIds": ["ct-stoneware", "digitalfire-ga6h", "ct-raku", "mason-reference-guide"]
+    }
+  ]
+}
